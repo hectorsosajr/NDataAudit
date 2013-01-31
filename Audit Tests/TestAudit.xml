@@ -1,0 +1,27 @@
+<auditgroup name="YOURSERVER">
+	<audit name="Departments missing concepts in ConceptDepartment">
+		<sqlcommand>SELECT departmentId, name
+FROM [SPDC].[dbo].[Department]
+WHERE departmentId NOT IN (
+	SELECT departmentId
+	FROM [SPDC].[dbo].[ConceptDepartment]
+)</sqlcommand>
+		<sqltype>0</sqltype>
+		<emails>
+			<email>hector@systemwidgets.com</email>
+		</emails>
+		<connectionstring>Data Source=YOURSERVER;Initial Catalog=YOURDATABASE;User ID=YOURUSER;Password=YOURPASSWORD;</connectionstring>
+		<tests>			
+			<test>
+				<column>departmentId</column>
+				<criteria>COUNTROWS</criteria>
+				<operator>&gt;</operator>
+				<testreturnedrows>true</testreturnedrows>
+				<failiftrue>true</failiftrue>
+				<usecriteria>false</usecriteria>
+				<rowcount>0</rowcount>
+				<instructions>There are departments in the Department table that do not have an entry in the ConceptDepartment table.</instructions>
+			</test>
+		</tests>
+	</audit>
+</auditgroup>

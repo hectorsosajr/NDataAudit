@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAudit.Framework", "NAudit.Framework.csproj", "{53D6FB23-ABBD-4E35-9A5D-91E17BE5F19D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{53D6FB23-ABBD-4E35-9A5D-91E17BE5F19D}.Debug.ActiveCfg = Debug|.NET
+		{53D6FB23-ABBD-4E35-9A5D-91E17BE5F19D}.Debug.Build.0 = Debug|.NET
+		{53D6FB23-ABBD-4E35-9A5D-91E17BE5F19D}.Release.ActiveCfg = Release|.NET
+		{53D6FB23-ABBD-4E35-9A5D-91E17BE5F19D}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
