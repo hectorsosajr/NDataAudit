@@ -81,3 +81,5 @@ packages/NLog.Schema.2.0.1.2/NLog.Schema.2.0.1.2.nupkg
 packages/NLog.Schema.2.0.1.2/NLog.Schema.2.0.1.2.nuspec
 NDataAudit/NAudit.Framework.xml
 NDataAudit/NAudit.Framework.xml
+DataAuditor-Console/bin/Debug/App.config
+DataAuditor-Console/obj/Debug/DataAuditor-Console.csproj.FileListAbsolute.txt
