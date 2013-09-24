@@ -1,1 +1,1 @@
-NDataAudit is a light-weight dabase auditing framework. It allows for the creation of audits in XML format. The framework sends the results of the audits as HTML emails.
+NDataAudit is a light-weight database auditing framework. It allows for the creation of audits in XML format. The framework sends the results of the audits as HTML emails.
