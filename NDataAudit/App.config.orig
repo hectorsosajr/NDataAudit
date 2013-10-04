@@ -1,0 +1,18 @@
+<<<<<<< HEAD
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key="sourceEmail" value="source@yourdomain.com"/>
+    <add key="sourceEmailDescription" value="Data Auditor Program"/>
+    <add key="smtpServerAddress" value="yourSMTPServerAddressOrDomainName"/>
+  </appSettings>
+=======
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key="sourceEmail" value="hector.sosa@klasresearch.com"/>
+    <add key="sourceEmailDescription" value="Data Auditor Program"/>
+    <add key="smtpServerAddress" value="mail.klasresearch.com"/>
+  </appSettings>
+>>>>>>> 27311ada9c6d2af0209a8e3d9381f80c3bae31b3
+</configuration>
