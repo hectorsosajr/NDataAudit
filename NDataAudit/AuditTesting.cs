@@ -539,13 +539,13 @@ namespace NDataAudit.Framework
 
         private void SendFailureEmail(ArrayList recipients, string sqlTested, int testIndex, Audit testedAudit, DataSet testData)
         {
-            StringBuilder body = new StringBuilder();
+            var body = new StringBuilder();
 
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-            string sourceEmail = config.AppSettings.Settings["sourceEmail"].ToString();
-            string sourceEmailDescription = config.AppSettings.Settings["sourceEmailDescription"].ToString();
-            string smtpServerAddress = config.AppSettings.Settings["sourceEmail"].ToString();
+            string sourceEmail = config.AppSettings.Settings["sourceEmail"].Value;
+            string sourceEmailDescription = config.AppSettings.Settings["sourceEmailDescription"].Value;
+            string smtpServerAddress = config.AppSettings.Settings["sourceEmail"].Value;
 
             const string htmlBreak = "<br/>";
 
@@ -619,7 +619,7 @@ namespace NDataAudit.Framework
                 body.Append("This audit ran at " + DateTime.Now.ToString(CultureInfo.InvariantCulture));
             }
 
-            MailMessage message = new MailMessage {IsBodyHtml = true};  
+            var message = new MailMessage {IsBodyHtml = true};  
 
             foreach (string recipient in recipients)
             {
@@ -640,7 +640,7 @@ namespace NDataAudit.Framework
 
             message.From = new MailAddress(sourceEmail, sourceEmailDescription);
 
-            SmtpClient server = new SmtpClient(smtpServerAddress);
+            var server = new SmtpClient(smtpServerAddress);
             server.Send(message);
         }
 
