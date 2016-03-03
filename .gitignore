@@ -247,3 +247,6 @@ NDataAudit/NAudit.Framework.xml
 NDataAudit/NAudit.Framework.xml
 DataAuditor-Console/bin/Debug/App.config
 DataAuditor-Console/obj/Debug/DataAuditor-Console.csproj.FileListAbsolute.txt
+*.dll
+*.xml
+*.ps1
