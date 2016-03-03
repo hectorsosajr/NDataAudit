@@ -29,7 +29,7 @@ using System.Text;
 using NLog;
 
 namespace NDataAudit.Framework
-{	
+{
     // Delegates for groups of Audits
     /// <summary>
     /// Delegate for the <seealso cref="AuditTesting.CurrentAuditRunning"/>AuditTesting.CurrentAuditRunning event.
