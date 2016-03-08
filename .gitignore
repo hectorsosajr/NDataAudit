@@ -65,6 +65,7 @@ local.properties
 
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
 packages/
+libs/
 
 # Visual C++ cache files
 ipch/
@@ -247,6 +248,6 @@ NDataAudit/NAudit.Framework.xml
 NDataAudit/NAudit.Framework.xml
 DataAuditor-Console/bin/Debug/App.config
 DataAuditor-Console/obj/Debug/DataAuditor-Console.csproj.FileListAbsolute.txt
-*.dll
+#*.dll
 *.xml
 *.ps1

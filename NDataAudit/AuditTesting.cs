@@ -441,11 +441,11 @@ namespace NDataAudit.Framework
                     auditToRun.Tests[testIndex].TestFailedMessage = strMsg;
                 }
 
-                _logger.LogException(LogLevel.Debug, exsql.TargetSite + "::" + exsql.Message, exsql);
+                _logger.Log(LogLevel.Debug, exsql.TargetSite + "::" + exsql.Message, exsql);
             }
             catch (Exception ex)
             {
-                _logger.LogException(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
+                _logger.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
 
                 string strMsg = ex.Message;
                 auditToRun.Tests[testIndex].TestFailedMessage = strMsg;
