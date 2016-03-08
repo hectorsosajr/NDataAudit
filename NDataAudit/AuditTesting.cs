@@ -545,7 +545,7 @@ namespace NDataAudit.Framework
 
             string sourceEmail = config.AppSettings.Settings["sourceEmail"].Value;
             string sourceEmailDescription = config.AppSettings.Settings["sourceEmailDescription"].Value;
-            string smtpServerAddress = config.AppSettings.Settings["sourceEmail"].Value;
+            string smtpServerAddress = config.AppSettings.Settings["smtpServerAddress"].Value;
 
             const string htmlBreak = "<br/>";
 
@@ -580,6 +580,7 @@ namespace NDataAudit.Framework
             {
                 if (testData.Tables.Count > 0)
                 {
+                    // TODO: Move this logic to XML or JSON, so that it is not hard-coded here.
                     TableTemplate currTemplate;
                     TableTemplateNames template = testedAudit.Tests[testIndex].TemplateColorScheme;
 
@@ -596,6 +597,9 @@ namespace NDataAudit.Framework
                             break;
                         case TableTemplateNames.YellowReport:
                             currTemplate = AuditUtils.GetYellowReportTemplate();
+                            break;
+                        case TableTemplateNames.Green:
+                            currTemplate = AuditUtils.GetGreenTemplate();
                             break;
                         default:
                             currTemplate = AuditUtils.GetDefaultTemplate();
@@ -640,7 +644,20 @@ namespace NDataAudit.Framework
 
             message.From = new MailAddress(sourceEmail, sourceEmailDescription);
 
-            var server = new SmtpClient(smtpServerAddress);
+            var server = new SmtpClient();
+
+            if (testedAudit.SmtpHasCredentials)
+            {
+                server.Host = smtpServerAddress;
+                server.Port = testedAudit.SmtpPort;
+                server.Credentials = new System.Net.NetworkCredential(testedAudit.SmtpUserName, testedAudit.SmtpPassword);
+                server.EnableSsl = testedAudit.SmtpUseSsl;
+            }
+            else
+            {
+                server.Host = smtpServerAddress;
+            }
+
             server.Send(message);
         }
 

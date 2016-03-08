@@ -158,7 +158,35 @@ namespace NDataAudit.Framework
         /// </value>
         public bool ShowQueryMessage { get; set; }
 
+        /// <summary>
+        /// This is a flag to help NDataAudit send report-like emails.
+        /// </summary>
         public bool FailIfTrue { get; set; }
+
+        /// <summary>
+        /// The port number for the SMTP server, if it uses something other than 25. This is mostly for TLS and SSL connections.
+        /// </summary>
+        public int SmtpPort { get; set; }
+
+        /// <summary>
+        /// This is the SMTP user name for servers that require authentication.
+        /// </summary>
+        public string SmtpUserName { get; set; }
+
+        /// <summary>
+        /// This is the SMTP password for servers that require authentication.
+        /// </summary>
+        public string SmtpPassword { get; set; }
+
+        /// <summary>
+        /// A flag to indicate whether or not the SMTP server needs to connect using SSL or TSL.
+        /// </summary>
+        public bool SmtpUseSsl { get; set; }
+
+        /// <summary>
+        /// A flag to indicate whether this audit group needs to connect to a SMTP server that requires network credentials.
+        /// </summary>
+        public bool SmtpHasCredentials { get; set; }
 
         #endregion
     }

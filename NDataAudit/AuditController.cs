@@ -126,6 +126,7 @@ namespace NDataAudit.Framework
                 newAudit.Name = auditBranch.Attributes[0].InnerText;
                 auditDoc.LoadXml(auditBranch.OuterXml);
 
+                // Process email list
                 XmlNodeList emailList = auditDoc.GetElementsByTagName("email");
                 ProcessEmails(ref newAudit, emailList);
 
@@ -134,7 +135,34 @@ namespace NDataAudit.Framework
                 if (xmlElement != null)
                 {
                     newAudit.EmailSubject = xmlElement.InnerText;
-                } 
+                }
+                
+                // Process SMTP credentials, if any
+                var xmlSmtpElement = auditBranch["smtpcredentials"];
+                if (xmlSmtpElement != null)
+                {
+                    newAudit.SmtpHasCredentials = true;
+
+                    if (xmlSmtpElement["port"] != null)
+                    {
+                        newAudit.SmtpPort = Convert.ToInt32(xmlSmtpElement["port"].InnerText);
+                    }
+
+                    if (xmlSmtpElement["username"] != null)
+                    {
+                        newAudit.SmtpUserName = xmlSmtpElement["username"].InnerText;
+                    }
+
+                    if (xmlSmtpElement["password"] != null)
+                    {
+                        newAudit.SmtpPassword = xmlSmtpElement["password"].InnerText;
+                    }
+
+                    if (xmlSmtpElement["usessl"] != null)
+                    {
+                        newAudit.SmtpUseSsl = bool.Parse(xmlSmtpElement["usessl"].InnerText);
+                    }
+                }
 
                 // See if we should show the threshold message for this audit.
                 var xmlShowThresholdElement = auditBranch["showThresholdMessage"];
