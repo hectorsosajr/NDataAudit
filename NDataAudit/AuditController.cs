@@ -184,9 +184,8 @@ namespace NDataAudit.Framework
         private void ProcessEmails(ref Audit currentAudit, XmlNodeList auditEmails)
         {
             int nodeCount;
-            int counter;
-            
-            counter = auditEmails.Count;
+
+            var counter = auditEmails.Count;
 
             for (nodeCount = 0; nodeCount < counter; nodeCount++)
             {
@@ -253,6 +252,9 @@ namespace NDataAudit.Framework
                             break;
                         case "yellowreport":
                             currTemplate = TableTemplateNames.YellowReport;
+                            break;
+                        case "green":
+                            currTemplate = TableTemplateNames.Green;
                             break;
                         default:
                             currTemplate = TableTemplateNames.Default;

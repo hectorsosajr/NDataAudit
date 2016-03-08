@@ -29,7 +29,12 @@ namespace NDataAudit.Framework
         /// <summary>
         /// Yellow header with black font, and alternating row colors.
         /// </summary>
-        YellowReport
+        YellowReport,
+
+        /// <summary>
+        /// Green headeer with white font.
+        /// </summary>
+        Green
     }
 
     /// <summary>
@@ -70,7 +75,7 @@ namespace NDataAudit.Framework
         public string AlternateRowColor { get; set; }
     }
 
-    static internal class AuditUtils
+    internal static class AuditUtils
     {
         public static string CreateHtmlData(DataSet testData, TableTemplate tableTemplate)
         {
@@ -146,11 +151,11 @@ namespace NDataAudit.Framework
         public static TableTemplate GetDefaultTemplate()
         {
             TableTemplate template = new TableTemplate
-                                         {
-                                             HtmlHeaderBackgroundColor = "FF0000",
-                                             HtmlHeaderFontColor = "white",
-                                            UseAlternateRowColors = false
-                                         };
+            {
+                HtmlHeaderBackgroundColor = "FF0000",
+                HtmlHeaderFontColor = "white",
+                UseAlternateRowColors = false
+            };
 
             return template;
         }
@@ -171,11 +176,11 @@ namespace NDataAudit.Framework
         public static TableTemplate GetYellowTemplate()
         {
             TableTemplate template = new TableTemplate
-                                        {
-                                            HtmlHeaderBackgroundColor = "FFFF00",
-                                            HtmlHeaderFontColor = "black",
-                                            UseAlternateRowColors = false
-                                        }; 
+            {
+                HtmlHeaderBackgroundColor = "FFFF00",
+                HtmlHeaderFontColor = "black",
+                UseAlternateRowColors = false
+            }; 
 
             return template;
         }
@@ -188,6 +193,18 @@ namespace NDataAudit.Framework
                 HtmlHeaderFontColor = "black",
                 UseAlternateRowColors = true,
                 AlternateRowColor = "F2F2F2"
+            };
+
+            return template;
+        }
+
+        public static TableTemplate GetGreenTemplate()
+        {
+            TableTemplate template = new TableTemplate
+            {
+                HtmlHeaderBackgroundColor = "13913F",
+                HtmlHeaderFontColor = "white",
+                UseAlternateRowColors = false
             };
 
             return template;
