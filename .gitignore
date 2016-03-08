@@ -64,7 +64,7 @@ local.properties
 *.dotCover
 
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
-#packages/
+packages/
 
 # Visual C++ cache files
 ipch/
@@ -208,7 +208,7 @@ NDataAudit/obj/Debug/NDataAudit.Framework.csproj.FileListAbsolute.txt
 NDataAudit/obj/Debug/NDataAudit.Framework.csprojResolveAssemblyReference.cache
 NDataAudit/obj/Debug/NDataAudit.Framework.dll
 NDataAudit/obj/Debug/NDataAudit.Framework.pdb
-NDataAudit/packages.config
+#NDataAudit/packages.config
 packages/NLog.2.0.1.2/lib/net20/NLog.dll
 packages/NLog.2.0.1.2/lib/net20/NLog.xml
 packages/NLog.2.0.1.2/lib/net35/NLog.dll
