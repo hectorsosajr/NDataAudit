@@ -62,7 +62,7 @@ namespace NDataAudit.Framework
     /// </summary>
     public class AuditTesting
     {
-        private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger AuditLogger = LogManager.GetCurrentClassLogger();
 
         #region  Declarations
 
@@ -211,7 +211,7 @@ namespace NDataAudit.Framework
                     }
                     else
                     {
-                        // This is a hack that needs to be fixed.
+                        // TODO: This is a hack that needs to be fixed.
                         // I want the test to succeed, but not send
                         // any emails. When this app was first built,
                         // it always assumed that the audit would fail or
@@ -235,7 +235,7 @@ namespace NDataAudit.Framework
                 }
                 else
                 {
-                    AuditTest currTest = currentAudit.Tests[testCount];
+                    var currTest = currentAudit.Tests[testCount];
 
                     int rowCount = dsTest.Tables[0].Rows.Count;					
         
@@ -373,11 +373,12 @@ namespace NDataAudit.Framework
 
         private DataSet GetTestDataSet(ref Audit auditToRun, int testIndex)
         {
-            SqlConnection conn = new SqlConnection();
-            SqlCommand cmdAudit = new SqlCommand();
+            // TODO: Changed this to have the ability to use more than just SQL Server.
+            var conn = new SqlConnection();
+            var cmdAudit = new SqlCommand();
             SqlDataAdapter daAudit = null;
             CommandType auditCommandType = 0;
-            DataSet dsAudit = new DataSet();
+            var dsAudit = new DataSet();
 
             conn.ConnectionString = auditToRun.ConnectionString;
             
@@ -391,7 +392,7 @@ namespace NDataAudit.Framework
                 strMsg = ex.Message;
                 auditToRun.Tests[testIndex].TestFailedMessage = strMsg;
 
-                _logger.LogException(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
+                AuditLogger?.Log(LogLevel.Debug, ex, ex.TargetSite + "::" + ex.Message);
 
                 return dsAudit;
             }
@@ -441,11 +442,11 @@ namespace NDataAudit.Framework
                     auditToRun.Tests[testIndex].TestFailedMessage = strMsg;
                 }
 
-                _logger.Log(LogLevel.Debug, exsql.TargetSite + "::" + exsql.Message, exsql);
+                AuditLogger.Log(LogLevel.Debug, exsql.TargetSite + "::" + exsql.Message, exsql);
             }
             catch (Exception ex)
             {
-                _logger.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
+                AuditLogger.Log(LogLevel.Debug, ex, ex.TargetSite + "::" + ex.Message, ex);
 
                 string strMsg = ex.Message;
                 auditToRun.Tests[testIndex].TestFailedMessage = strMsg;
@@ -529,7 +530,7 @@ namespace NDataAudit.Framework
             return result;
         }
 
-        private string Today(string columnName)
+        private static string Today(string columnName)
         {
             string result = "DATEDIFF(day, COLUMN, getdate())";
             result = result.Replace("COLUMN", columnName);
@@ -552,7 +553,7 @@ namespace NDataAudit.Framework
             if (testedAudit.ShowQueryMessage)
             {
                 body.Append("The '" + testedAudit.Name + "' audit has failed. The following SQL statement was used to test this audit :" + htmlBreak + htmlBreak);
-                body.Append(sqlTested + htmlBreak + htmlBreak);
+                body.Append(sqlTested.Replace(Environment.NewLine, htmlBreak) + htmlBreak + htmlBreak);
                 body.Append("<b>This query was ran on: " + testedAudit.TestServer + "</b>" + htmlBreak + htmlBreak);
             }
 
@@ -561,19 +562,28 @@ namespace NDataAudit.Framework
                 body.Append(testedAudit.Tests[testIndex].TestFailedMessage + htmlBreak + htmlBreak);
             }
 
-            if (testedAudit.Tests.Count > 0)
+            if (testedAudit.Tests[testIndex].SendReport)
             {
-                body.AppendLine("COMMENTS AND INSTRUCTIONS" + htmlBreak);
-                body.AppendLine("============================" + htmlBreak);
-                foreach (AuditTest test in testedAudit.Tests)
-                {
-                    if (test.Instructions.Length > 0)
-                    {
-                        body.Append(test.Instructions + htmlBreak);
-                    }
-                }
+                body.AppendLine(testedAudit.EmailSubject.ToUpper() + htmlBreak);
+                body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + htmlBreak + htmlBreak);
+            }
 
-                body.AppendLine(htmlBreak);
+            if (!testedAudit.Tests[testIndex].SendReport)
+            {
+                if (testedAudit.Tests.Count > 0)
+                {
+                    body.AppendLine("COMMENTS AND INSTRUCTIONS" + htmlBreak);
+                    body.AppendLine("============================" + htmlBreak);
+                    foreach (AuditTest test in testedAudit.Tests)
+                    {
+                        if (test.Instructions.Length > 0)
+                        {
+                            body.Append(test.Instructions + htmlBreak);
+                        }
+                    }
+
+                    body.AppendLine(htmlBreak);
+                }
             }
 
             if (testedAudit.IncludeDataInEmail)
@@ -601,6 +611,9 @@ namespace NDataAudit.Framework
                         case TableTemplateNames.Green:
                             currTemplate = AuditUtils.GetGreenTemplate();
                             break;
+                        case TableTemplateNames.BlueReport:
+                            currTemplate = AuditUtils.GetBlueReportTemplate();
+                            break;
                         default:
                             currTemplate = AuditUtils.GetDefaultTemplate();
                             break;
@@ -616,11 +629,11 @@ namespace NDataAudit.Framework
 
             if (testedAudit.Tests[testIndex].SendReport)
             {
-                body.Append("This report ran at " + DateTime.Now.ToString(CultureInfo.InvariantCulture)); 
+                body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture)); 
             }
             else
             {
-                body.Append("This audit ran at " + DateTime.Now.ToString(CultureInfo.InvariantCulture));
+                body.Append("This audit ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture));
             }
 
             var message = new MailMessage {IsBodyHtml = true};  

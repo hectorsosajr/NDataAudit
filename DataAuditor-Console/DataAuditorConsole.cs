@@ -11,7 +11,8 @@ namespace DataAuditor.CommandLine
     ///	</summary>
     internal sealed class DataAuditorConsole
     {
-        private static Logger _logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger AuditLogger = LogManager.GetCurrentClassLogger();
+        private static AuditTesting _auditTesting;
 
         internal static void Main(string[] cmdArgs)
         {
@@ -43,7 +44,8 @@ namespace DataAuditor.CommandLine
             }
             catch (Exception ex)
             {
-                _logger.LogException(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
+                AuditLogger.Log(LogLevel.Debug, ex, ex.TargetSite + "::" + ex.Message, ex);
+                Console.WriteLine(ex.TargetSite + "::" + ex.Message);
             }
         }
 
@@ -51,8 +53,16 @@ namespace DataAuditor.CommandLine
         {
             var colAudits = new AuditController(auditGroupFile);
 
-            var auditTesting = new AuditTesting(colAudits.AuditGroup);
-            auditTesting.RunAudits();
+            _auditTesting = new AuditTesting(colAudits.AuditGroup);
+
+            // Wire up the events
+            _auditTesting.AuditTestingStarting += _auditTesting_AuditTestingStarting;
+            _auditTesting.CurrentAuditRunning += _auditTesting_CurrentAuditRunning;
+            _auditTesting.CurrentAuditDone += _auditTesting_CurrentAuditDone;
+
+            _auditTesting.RunAudits();
+
+            Console.WriteLine("DataAuditor ran {0} test(s).", _auditTesting.Audits.Count);
         }
 
         private static bool CheckForValidFile(string fileNameToCheck)
@@ -62,6 +72,22 @@ namespace DataAuditor.CommandLine
             bool result = checkFileInfo.Exists;
 
             return result;
+        }
+
+        private static void _auditTesting_AuditTestingStarting()
+        {
+            Console.WriteLine("Starting audits...");
+        }
+
+        private static void _auditTesting_CurrentAuditRunning(int AuditNumber, string AuditName)
+        {
+            Console.WriteLine("This is audit number {0}", (AuditNumber + 1).ToString());
+            Console.WriteLine("Running the {0} test.", AuditName);
+        }
+
+        private static void _auditTesting_CurrentAuditDone(int AuditNumber, string AuditName)
+        {
+            Console.WriteLine("Finished the {0} test.", AuditName);
         }
     }
 }

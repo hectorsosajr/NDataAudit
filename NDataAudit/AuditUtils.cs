@@ -34,7 +34,12 @@ namespace NDataAudit.Framework
         /// <summary>
         /// Green headeer with white font.
         /// </summary>
-        Green
+        Green,
+
+        /// <summary>
+        /// Blue header with white, and alternating row colors.
+        /// </summary>
+        BlueReport,
     }
 
     /// <summary>
@@ -94,12 +99,12 @@ namespace NDataAudit.Framework
 
             sb.Append("<TABLE BORDER=1>");
 
-            sb.Append("<TR ALIGN='CENTER'>");
+            sb.Append("<TR ALIGN='LEFT' style='white-space: nowrap;'>");
 
             // first append the column names.
             foreach (DataColumn column in thisTable.Columns)
             {
-                sb.Append("<TD bgcolor=\"" + tableTemplate.HtmlHeaderBackgroundColor + "\"><B>");
+                sb.Append("<TD style='white-space: nowrap;' bgcolor=\"" + tableTemplate.HtmlHeaderBackgroundColor + "\"><B>");
                 sb.Append("<font color=\"" + tableTemplate.HtmlHeaderFontColor + "\">" + column.ColumnName + "</font>");
                 sb.Append("</B></TD>");
             }
@@ -116,21 +121,21 @@ namespace NDataAudit.Framework
                     if (rowCounter % 2 == 0)
                     {
                         // Even numbered row, so tag it with a different background color.
-                        sb.Append("<TR ALIGN='CENTER' bgcolor=\"" + tableTemplate.AlternateRowColor + "\">");
+                        sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT' bgcolor=\"" + tableTemplate.AlternateRowColor + "\">");
                     }
                     else
                     {
-                        sb.Append("<TR ALIGN='CENTER'>");
+                        sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT'>");
                     } 
                 }
                 else
                 {
-                    sb.Append("<TR ALIGN='CENTER'>");
+                    sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT'>");
                 }
 
                 foreach (DataColumn column in thisTable.Columns)
                 {
-                    sb.Append("<TD>");
+                    sb.Append("<TD style='white-space: nowrap;'>");
                     if (row[column].ToString().Trim().Length > 0)
                         sb.Append(row[column]);
                     else
@@ -150,7 +155,7 @@ namespace NDataAudit.Framework
 
         public static TableTemplate GetDefaultTemplate()
         {
-            TableTemplate template = new TableTemplate
+            var template = new TableTemplate
             {
                 HtmlHeaderBackgroundColor = "FF0000",
                 HtmlHeaderFontColor = "white",
@@ -162,7 +167,7 @@ namespace NDataAudit.Framework
 
         public static TableTemplate GetRedReportTemplate()
         {
-            TableTemplate template = new TableTemplate
+            var template = new TableTemplate
             {
                 HtmlHeaderBackgroundColor = "FF0000",
                 HtmlHeaderFontColor = "white",
@@ -175,7 +180,7 @@ namespace NDataAudit.Framework
 
         public static TableTemplate GetYellowTemplate()
         {
-            TableTemplate template = new TableTemplate
+            var template = new TableTemplate
             {
                 HtmlHeaderBackgroundColor = "FFFF00",
                 HtmlHeaderFontColor = "black",
@@ -187,7 +192,7 @@ namespace NDataAudit.Framework
 
         public static TableTemplate GetYellowReportTemplate()
         {
-            TableTemplate template = new TableTemplate
+            var template = new TableTemplate
             {
                 HtmlHeaderBackgroundColor = "FFFF00",
                 HtmlHeaderFontColor = "black",
@@ -200,11 +205,24 @@ namespace NDataAudit.Framework
 
         public static TableTemplate GetGreenTemplate()
         {
-            TableTemplate template = new TableTemplate
+            var template = new TableTemplate
             {
                 HtmlHeaderBackgroundColor = "13913F",
                 HtmlHeaderFontColor = "white",
                 UseAlternateRowColors = false
+            };
+
+            return template;
+        }
+
+        public static TableTemplate GetBlueReportTemplate()
+        {
+            var template = new TableTemplate
+            {
+                HtmlHeaderBackgroundColor = "5B9BD5",
+                HtmlHeaderFontColor = "white",
+                UseAlternateRowColors = true,
+                AlternateRowColor = "DDEBF7"
             };
 
             return template;

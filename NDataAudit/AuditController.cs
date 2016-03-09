@@ -92,14 +92,13 @@ namespace NDataAudit.Framework
         /// <param name="xmlGroup">The full path to the audit group xml file.</param>
         public void LoadAuditGroup(string xmlGroup)
         {
-            XmlDocument auditGroup = new XmlDocument();
-            XmlNodeList auditList;
+            var auditGroup = new XmlDocument();
 
             auditGroup.Load(xmlGroup);
 
             _auditGroupName = auditGroup.DocumentElement.Attributes[0].InnerText;
 
-            auditList = auditGroup.GetElementsByTagName("audit");
+            XmlNodeList auditList = auditGroup.GetElementsByTagName("audit");
 
             ProcessAudits(auditList);
         }
@@ -113,12 +112,11 @@ namespace NDataAudit.Framework
             int nodeCount;
             XmlDocument auditDoc = new XmlDocument();
 
-
             int counter = auditList.Count;
             
             for (nodeCount = 0; nodeCount < counter; nodeCount++)
             {
-                Audit newAudit = new Audit();
+                var newAudit = new Audit();
 
                 XmlNode auditBranch = auditList[nodeCount];
 
@@ -209,7 +207,7 @@ namespace NDataAudit.Framework
             }
         }		
         
-        private void ProcessEmails(ref Audit currentAudit, XmlNodeList auditEmails)
+        private static void ProcessEmails(ref Audit currentAudit, XmlNodeList auditEmails)
         {
             int nodeCount;
 
@@ -227,7 +225,7 @@ namespace NDataAudit.Framework
             }
         }		
         
-        private void ProcessTests(ref Audit currentAudit, XmlNodeList auditTests)
+        private static void ProcessTests(ref Audit currentAudit, XmlNodeList auditTests)
         {
             int nodeCount = 0;
             int counter = 0;
@@ -236,7 +234,7 @@ namespace NDataAudit.Framework
             
             for (nodeCount = 0; nodeCount < counter; nodeCount++)
             {
-                AuditTest newTest = new AuditTest();
+                var newTest = new AuditTest();
 
                 XmlNode columnNode = auditTests[nodeCount];
 
@@ -283,6 +281,9 @@ namespace NDataAudit.Framework
                             break;
                         case "green":
                             currTemplate = TableTemplateNames.Green;
+                            break;
+                        case "bluereport":
+                            currTemplate = TableTemplateNames.BlueReport;
                             break;
                         default:
                             currTemplate = TableTemplateNames.Default;
