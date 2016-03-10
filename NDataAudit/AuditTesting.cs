@@ -316,10 +316,26 @@ namespace NDataAudit.Framework
                                 case "=":
                                     if (rowCount == currTest.RowCount)
                                     {
-                                        currentAudit.Result = true;
+                                        if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
+                                        {
+                                            currentAudit.Result = false;
+                                        }
+                                        else
+                                        {
+                                            currentAudit.Result = true;
+                                        }
                                     }
                                     else
                                     {
+                                        if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
+                                        {
+                                            currentAudit.Result = false;
+                                        }
+                                        else
+                                        {
+                                            currentAudit.Result = true;
+                                        }
+
                                         threshold = currentAudit.Tests[testCount].RowCount.ToString(CultureInfo.InvariantCulture);
                                         currentAudit.Tests[testCount].TestFailedMessage = "The failure threshold was equal to " + threshold + " rows. This audit returned " + rowCount.ToString() + " rows.";
                                     }
