@@ -392,7 +392,7 @@ namespace NDataAudit.Framework
                 strMsg = ex.Message;
                 auditToRun.Tests[testIndex].TestFailedMessage = strMsg;
 
-                AuditLogger?.Log(LogLevel.Debug, ex, ex.TargetSite + "::" + ex.Message);
+                AuditLogger?.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message);
 
                 return dsAudit;
             }
@@ -446,7 +446,7 @@ namespace NDataAudit.Framework
             }
             catch (Exception ex)
             {
-                AuditLogger.Log(LogLevel.Debug, ex, ex.TargetSite + "::" + ex.Message, ex);
+                AuditLogger.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
 
                 string strMsg = ex.Message;
                 auditToRun.Tests[testIndex].TestFailedMessage = strMsg;
