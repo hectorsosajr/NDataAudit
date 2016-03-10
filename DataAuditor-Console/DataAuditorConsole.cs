@@ -44,7 +44,7 @@ namespace DataAuditor.CommandLine
             }
             catch (Exception ex)
             {
-                AuditLogger.Log(LogLevel.Debug, ex, ex.TargetSite + "::" + ex.Message, ex);
+                AuditLogger.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
                 Console.WriteLine(ex.TargetSite + "::" + ex.Message);
             }
         }
