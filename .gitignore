@@ -63,10 +63,6 @@ local.properties
 .builds
 *.dotCover
 
-## TODO: If you have NuGet Package Restore enabled, uncomment this
-packages/
-libs/
-
 # Visual C++ cache files
 ipch/
 *.aps
@@ -77,6 +73,15 @@ ipch/
 # Visual Studio profiler
 *.psess
 *.vsp
+
+# Ignore NuGet Packages
+*.nupkg
+# Ignore the packages folder
+**/packages/*
+# except build/, which is used as an MSBuild target.
+!**/packages/build/
+# Uncomment if necessary however generally it will be regenerated when needed
+#!**/packages/repositories.config
 
 # ReSharper is a .NET coding add-in
 _ReSharper*
