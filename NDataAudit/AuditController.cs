@@ -14,6 +14,7 @@
 
 using System;
 using System.Xml;
+using NLog;
 
 namespace NDataAudit.Framework
 {
@@ -22,6 +23,8 @@ namespace NDataAudit.Framework
     /// </summary>
     public class AuditController
     {
+        private static readonly Logger AuditLogger = LogManager.GetCurrentClassLogger();
+
         #region  Declarations 
 
         private AuditCollection _colAuditGroup;
@@ -94,13 +97,20 @@ namespace NDataAudit.Framework
         {
             var auditGroup = new XmlDocument();
 
-            auditGroup.Load(xmlGroup);
+            try
+            {
+                auditGroup.Load(xmlGroup);
 
-            _auditGroupName = auditGroup.DocumentElement.Attributes[0].InnerText;
+                _auditGroupName = auditGroup.DocumentElement.Attributes[0].InnerText;
 
-            XmlNodeList auditList = auditGroup.GetElementsByTagName("audit");
+                XmlNodeList auditList = auditGroup.GetElementsByTagName("audit");
 
-            ProcessAudits(auditList);
+                ProcessAudits(auditList);
+            }
+            catch (Exception ex)
+            {
+                AuditLogger.Log(LogLevel.Debug, ex, ex.TargetSite + "::" + ex.Message, ex);
+            }
         }
 
         #endregion
@@ -281,6 +291,9 @@ namespace NDataAudit.Framework
                             break;
                         case "green":
                             currTemplate = TableTemplateNames.Green;
+                            break;
+                        case "greenreport":
+                            currTemplate = TableTemplateNames.GreenReport;
                             break;
                         case "bluereport":
                             currTemplate = TableTemplateNames.BlueReport;

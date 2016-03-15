@@ -580,7 +580,11 @@ namespace NDataAudit.Framework
 
             if (testedAudit.Tests[testIndex].SendReport)
             {
-                body.AppendLine(testedAudit.EmailSubject.ToUpper() + htmlBreak);
+                if (testedAudit.EmailSubject != null)
+                {
+                    body.AppendLine(testedAudit.EmailSubject + htmlBreak);
+                }
+
                 body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + htmlBreak + htmlBreak);
             }
 
@@ -630,6 +634,9 @@ namespace NDataAudit.Framework
                         case TableTemplateNames.BlueReport:
                             currTemplate = AuditUtils.GetBlueReportTemplate();
                             break;
+                        case TableTemplateNames.GreenReport:
+                            currTemplate = AuditUtils.GetGreenReportTemplate();
+                            break;
                         default:
                             currTemplate = AuditUtils.GetDefaultTemplate();
                             break;
@@ -652,7 +659,12 @@ namespace NDataAudit.Framework
                 body.Append("This audit ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture));
             }
 
-            var message = new MailMessage {IsBodyHtml = true};  
+            SendEmail(recipients, testedAudit, body.ToString(), sourceEmail, sourceEmailDescription, smtpServerAddress);
+        }
+
+        private static void SendEmail(ArrayList recipients, Audit testedAudit, string body, string sourceEmail, string sourceEmailDescription, string smtpServerAddress)
+        {
+            var message = new MailMessage {IsBodyHtml = true};
 
             foreach (string recipient in recipients)
             {

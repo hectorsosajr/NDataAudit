@@ -32,9 +32,14 @@ namespace NDataAudit.Framework
         YellowReport,
 
         /// <summary>
-        /// Green headeer with white font.
+        /// Green header with white font.
         /// </summary>
         Green,
+
+        /// <summary>
+        /// Green header with white font, and alternating row colors.
+        /// </summary>
+        GreenReport,
 
         /// <summary>
         /// Blue header with white, and alternating row colors.
@@ -210,6 +215,19 @@ namespace NDataAudit.Framework
                 HtmlHeaderBackgroundColor = "13913F",
                 HtmlHeaderFontColor = "white",
                 UseAlternateRowColors = false
+            };
+
+            return template;
+        }
+
+        public static TableTemplate GetGreenReportTemplate()
+        {
+            var template = new TableTemplate
+            {
+                HtmlHeaderBackgroundColor = "70AD47",
+                HtmlHeaderFontColor = "white",
+                UseAlternateRowColors = true,
+                AlternateRowColor = "E2EFDA"
             };
 
             return template;
