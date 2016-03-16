@@ -12,6 +12,8 @@
 //										conventions.
 //*********************************************************************
 
+using System.Collections;
+
 namespace NDataAudit.Framework
 {
     /// <summary>
@@ -27,6 +29,7 @@ namespace NDataAudit.Framework
         public AuditTest()
         {
             SendReport = false;
+            TableNames = new ArrayList();
         }
 
         #endregion
@@ -115,6 +118,16 @@ namespace NDataAudit.Framework
         /// A where clause that will be added to the root SQL code. This is only done for this test.
         /// </summary>
         public string WhereClause { get; set; }
+
+        /// <summary>
+        /// A flag to indicate whether this test needs to process multiple results from the database.
+        /// </summary>
+        public bool MultipleResults { get; set; }
+
+        /// <summary>
+        /// A list of table names to be used in the email as headers.
+        /// </summary>
+        public ArrayList TableNames { get; set; }
 
         #endregion
     }

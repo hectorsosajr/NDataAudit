@@ -642,7 +642,7 @@ namespace NDataAudit.Framework
                             break;
                     }
 
-                    string htmlData = AuditUtils.CreateHtmlData(testData, currTemplate);
+                    string htmlData = AuditUtils.CreateHtmlData(testedAudit, testData, currTemplate);
 
                     body.Append(htmlData);
                 }

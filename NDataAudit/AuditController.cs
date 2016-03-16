@@ -210,7 +210,7 @@ namespace NDataAudit.Framework
                 XmlNodeList testRunOn = auditDoc.GetElementsByTagName("testrunon");
                 if (testRunOn.Count > 0)
                 {
-                    newAudit.TestServer =testRunOn[0].InnerText;
+                    newAudit.TestServer = testRunOn[0].InnerText;
                 }
 
                 _colAuditGroup.Add(newAudit);
@@ -267,6 +267,29 @@ namespace NDataAudit.Framework
                 if (xmlElement != null)
                 {
                     newTest.SendReport = Convert.ToBoolean(columnNode["sendReport"].InnerText);
+                }
+
+                xmlElement = columnNode["multipleResults"];
+                if (xmlElement != null)
+                {
+                    newTest.MultipleResults = Convert.ToBoolean(columnNode["multipleResults"].InnerText);
+
+                    if (newTest.MultipleResults)
+                    {
+                        xmlElement = columnNode["tableNames"];
+                        if (xmlElement != null)
+                        {
+                            int tableCount;
+
+                            string[] stringSeparators = new[] {"::"};
+                            var tableCounter = xmlElement.InnerText.Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
+
+                            for (tableCount = 0; tableCount < tableCounter.Length; tableCount++)
+                            {
+                                newTest.TableNames.Add(tableCounter[tableCount]);
+                            }
+                        }
+                    }
                 }
 
                 xmlElement = columnNode["reportTemplate"];

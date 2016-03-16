@@ -87,73 +87,90 @@ namespace NDataAudit.Framework
 
     internal static class AuditUtils
     {
-        public static string CreateHtmlData(DataSet testData, TableTemplate tableTemplate)
+        public static string CreateHtmlData(Audit testedAudit, DataSet testData, TableTemplate tableTemplate)
         {
-            StringBuilder sb = new StringBuilder();
-
-            DataTable thisTable = testData.Tables[0];
+            var sb = new StringBuilder();
 
             if (tableTemplate.Equals(null))
             {
                 tableTemplate = GetDefaultTemplate();
             }
 
-            sb.AppendFormat(@"<caption> Total Rows = ");
-            sb.AppendFormat(thisTable.Rows.Count.ToString(CultureInfo.InvariantCulture));
-            sb.AppendFormat(@"  </caption>");
+            int tableNamesCount = 0;
 
-            sb.Append("<TABLE BORDER=1>");
-
-            sb.Append("<TR ALIGN='LEFT' style='white-space: nowrap;'>");
-
-            // first append the column names.
-            foreach (DataColumn column in thisTable.Columns)
+            foreach (DataTable currTable in testData.Tables)
             {
-                sb.Append("<TD style='white-space: nowrap;' bgcolor=\"" + tableTemplate.HtmlHeaderBackgroundColor + "\"><B>");
-                sb.Append("<font color=\"" + tableTemplate.HtmlHeaderFontColor + "\">" + column.ColumnName + "</font>");
-                sb.Append("</B></TD>");
-            }
-
-            sb.Append("</TR>");
-
-            int rowCounter = 1;
-
-            // next, the column values.
-            foreach (DataRow row in thisTable.Rows)
-            {
-                if (tableTemplate.UseAlternateRowColors)
+                if (testedAudit.Tests[0].MultipleResults)
                 {
-                    if (rowCounter % 2 == 0)
-                    {
-                        // Even numbered row, so tag it with a different background color.
-                        sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT' bgcolor=\"" + tableTemplate.AlternateRowColor + "\">");
-                    }
-                    else
-                    {
-                        sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT'>");
-                    } 
-                }
-                else
-                {
-                    sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT'>");
+                    sb.Append("<B>");
+                    sb.Append(testedAudit.Tests[0].TableNames[tableNamesCount]);
+                    sb.Append("</B>");
+                    sb.AppendLine("<br>");
                 }
 
-                foreach (DataColumn column in thisTable.Columns)
+                sb.AppendFormat(@"<caption> Total Rows = ");
+                sb.AppendFormat(currTable.Rows.Count.ToString(CultureInfo.InvariantCulture));
+                sb.AppendFormat(@"  </caption>");
+
+                sb.Append("<TABLE BORDER=1>");
+
+                sb.Append("<TR ALIGN='LEFT' style='white-space: nowrap;'>");
+
+                // first append the column names.
+                foreach (DataColumn column in currTable.Columns)
                 {
-                    sb.Append("<TD style='white-space: nowrap;'>");
-                    if (row[column].ToString().Trim().Length > 0)
-                        sb.Append(row[column]);
-                    else
-                        sb.Append("&nbsp;");
-                    sb.Append("</TD>");
+                    sb.Append("<TD style='white-space: nowrap;' bgcolor=\"" + tableTemplate.HtmlHeaderBackgroundColor +
+                              "\"><B>");
+                    sb.Append("<font color=\"" + tableTemplate.HtmlHeaderFontColor + "\">" + column.ColumnName +
+                              "</font>");
+                    sb.Append("</B></TD>");
                 }
 
                 sb.Append("</TR>");
 
-                rowCounter++;
-            }
+                int rowCounter = 1;
 
-            sb.Append("</TABLE>");
+                // next, the column values.
+                foreach (DataRow row in currTable.Rows)
+                {
+                    if (tableTemplate.UseAlternateRowColors)
+                    {
+                        if (rowCounter%2 == 0)
+                        {
+                            // Even numbered row, so tag it with a different background color.
+                            sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT' bgcolor=\"" +
+                                      tableTemplate.AlternateRowColor + "\">");
+                        }
+                        else
+                        {
+                            sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT'>");
+                        }
+                    }
+                    else
+                    {
+                        sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT'>");
+                    }
+
+                    foreach (DataColumn column in currTable.Columns)
+                    {
+                        sb.Append("<TD style='white-space: nowrap;'>");
+                        if (row[column].ToString().Trim().Length > 0)
+                            sb.Append(row[column]);
+                        else
+                            sb.Append("&nbsp;");
+                        sb.Append("</TD>");
+                    }
+
+                    sb.Append("</TR>");
+
+                    rowCounter++;
+                }
+
+                sb.Append("</TABLE>");
+                sb.Append("<br>");
+
+                tableNamesCount++;
+            }
 
             return sb.ToString();
         }
