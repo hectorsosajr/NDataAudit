@@ -565,11 +565,13 @@ namespace NDataAudit.Framework
             string smtpServerAddress = config.AppSettings.Settings["smtpServerAddress"].Value;
 
             const string htmlBreak = "<br/>";
+            const string htmlSpace = "&nbsp;";
+            const string htmlTab = "&nbsp;&nbsp;&nbsp;&nbsp;";
 
             if (testedAudit.ShowQueryMessage)
             {
-                body.Append("The '" + testedAudit.Name + "' audit has failed. The following SQL statement was used to test this audit :" + htmlBreak + htmlBreak);
-                body.Append(sqlTested.Replace(Environment.NewLine, htmlBreak) + htmlBreak + htmlBreak);
+                body.Append("The '" + testedAudit.Name + "' audit has failed. The following SQL statement was used to test this audit :" + htmlBreak);
+                body.Append(sqlTested.Replace(Environment.NewLine, htmlBreak).Replace(" ", htmlSpace).Replace("\t", htmlTab) + htmlBreak);
                 body.Append("<b>This query was ran on: " + testedAudit.TestServer + "</b>" + htmlBreak + htmlBreak);
             }
 
