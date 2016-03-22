@@ -340,6 +340,17 @@ namespace NDataAudit.Framework
                                         currentAudit.Tests[testCount].TestFailedMessage = "The failure threshold was equal to " + threshold + " rows. This audit returned " + rowCount.ToString() + " rows.";
                                     }
                                     break;
+                                case "<>":
+                                case "!=":
+                                    if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
+                                    {
+                                        currentAudit.Result = false;
+                                    }
+                                    else
+                                    {
+                                        currentAudit.Result = true;
+                                    }
+                                    break;
                             }
                         }
                         else
@@ -350,7 +361,16 @@ namespace NDataAudit.Framework
                             }
                             else
                             {
-                                currentAudit.Tests[testCount].TestFailedMessage = "This audit was set to have more than zero rows returned. " + "This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
+                                if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
+                                {
+                                    currentAudit.Result = false;
+
+                                    currentAudit.Tests[testCount].TestFailedMessage = "This audit was set to have more than zero rows returned. " + "This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
+                                }
+                                else
+                                {
+                                    currentAudit.Result = true;
+                                }
                             }
                         }
                     }
