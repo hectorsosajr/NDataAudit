@@ -186,6 +186,13 @@ namespace NDataAudit.Framework
                     newAudit.ShowQueryMessage = bool.Parse(xmlShowQueryElement.InnerText);
                 }
 
+                // See if we should show the comments and instructions for this audit.
+                var xmlShowCommentElement = auditBranch["showComments"];
+                if (xmlShowCommentElement != null)
+                {
+                    newAudit.ShowCommentMessage = bool.Parse(xmlShowCommentElement.InnerText);
+                }
+
                 XmlNodeList testList = auditDoc.GetElementsByTagName("test");
                 ProcessTests(ref newAudit, testList);
 

@@ -55,6 +55,7 @@ namespace NDataAudit.Framework
 
             ShowQueryMessage = true;
             ShowThresholdMessage = true;
+            ShowCommentMessage = true;
         }
 
         #endregion
@@ -151,12 +152,20 @@ namespace NDataAudit.Framework
         public bool ShowThresholdMessage { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether [show query message].
+        /// Gets or sets a value indicating whether to [show query message].
         /// </summary>
         /// <value>
         ///   <c>true</c> if [show query message]; otherwise, <c>false</c>.
         /// </value>
         public bool ShowQueryMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to show the comment and instructions message.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [showComments]; otherwise, <c>false</c>.
+        /// </value>
+        public bool ShowCommentMessage { get; set; }
 
         /// <summary>
         /// This is a flag to help NDataAudit send report-like emails.

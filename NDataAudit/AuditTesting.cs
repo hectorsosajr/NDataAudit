@@ -600,6 +600,18 @@ namespace NDataAudit.Framework
                 body.Append(testedAudit.Tests[testIndex].TestFailedMessage + htmlBreak + htmlBreak);
             }
 
+            if (testedAudit.ShowCommentMessage)
+            {
+                body.AppendLine("COMMENTS AND INSTRUCTIONS" + htmlBreak);
+                body.AppendLine("============================" + htmlBreak);
+
+                if (testedAudit.Tests[testIndex].Instructions.Length > 0)
+                {
+                    body.Append(testedAudit.Tests[testIndex].Instructions + htmlBreak);
+                    body.AppendLine(htmlBreak);
+                }
+            }
+
             if (testedAudit.Tests[testIndex].SendReport)
             {
                 if (testedAudit.EmailSubject != null)
@@ -610,23 +622,21 @@ namespace NDataAudit.Framework
                 body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + htmlBreak + htmlBreak);
             }
 
-            if (!testedAudit.Tests[testIndex].SendReport)
-            {
-                if (testedAudit.Tests.Count > 0)
-                {
-                    body.AppendLine("COMMENTS AND INSTRUCTIONS" + htmlBreak);
-                    body.AppendLine("============================" + htmlBreak);
-                    foreach (AuditTest test in testedAudit.Tests)
-                    {
-                        if (test.Instructions.Length > 0)
-                        {
-                            body.Append(test.Instructions + htmlBreak);
-                        }
-                    }
+            //if (!testedAudit.Tests[testIndex].SendReport)
+            //{
+            //    if (testedAudit.Tests.Count > 0)
+            //    {
+            //        foreach (AuditTest test in testedAudit.Tests)
+            //        {
+            //            if (test.Instructions.Length > 0)
+            //            {
+            //                body.Append(test.Instructions + htmlBreak);
+            //            }
+            //        }
 
-                    body.AppendLine(htmlBreak);
-                }
-            }
+            //        body.AppendLine(htmlBreak);
+            //    }
+            //}
 
             if (testedAudit.IncludeDataInEmail)
             {
