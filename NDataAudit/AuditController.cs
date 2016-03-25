@@ -13,6 +13,7 @@
 //*********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Xml;
 using NLog;
 
@@ -45,12 +46,14 @@ namespace NDataAudit.Framework
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="AuditFilePath">The full path of the Audit group xml file.</param>
-        public AuditController(string AuditFilePath)
+        /// <param name="auditFilePath">The full path of the Audit group xml file.</param>
+        public AuditController(string auditFilePath)
         {
             _colAuditGroup = new AuditCollection();
 
-            LoadAuditGroup(AuditFilePath);
+            TableTemplates = AuditUtils.GeTableTemplates();
+
+            LoadAuditGroup(auditFilePath);
         }
 
         #endregion
@@ -83,6 +86,11 @@ namespace NDataAudit.Framework
                 _auditGroupName = value;
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<TableTemplate> TableTemplates { get; set; }
 
         #endregion
 

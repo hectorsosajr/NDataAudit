@@ -1,6 +1,12 @@
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Text;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace NDataAudit.Framework
 {
@@ -52,6 +58,11 @@ namespace NDataAudit.Framework
     /// </summary>
     public struct TableTemplate
     {
+        /// <summary>
+        /// Gets or sets the name of this template. This is done so that it is human readable.
+        /// </summary>
+        public string Name { get; set; }
+
         /// <summary>
         /// Gets or sets the color of the HTML header font.
         /// </summary>
@@ -175,10 +186,38 @@ namespace NDataAudit.Framework
             return sb.ToString();
         }
 
+        public static List<TableTemplate> GeTableTemplates()
+        {
+            var templates = new List<TableTemplate>();
+
+            string templateText = File.ReadAllText(@"TableTemplates.json");
+            var results = JObject.Parse(templateText);
+
+            foreach (var template in results["tabletemplates"])
+            {
+                TableTemplate currTemplate = new TableTemplate
+                {
+                    Name = (string) template["Name"],
+                    AlternateRowColor = (string) template["AlternateRowColor"],
+                    HtmlHeaderBackgroundColor = (string) template["HtmlHeaderBackgroundColor"],
+                    HtmlHeaderFontColor = (string) template["HtmlHeaderFontColor"]
+                };
+
+                currTemplate.UseAlternateRowColors = Convert.ToBoolean(template["UseAlternateRowColors"]);
+
+                templates.Add(currTemplate);
+            }
+
+            templates.Add(GetDefaultTemplate());
+            
+            return templates;
+        }
+
         public static TableTemplate GetDefaultTemplate()
         {
             var template = new TableTemplate
             {
+                Name = "Default",
                 HtmlHeaderBackgroundColor = "FF0000",
                 HtmlHeaderFontColor = "white",
                 UseAlternateRowColors = false
