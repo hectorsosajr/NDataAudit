@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using NLog;
 
@@ -90,7 +91,7 @@ namespace NDataAudit.Framework
         /// <summary>
         /// 
         /// </summary>
-        public List<TableTemplate> TableTemplates { get; set; }
+        public static List<TableTemplate> TableTemplates { get; set; }
 
         #endregion
 
@@ -310,42 +311,15 @@ namespace NDataAudit.Framework
                 xmlElement = columnNode["reportTemplate"];
                 if (xmlElement != null)
                 {
-                    TableTemplateNames currTemplate;
                     string templateName = columnNode["reportTemplate"].InnerText;
 
-                    switch (templateName.ToLower())
-                    {
-                        case "default":
-                            currTemplate = TableTemplateNames.Default;
-                            break;
-                        case "redreport":
-                            currTemplate = TableTemplateNames.RedReport;
-                            break;
-                        case "yellow":
-                            currTemplate = TableTemplateNames.Yellow;
-                            break;
-                        case "yellowreport":
-                            currTemplate = TableTemplateNames.YellowReport;
-                            break;
-                        case "green":
-                            currTemplate = TableTemplateNames.Green;
-                            break;
-                        case "greenreport":
-                            currTemplate = TableTemplateNames.GreenReport;
-                            break;
-                        case "bluereport":
-                            currTemplate = TableTemplateNames.BlueReport;
-                            break;
-                        default:
-                            currTemplate = TableTemplateNames.Default;
-                            break;
-                    }
+                    TableTemplate currTemplate = TableTemplates.FirstOrDefault(t => t.Name.ToLower() == templateName.ToLower());
 
                     newTest.TemplateColorScheme = currTemplate;
                 }
                 else
                 {
-                    newTest.TemplateColorScheme = TableTemplateNames.Default;
+                    newTest.TemplateColorScheme = TableTemplates.FirstOrDefault(t => t.Name.ToLower() == "default");
                 }
 
                 currentAudit.Tests.Add(newTest);

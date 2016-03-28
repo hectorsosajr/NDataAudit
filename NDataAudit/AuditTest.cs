@@ -97,7 +97,7 @@ namespace NDataAudit.Framework
         /// <value>
         /// The template color scheme.
         /// </value>
-        public TableTemplateNames TemplateColorScheme { get; set; }
+        public TableTemplate TemplateColorScheme { get; set; }
 
         /// <summary>
         /// Stores any error message from exceptions. This is mostly to get a verbose description of the failure.

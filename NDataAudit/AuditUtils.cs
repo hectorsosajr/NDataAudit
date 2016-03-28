@@ -4,55 +4,10 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Text;
-
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace NDataAudit.Framework
 {
-    /// <summary>
-    /// An enum to give the different hard-coded template easy to use
-    /// names.
-    /// </summary>
-    public enum TableTemplateNames
-    {
-        /// <summary>
-        /// Default template color scheme. RED header
-        /// background with white font.
-        /// </summary>
-        Default,
-
-        /// <summary>
-        /// Red header with white text, and alternating row colors.
-        /// </summary>
-        RedReport,
-
-        /// <summary>
-        /// Yellow header with black font.
-        /// </summary>
-        Yellow,
-
-        /// <summary>
-        /// Yellow header with black font, and alternating row colors.
-        /// </summary>
-        YellowReport,
-
-        /// <summary>
-        /// Green header with white font.
-        /// </summary>
-        Green,
-
-        /// <summary>
-        /// Green header with white font, and alternating row colors.
-        /// </summary>
-        GreenReport,
-
-        /// <summary>
-        /// Blue header with white, and alternating row colors.
-        /// </summary>
-        BlueReport,
-    }
-
     /// <summary>
     /// Template used to color the HTML table in CreateHtmlData.
     /// </summary>
@@ -200,10 +155,9 @@ namespace NDataAudit.Framework
                     Name = (string) template["Name"],
                     AlternateRowColor = (string) template["AlternateRowColor"],
                     HtmlHeaderBackgroundColor = (string) template["HtmlHeaderBackgroundColor"],
-                    HtmlHeaderFontColor = (string) template["HtmlHeaderFontColor"]
+                    HtmlHeaderFontColor = (string) template["HtmlHeaderFontColor"],
+                    UseAlternateRowColors = Convert.ToBoolean(template["UseAlternateRowColors"])
                 };
-
-                currTemplate.UseAlternateRowColors = Convert.ToBoolean(template["UseAlternateRowColors"]);
 
                 templates.Add(currTemplate);
             }
@@ -221,82 +175,6 @@ namespace NDataAudit.Framework
                 HtmlHeaderBackgroundColor = "FF0000",
                 HtmlHeaderFontColor = "white",
                 UseAlternateRowColors = false
-            };
-
-            return template;
-        }
-
-        public static TableTemplate GetRedReportTemplate()
-        {
-            var template = new TableTemplate
-            {
-                HtmlHeaderBackgroundColor = "FF0000",
-                HtmlHeaderFontColor = "white",
-                UseAlternateRowColors = true,
-                AlternateRowColor = "F2F2F2"
-            };
-
-            return template;
-        }
-
-        public static TableTemplate GetYellowTemplate()
-        {
-            var template = new TableTemplate
-            {
-                HtmlHeaderBackgroundColor = "FFFF00",
-                HtmlHeaderFontColor = "black",
-                UseAlternateRowColors = false
-            }; 
-
-            return template;
-        }
-
-        public static TableTemplate GetYellowReportTemplate()
-        {
-            var template = new TableTemplate
-            {
-                HtmlHeaderBackgroundColor = "FFFF00",
-                HtmlHeaderFontColor = "black",
-                UseAlternateRowColors = true,
-                AlternateRowColor = "F2F2F2"
-            };
-
-            return template;
-        }
-
-        public static TableTemplate GetGreenTemplate()
-        {
-            var template = new TableTemplate
-            {
-                HtmlHeaderBackgroundColor = "13913F",
-                HtmlHeaderFontColor = "white",
-                UseAlternateRowColors = false
-            };
-
-            return template;
-        }
-
-        public static TableTemplate GetGreenReportTemplate()
-        {
-            var template = new TableTemplate
-            {
-                HtmlHeaderBackgroundColor = "70AD47",
-                HtmlHeaderFontColor = "white",
-                UseAlternateRowColors = true,
-                AlternateRowColor = "E2EFDA"
-            };
-
-            return template;
-        }
-
-        public static TableTemplate GetBlueReportTemplate()
-        {
-            var template = new TableTemplate
-            {
-                HtmlHeaderBackgroundColor = "5B9BD5",
-                HtmlHeaderFontColor = "white",
-                UseAlternateRowColors = true,
-                AlternateRowColor = "DDEBF7"
             };
 
             return template;

@@ -622,57 +622,11 @@ namespace NDataAudit.Framework
                 body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + htmlBreak + htmlBreak);
             }
 
-            //if (!testedAudit.Tests[testIndex].SendReport)
-            //{
-            //    if (testedAudit.Tests.Count > 0)
-            //    {
-            //        foreach (AuditTest test in testedAudit.Tests)
-            //        {
-            //            if (test.Instructions.Length > 0)
-            //            {
-            //                body.Append(test.Instructions + htmlBreak);
-            //            }
-            //        }
-
-            //        body.AppendLine(htmlBreak);
-            //    }
-            //}
-
             if (testedAudit.IncludeDataInEmail)
             {
                 if (testData.Tables.Count > 0)
                 {
-                    // TODO: Move this logic to XML or JSON, so that it is not hard-coded here.
-                    TableTemplate currTemplate;
-                    TableTemplateNames template = testedAudit.Tests[testIndex].TemplateColorScheme;
-
-                    switch (template)
-                    {
-                        case TableTemplateNames.Default:
-                            currTemplate = AuditUtils.GetDefaultTemplate();
-                            break; 
-                        case TableTemplateNames.Yellow:
-                            currTemplate = AuditUtils.GetYellowTemplate();
-                            break;
-                        case TableTemplateNames.RedReport:
-                            currTemplate = AuditUtils.GetRedReportTemplate();
-                            break;
-                        case TableTemplateNames.YellowReport:
-                            currTemplate = AuditUtils.GetYellowReportTemplate();
-                            break;
-                        case TableTemplateNames.Green:
-                            currTemplate = AuditUtils.GetGreenTemplate();
-                            break;
-                        case TableTemplateNames.BlueReport:
-                            currTemplate = AuditUtils.GetBlueReportTemplate();
-                            break;
-                        case TableTemplateNames.GreenReport:
-                            currTemplate = AuditUtils.GetGreenReportTemplate();
-                            break;
-                        default:
-                            currTemplate = AuditUtils.GetDefaultTemplate();
-                            break;
-                    }
+                    TableTemplate currTemplate = testedAudit.Tests[testIndex].TemplateColorScheme;
 
                     string htmlData = AuditUtils.CreateHtmlData(testedAudit, testData, currTemplate);
 
