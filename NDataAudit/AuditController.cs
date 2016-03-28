@@ -319,7 +319,7 @@ namespace NDataAudit.Framework
                 }
                 else
                 {
-                    newTest.TemplateColorScheme = TableTemplates.FirstOrDefault(t => t.Name.ToLower() == "default");
+                    newTest.TemplateColorScheme = AuditUtils.GetDefaultTemplate();
                 }
 
                 currentAudit.Tests.Add(newTest);
