@@ -256,3 +256,4 @@ DataAuditor-Console/obj/Debug/DataAuditor-Console.csproj.FileListAbsolute.txt
 #*.dll
 *.xml
 *.ps1
+.vs/config/applicationhost.config

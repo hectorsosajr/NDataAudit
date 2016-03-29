@@ -91,7 +91,7 @@ namespace NDataAudit.Framework
         /// <summary>
         /// 
         /// </summary>
-        public static List<TableTemplate> TableTemplates { get; set; }
+        public static List<EmailTableTemplate> TableTemplates { get; set; }
 
         #endregion
 
@@ -313,7 +313,7 @@ namespace NDataAudit.Framework
                 {
                     string templateName = columnNode["reportTemplate"].InnerText;
 
-                    TableTemplate currTemplate = TableTemplates.FirstOrDefault(t => t.Name.ToLower() == templateName.ToLower());
+                    EmailTableTemplate currTemplate = TableTemplates.FirstOrDefault(t => t.Name.ToLower() == templateName.ToLower());
 
                     newTest.TemplateColorScheme = currTemplate;
                 }

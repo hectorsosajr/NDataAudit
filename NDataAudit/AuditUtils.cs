@@ -11,7 +11,7 @@ namespace NDataAudit.Framework
     /// <summary>
     /// Template used to color the HTML table in CreateHtmlData.
     /// </summary>
-    public struct TableTemplate
+    public struct EmailTableTemplate
     {
         /// <summary>
         /// Gets or sets the name of this template. This is done so that it is human readable.
@@ -53,13 +53,13 @@ namespace NDataAudit.Framework
 
     internal static class AuditUtils
     {
-        public static string CreateHtmlData(Audit testedAudit, DataSet testData, TableTemplate tableTemplate)
+        public static string CreateHtmlData(Audit testedAudit, DataSet testData, EmailTableTemplate emailTableTemplate)
         {
             var sb = new StringBuilder();
 
-            if (tableTemplate.Equals(null))
+            if (emailTableTemplate.Equals(null))
             {
-                tableTemplate = GetDefaultTemplate();
+                emailTableTemplate = GetDefaultTemplate();
             }
 
             int tableNamesCount = 0;
@@ -85,9 +85,9 @@ namespace NDataAudit.Framework
                 // first append the column names.
                 foreach (DataColumn column in currTable.Columns)
                 {
-                    sb.Append("<TD style='white-space: nowrap;' bgcolor=\"" + tableTemplate.HtmlHeaderBackgroundColor +
+                    sb.Append("<TD style='white-space: nowrap;' bgcolor=\"" + emailTableTemplate.HtmlHeaderBackgroundColor +
                               "\"><B>");
-                    sb.Append("<font color=\"" + tableTemplate.HtmlHeaderFontColor + "\">" + column.ColumnName +
+                    sb.Append("<font color=\"" + emailTableTemplate.HtmlHeaderFontColor + "\">" + column.ColumnName +
                               "</font>");
                     sb.Append("</B></TD>");
                 }
@@ -99,13 +99,13 @@ namespace NDataAudit.Framework
                 // next, the column values.
                 foreach (DataRow row in currTable.Rows)
                 {
-                    if (tableTemplate.UseAlternateRowColors)
+                    if (emailTableTemplate.UseAlternateRowColors)
                     {
                         if (rowCounter%2 == 0)
                         {
                             // Even numbered row, so tag it with a different background color.
                             sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT' bgcolor=\"" +
-                                      tableTemplate.AlternateRowColor + "\">");
+                                      emailTableTemplate.AlternateRowColor + "\">");
                         }
                         else
                         {
@@ -141,16 +141,16 @@ namespace NDataAudit.Framework
             return sb.ToString();
         }
 
-        public static List<TableTemplate> GeTableTemplates()
+        public static List<EmailTableTemplate> GeTableTemplates()
         {
-            var templates = new List<TableTemplate>();
+            var templates = new List<EmailTableTemplate>();
 
             string templateText = File.ReadAllText(@"TableTemplates.json");
             var results = JObject.Parse(templateText);
 
             foreach (var template in results["tabletemplates"])
             {
-                TableTemplate currTemplate = new TableTemplate
+                EmailTableTemplate currTemplate = new EmailTableTemplate
                 {
                     Name = (string) template["Name"],
                     AlternateRowColor = (string) template["AlternateRowColor"],
@@ -167,9 +167,9 @@ namespace NDataAudit.Framework
             return templates;
         }
 
-        public static TableTemplate GetDefaultTemplate()
+        public static EmailTableTemplate GetDefaultTemplate()
         {
-            var template = new TableTemplate
+            var template = new EmailTableTemplate
             {
                 Name = "Default",
                 HtmlHeaderBackgroundColor = "FF0000",

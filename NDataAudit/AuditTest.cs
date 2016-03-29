@@ -29,6 +29,7 @@ namespace NDataAudit.Framework
         public AuditTest()
         {
             SendReport = false;
+            HasTestRun = false;
             TableNames = new ArrayList();
         }
 
@@ -97,12 +98,12 @@ namespace NDataAudit.Framework
         /// <value>
         /// The template color scheme.
         /// </value>
-        public TableTemplate TemplateColorScheme { get; set; }
+        public EmailTableTemplate TemplateColorScheme { get; set; }
 
         /// <summary>
         /// Stores any error message from exceptions. This is mostly to get a verbose description of the failure.
         /// </summary>
-        public string TestFailedMessage { get; set; }
+        public string FailedMessage { get; set; }
 
         /// <summary>
         /// Whether or not to test the rows that may get returned.
@@ -128,6 +129,16 @@ namespace NDataAudit.Framework
         /// A list of table names to be used in the email as headers.
         /// </summary>
         public ArrayList TableNames { get; set; }
+
+        /// <summary>
+        /// A flag to indicate the result of this test.
+        /// </summary>
+        public bool Result { get; set; }
+
+        /// <summary>
+        /// A flag to indicate whether this test has run or not.
+        /// </summary>
+        public bool HasTestRun { get; set; }
 
         #endregion
     }
