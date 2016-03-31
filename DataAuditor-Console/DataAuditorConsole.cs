@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 using NDataAudit.Framework;
-using NLog;
 
 namespace DataAuditor.CommandLine
 {
@@ -11,7 +10,6 @@ namespace DataAuditor.CommandLine
     ///	</summary>
     internal sealed class DataAuditorConsole
     {
-        private static readonly Logger AuditLogger = LogManager.GetCurrentClassLogger();
         private static AuditTesting _auditTesting;
 
         internal static void Main(string[] cmdArgs)
@@ -44,7 +42,7 @@ namespace DataAuditor.CommandLine
             }
             catch (Exception ex)
             {
-                AuditLogger.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
+                //AuditLogger.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
                 Console.WriteLine(ex.TargetSite + "::" + ex.Message);
             }
         }

@@ -16,7 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
-using NLog;
 
 namespace NDataAudit.Framework
 {
@@ -25,8 +24,6 @@ namespace NDataAudit.Framework
     /// </summary>
     public class AuditController
     {
-        private static readonly Logger AuditLogger = LogManager.GetCurrentClassLogger();
-
         #region  Declarations 
 
         private AuditCollection _colAuditGroup;
@@ -118,7 +115,8 @@ namespace NDataAudit.Framework
             }
             catch (Exception ex)
             {
-                AuditLogger.Log(LogLevel.Debug, ex, ex.TargetSite + "::" + ex.Message, ex);
+                //AuditLogger.Log(LogLevel.Debug, ex, ex.TargetSite + "::" + ex.Message, ex);
+                // Site for future logger.
             }
         }
 

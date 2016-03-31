@@ -26,7 +26,6 @@ using System.Net.Mail;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
-using NLog;
 
 namespace NDataAudit.Framework
 {
@@ -62,8 +61,6 @@ namespace NDataAudit.Framework
     /// </summary>
     public class AuditTesting
     {
-        private static readonly Logger AuditLogger = LogManager.GetCurrentClassLogger();
-
         #region  Declarations
 
         private AuditCollection _colAudits;
@@ -443,7 +440,7 @@ namespace NDataAudit.Framework
                 strMsg = ex.Message;
                 auditToRun.Tests[testIndex].FailedMessage = strMsg;
 
-                AuditLogger?.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message);
+                //AuditLogger?.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message);
 
                 return dsAudit;
             }
@@ -493,11 +490,11 @@ namespace NDataAudit.Framework
                     auditToRun.Tests[testIndex].FailedMessage = strMsg;
                 }
 
-                AuditLogger.Log(LogLevel.Debug, exsql.TargetSite + "::" + exsql.Message, exsql);
+                //AuditLogger.Log(LogLevel.Debug, exsql.TargetSite + "::" + exsql.Message, exsql);
             }
             catch (Exception ex)
             {
-                AuditLogger.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
+                //AuditLogger.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
 
                 string strMsg = ex.Message;
                 auditToRun.Tests[testIndex].FailedMessage = strMsg;
