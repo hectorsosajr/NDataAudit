@@ -75,6 +75,18 @@ namespace NDataAudit.Framework
         public ArrayList EmailSubscribers { get; set; }
 
         /// <summary>
+        /// The emails of the people who will receive notifications as carbon copies.
+        /// </summary>
+        [Description("The emails of the people who will receive notifications as carbon copies.")]
+        public ArrayList EmailCarbonCopySubscribers { get; set; }
+
+        /// <summary>
+        /// The emails of the people who will receive notifications as blind carbon copies.
+        /// </summary>
+        [Description("The emails of the people who will receive notifications as blind carbon copies.")]
+        public ArrayList EmailBlindCarbonCopySubscribers { get; set; }
+
+        /// <summary>
         /// Whether or not this audit has been tested in this run.
         /// </summary>
         [Description("Whether or not this audit has been tested in this run.")]
