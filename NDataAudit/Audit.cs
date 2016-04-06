@@ -41,6 +41,25 @@ namespace NDataAudit.Framework
             StoredProcedure = 1
         }
 
+        /// <summary>
+        /// Type of email entry
+        /// </summary>
+        public enum EmailTypeEnum
+        {
+            /// <summary>
+            /// Regular email recipient
+            /// </summary>
+            Recipient,
+            /// <summary>
+            /// Carbon Copy email recipient
+            /// </summary>
+            CarbonCopy,
+            /// <summary>
+            /// Blind carbon copy email recipient
+            /// </summary>
+            BlindCarbonCopy
+        }
+
         #endregion
 
         #region Constructors
@@ -73,6 +92,18 @@ namespace NDataAudit.Framework
         /// </summary>
         [Description("The emails of the people who will receive notifications.")]
         public ArrayList EmailSubscribers { get; set; }
+
+        /// <summary>
+        /// The emails of the people who will receive notifications as carbon copies.
+        /// </summary>
+        [Description("The emails of the people who will receive notifications as carbon copies.")]
+        public ArrayList EmailCarbonCopySubscribers { get; set; }
+
+        /// <summary>
+        /// The emails of the people who will receive notifications as blind carbon copies.
+        /// </summary>
+        [Description("The emails of the people who will receive notifications as blind carbon copies.")]
+        public ArrayList EmailBlindCarbonCopySubscribers { get; set; }
 
         /// <summary>
         /// Whether or not this audit has been tested in this run.
