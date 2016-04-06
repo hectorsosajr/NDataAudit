@@ -141,64 +141,11 @@ namespace NDataAudit.Framework
                 newAudit.Name = auditBranch.Attributes[0].InnerText;
                 auditDoc.LoadXml(auditBranch.OuterXml);
 
-                // Process email list
-                XmlNodeList emailList = auditDoc.GetElementsByTagName("email");
-                ProcessEmails(ref newAudit, emailList);
+                GetEmailSettings(auditDoc, ref newAudit, auditBranch);
 
-                // See if there is a custom email subject for this audit.
-                var xmlElement = auditBranch["emailSubject"];
-                if (xmlElement != null)
-                {
-                    newAudit.EmailSubject = xmlElement.InnerText;
-                }
-                
-                // Process SMTP credentials, if any
-                var xmlSmtpElement = auditBranch["smtpcredentials"];
-                if (xmlSmtpElement != null)
-                {
-                    newAudit.SmtpHasCredentials = true;
+                GetSmtpDetails(auditBranch, newAudit);
 
-                    if (xmlSmtpElement["port"] != null)
-                    {
-                        newAudit.SmtpPort = Convert.ToInt32(xmlSmtpElement["port"].InnerText);
-                    }
-
-                    if (xmlSmtpElement["username"] != null)
-                    {
-                        newAudit.SmtpUserName = xmlSmtpElement["username"].InnerText;
-                    }
-
-                    if (xmlSmtpElement["password"] != null)
-                    {
-                        newAudit.SmtpPassword = xmlSmtpElement["password"].InnerText;
-                    }
-
-                    if (xmlSmtpElement["usessl"] != null)
-                    {
-                        newAudit.SmtpUseSsl = bool.Parse(xmlSmtpElement["usessl"].InnerText);
-                    }
-                }
-
-                // See if we should show the threshold message for this audit.
-                var xmlShowThresholdElement = auditBranch["showThresholdMessage"];
-                if (xmlShowThresholdElement != null)
-                {
-                    newAudit.ShowThresholdMessage = bool.Parse(xmlShowThresholdElement.InnerText);
-                }
-
-                // See if we should show the query text for this audit.
-                var xmlShowQueryElement = auditBranch["showQueryMessage"];
-                if (xmlShowQueryElement != null)
-                {
-                    newAudit.ShowQueryMessage = bool.Parse(xmlShowQueryElement.InnerText);
-                }
-
-                // See if we should show the comments and instructions for this audit.
-                var xmlShowCommentElement = auditBranch["showComments"];
-                if (xmlShowCommentElement != null)
-                {
-                    newAudit.ShowCommentMessage = bool.Parse(xmlShowCommentElement.InnerText);
-                }
+                GetReportUiElements(auditBranch, newAudit);
 
                 XmlNodeList testList = auditDoc.GetElementsByTagName("test");
                 ProcessTests(ref newAudit, testList);
@@ -229,8 +176,78 @@ namespace NDataAudit.Framework
 
                 _colAuditGroup.Add(newAudit);
             }
-        }		
-        
+        }
+
+        private static void GetEmailSettings(XmlDocument auditDoc, ref Audit newAudit, XmlNode auditBranch)
+        {
+            // Process email list
+            XmlNodeList emailList = auditDoc.GetElementsByTagName("email");
+            ProcessEmails(ref newAudit, emailList);
+
+            // See if there is a custom email subject for this audit.
+            var xmlElement = auditBranch["emailSubject"];
+            if (xmlElement != null)
+            {
+                newAudit.EmailSubject = xmlElement.InnerText;
+            }
+        }
+
+        private static void GetReportUiElements(XmlNode auditBranch, Audit newAudit)
+        {
+            // See if we should show the threshold message for this audit.
+            var xmlShowThresholdElement = auditBranch["showThresholdMessage"];
+
+            if (xmlShowThresholdElement != null)
+            {
+                newAudit.ShowThresholdMessage = bool.Parse(xmlShowThresholdElement.InnerText);
+            }
+
+            // See if we should show the query text for this audit.
+            var xmlShowQueryElement = auditBranch["showQueryMessage"];
+            if (xmlShowQueryElement != null)
+            {
+                newAudit.ShowQueryMessage = bool.Parse(xmlShowQueryElement.InnerText);
+            }
+
+            // See if we should show the comments and instructions for this audit.
+            var xmlShowCommentElement = auditBranch["showComments"];
+            if (xmlShowCommentElement != null)
+            {
+                newAudit.ShowCommentMessage = bool.Parse(xmlShowCommentElement.InnerText);
+            }
+        }
+
+        private static void GetSmtpDetails(XmlNode auditBranch, Audit newAudit)
+        {
+            // Process SMTP credentials, if any
+            var xmlSmtpElement = auditBranch["smtpcredentials"];
+
+            if (xmlSmtpElement != null)
+            {
+                newAudit.SmtpHasCredentials = true;
+
+                if (xmlSmtpElement["port"] != null)
+                {
+                    newAudit.SmtpPort = Convert.ToInt32(xmlSmtpElement["port"].InnerText);
+                }
+
+                if (xmlSmtpElement["username"] != null)
+                {
+                    newAudit.SmtpUserName = xmlSmtpElement["username"].InnerText;
+                }
+
+                if (xmlSmtpElement["password"] != null)
+                {
+                    newAudit.SmtpPassword = xmlSmtpElement["password"].InnerText;
+                }
+
+                if (xmlSmtpElement["usessl"] != null)
+                {
+                    newAudit.SmtpUseSsl = bool.Parse(xmlSmtpElement["usessl"].InnerText);
+                }
+            }
+        }
+
         private static void ProcessEmails(ref Audit currentAudit, XmlNodeList auditEmails)
         {
             int nodeCount;
