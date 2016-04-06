@@ -42,7 +42,7 @@ namespace NDataAudit.Framework
         }
 
         /// <summary>
-        /// 
+        /// Constructor
         /// </summary>
         /// <param name="auditFilePath">The full path of the Audit group xml file.</param>
         public AuditController(string auditFilePath)
@@ -182,13 +182,52 @@ namespace NDataAudit.Framework
         {
             // Process email list
             XmlNodeList emailList = auditDoc.GetElementsByTagName("email");
-            ProcessEmails(ref newAudit, emailList);
+            ProcessEmails(ref newAudit, emailList, Audit.EmailTypeEnum.Recipient);
+
+            // Process cc email list
+            XmlNodeList ccEmailList = auditDoc.GetElementsByTagName("ccEmail");
+            ProcessEmails(ref newAudit, emailList, Audit.EmailTypeEnum.CarbonCopy);
+
+            // Process email list
+            XmlNodeList bccEmailList = auditDoc.GetElementsByTagName("bccEmail");
+            ProcessEmails(ref newAudit, emailList, Audit.EmailTypeEnum.BlindCarbonCopy);
 
             // See if there is a custom email subject for this audit.
             var xmlElement = auditBranch["emailSubject"];
             if (xmlElement != null)
             {
                 newAudit.EmailSubject = xmlElement.InnerText;
+            }
+        }
+
+        private static void ProcessEmails(ref Audit currentAudit, XmlNodeList auditEmails, Audit.EmailTypeEnum emailType)
+        {
+            int nodeCount;
+
+            var counter = auditEmails.Count;
+
+            for (nodeCount = 0; nodeCount < counter; nodeCount++)
+            {
+                string currEmail = null;
+                XmlNode emailNode = null;
+
+                emailNode = auditEmails[nodeCount];
+                currEmail = emailNode.InnerText;
+
+                switch (emailType)
+                {
+                    case Audit.EmailTypeEnum.Recipient:
+                        currentAudit.EmailSubscribers.Add(currEmail);
+                        break;
+                    case Audit.EmailTypeEnum.CarbonCopy:
+                        currentAudit.EmailCarbonCopySubscribers.Add(currEmail);
+                        break;
+                    case Audit.EmailTypeEnum.BlindCarbonCopy:
+                        currentAudit.EmailBlindCarbonCopySubscribers.Add(currEmail);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(emailType), emailType, null);
+                }
             }
         }
 
@@ -248,31 +287,13 @@ namespace NDataAudit.Framework
             }
         }
 
-        private static void ProcessEmails(ref Audit currentAudit, XmlNodeList auditEmails)
-        {
-            int nodeCount;
-
-            var counter = auditEmails.Count;
-
-            for (nodeCount = 0; nodeCount < counter; nodeCount++)
-            {
-                string currEmail = null;
-                XmlNode emailNode = null;
-
-                emailNode = auditEmails[nodeCount];
-                currEmail = emailNode.InnerText;
-
-                currentAudit.EmailSubscribers.Add(currEmail);
-            }
-        }		
-        
         private static void ProcessTests(ref Audit currentAudit, XmlNodeList auditTests)
         {
             int nodeCount = 0;
             int counter = 0;
-            
+
             counter = auditTests.Count;
-            
+
             for (nodeCount = 0; nodeCount < counter; nodeCount++)
             {
                 var newTest = new AuditTest();
@@ -285,7 +306,7 @@ namespace NDataAudit.Framework
                 newTest.WhereClause = newTest.ColumnName + " " + newTest.Operator + " " + newTest.Criteria;
                 newTest.TestReturnedRows = Convert.ToBoolean(columnNode["testreturnedrows"].InnerText);
                 newTest.UseCriteria = Convert.ToBoolean(columnNode["usecriteria"].InnerText);
-                
+
                 if (newTest.Criteria.ToUpper() == "COUNTROWS")
                 {
                     newTest.RowCount = Convert.ToInt32(columnNode["rowcount"].InnerText);
@@ -341,6 +362,6 @@ namespace NDataAudit.Framework
             }
         }
 
-        #endregion 
+        #endregion
     }
 }

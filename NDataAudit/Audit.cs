@@ -41,6 +41,25 @@ namespace NDataAudit.Framework
             StoredProcedure = 1
         }
 
+        /// <summary>
+        /// Type of email entry
+        /// </summary>
+        public enum EmailTypeEnum
+        {
+            /// <summary>
+            /// Regular email recipient
+            /// </summary>
+            Recipient,
+            /// <summary>
+            /// Carbon Copy email recipient
+            /// </summary>
+            CarbonCopy,
+            /// <summary>
+            /// Blind carbon copy email recipient
+            /// </summary>
+            BlindCarbonCopy
+        }
+
         #endregion
 
         #region Constructors
