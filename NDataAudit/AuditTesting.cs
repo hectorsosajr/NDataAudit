@@ -625,7 +625,7 @@ namespace NDataAudit.Framework
             {
                 if (testedAudit.EmailSubject != null)
                 {
-                    body.AppendLine(testedAudit.EmailSubject + htmlBreak);
+                    body.AppendLine("<h2>" + testedAudit.EmailSubject + "</h2>" + htmlBreak);
                 }
 
                 body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + htmlBreak + htmlBreak);
@@ -666,16 +666,22 @@ namespace NDataAudit.Framework
                 message.To.Add(new MailAddress(recipient));
             }
 
-            // Carbon Copies - CC
-            foreach (string ccemail in testedAudit.EmailCarbonCopySubscribers)
+            if (testedAudit.EmailCarbonCopySubscribers != null)
             {
-                message.CC.Add(new MailAddress(ccemail));
+                // Carbon Copies - CC
+                foreach (string ccemail in testedAudit.EmailCarbonCopySubscribers)
+                {
+                    message.CC.Add(new MailAddress(ccemail));
+                } 
             }
-
-            // Blind Carbon Copies - BCC
-            foreach (string bccemail in testedAudit.EmailCarbonCopySubscribers)
+            
+            if (testedAudit.EmailBlindCarbonCopySubscribers != null)
             {
-                message.Bcc.Add(new MailAddress(bccemail));
+                // Blind Carbon Copies - BCC
+                foreach (string bccemail in testedAudit.EmailBlindCarbonCopySubscribers)
+                {
+                    message.Bcc.Add(new MailAddress(bccemail));
+                }
             }
 
             message.Body = body;
