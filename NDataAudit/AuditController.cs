@@ -191,14 +191,14 @@ namespace NDataAudit.Framework
             XmlNodeList ccEmailList = auditDoc.GetElementsByTagName("ccEmail");
             if (ccEmailList.Count > 0)
             {
-                ProcessEmails(ref newAudit, emailList, Audit.EmailTypeEnum.CarbonCopy); 
+                ProcessEmails(ref newAudit, ccEmailList, Audit.EmailTypeEnum.CarbonCopy); 
             }
 
             // Process email list
             XmlNodeList bccEmailList = auditDoc.GetElementsByTagName("bccEmail");
             if (bccEmailList.Count > 0)
             {
-                ProcessEmails(ref newAudit, emailList, Audit.EmailTypeEnum.BlindCarbonCopy); 
+                ProcessEmails(ref newAudit, bccEmailList, Audit.EmailTypeEnum.BlindCarbonCopy); 
             }
 
             // See if there is a custom email subject for this audit.
