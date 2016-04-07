@@ -182,15 +182,24 @@ namespace NDataAudit.Framework
         {
             // Process email list
             XmlNodeList emailList = auditDoc.GetElementsByTagName("email");
-            ProcessEmails(ref newAudit, emailList, Audit.EmailTypeEnum.Recipient);
+            if (emailList.Count > 0)
+            {
+                ProcessEmails(ref newAudit, emailList, Audit.EmailTypeEnum.Recipient); 
+            }
 
             // Process cc email list
             XmlNodeList ccEmailList = auditDoc.GetElementsByTagName("ccEmail");
-            ProcessEmails(ref newAudit, emailList, Audit.EmailTypeEnum.CarbonCopy);
+            if (ccEmailList.Count > 0)
+            {
+                ProcessEmails(ref newAudit, emailList, Audit.EmailTypeEnum.CarbonCopy); 
+            }
 
             // Process email list
             XmlNodeList bccEmailList = auditDoc.GetElementsByTagName("bccEmail");
-            ProcessEmails(ref newAudit, emailList, Audit.EmailTypeEnum.BlindCarbonCopy);
+            if (bccEmailList.Count > 0)
+            {
+                ProcessEmails(ref newAudit, emailList, Audit.EmailTypeEnum.BlindCarbonCopy); 
+            }
 
             // See if there is a custom email subject for this audit.
             var xmlElement = auditBranch["emailSubject"];

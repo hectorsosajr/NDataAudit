@@ -224,8 +224,7 @@ namespace NDataAudit.Framework
                         else
                         {
                             currentAudit.Result = false;
-                            SendFailureEmail(currentAudit.EmailSubscribers,
-                                             currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit,
+                            SendFailureEmail(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit,
                                              dsTest);
                         }
                     }
@@ -394,8 +393,7 @@ namespace NDataAudit.Framework
                     {
                         if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
                         {
-                            SendFailureEmail(currentAudit.EmailSubscribers,
-                                currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit, dsTest);
+                            SendFailureEmail(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit, dsTest);
                         }
                     }
                     else
@@ -405,8 +403,7 @@ namespace NDataAudit.Framework
                             if (currentAudit.Tests[testCount].SendReport)
                             {
                                 // It's not really a failure. Just want to send a report-like email.
-                                SendFailureEmail(currentAudit.EmailSubscribers,
-                                    currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit, dsTest);
+                                SendFailureEmail(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit, dsTest);
                             }
                         }
                     }
@@ -586,7 +583,7 @@ namespace NDataAudit.Framework
             return result;
         }
 
-        private void SendFailureEmail(ArrayList recipients, string sqlTested, int testIndex, Audit testedAudit, DataSet testData)
+        private void SendFailureEmail(string sqlTested, int testIndex, Audit testedAudit, DataSet testData)
         {
             var body = new StringBuilder();
 
@@ -657,19 +654,31 @@ namespace NDataAudit.Framework
                 body.Append("This audit ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture));
             }
 
-            SendEmail(recipients, testedAudit, body.ToString(), sourceEmail, sourceEmailDescription, smtpServerAddress);
+            SendEmail(testedAudit, body.ToString(), sourceEmail, sourceEmailDescription, smtpServerAddress);
         }
 
-        private static void SendEmail(ArrayList recipients, Audit testedAudit, string body, string sourceEmail, string sourceEmailDescription, string smtpServerAddress)
+        private static void SendEmail(Audit testedAudit, string body, string sourceEmail, string sourceEmailDescription, string smtpServerAddress)
         {
             var message = new MailMessage {IsBodyHtml = true};
 
-            foreach (string recipient in recipients)
+            foreach (string recipient in testedAudit.EmailSubscribers)
             {
                 message.To.Add(new MailAddress(recipient));
             }
 
-            message.Body = body.ToString();
+            // Carbon Copies - CC
+            foreach (string ccemail in testedAudit.EmailCarbonCopySubscribers)
+            {
+                message.CC.Add(new MailAddress(ccemail));
+            }
+
+            // Blind Carbon Copies - BCC
+            foreach (string bccemail in testedAudit.EmailCarbonCopySubscribers)
+            {
+                message.Bcc.Add(new MailAddress(bccemail));
+            }
+
+            message.Body = body;
             message.Priority = MailPriority.High;
 
             if (!string.IsNullOrEmpty(testedAudit.EmailSubject))
