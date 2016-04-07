@@ -70,6 +70,8 @@ namespace NDataAudit.Framework
         public Audit()
         {
             EmailSubscribers = new ArrayList();
+            EmailCarbonCopySubscribers = new ArrayList();
+            EmailBlindCarbonCopySubscribers = new ArrayList();
             Tests = new AuditTestCollection();
 
             ShowQueryMessage = true;
@@ -90,37 +92,37 @@ namespace NDataAudit.Framework
         /// <summary>
         /// The emails of the people who will receive notifications.
         /// </summary>
-        [Description("The emails of the people who will receive notifications.")]
+        [Description("The emails of the people who will receive notifications."), Category("Email")]
         public ArrayList EmailSubscribers { get; set; }
 
         /// <summary>
         /// The emails of the people who will receive notifications as carbon copies.
         /// </summary>
-        [Description("The emails of the people who will receive notifications as carbon copies.")]
+        [Description("The emails of the people who will receive notifications as carbon copies."), Category("Email")]
         public ArrayList EmailCarbonCopySubscribers { get; set; }
 
         /// <summary>
         /// The emails of the people who will receive notifications as blind carbon copies.
         /// </summary>
-        [Description("The emails of the people who will receive notifications as blind carbon copies.")]
+        [Description("The emails of the people who will receive notifications as blind carbon copies."), Category("Email")]
         public ArrayList EmailBlindCarbonCopySubscribers { get; set; }
 
         /// <summary>
         /// Whether or not this audit has been tested in this run.
         /// </summary>
-        [Description("Whether or not this audit has been tested in this run.")]
+        [Description("Whether or not this audit has been tested in this run."), Category("Audit")]
         public bool HasRun { get; set; }
 
         /// <summary>
         /// This is the name of this <see cref="Audit"/>.
         /// </summary>
-        [Description("This is the name of this Audit.")]
+        [Description("This is the name of this Audit."), Category("Audit")]
         public string Name { get; set; }
 
         /// <summary>
         /// The result of this <see cref="Audit"/> tests is stored here.
         /// </summary>
-        [Description("The result of this Audit tests is stored here.")]
+        [Description("The result of this Audit tests is stored here."), Category("Audit")]
         public bool Result { get; set; }
 
         /// <summary>
@@ -144,7 +146,7 @@ namespace NDataAudit.Framework
         /// <summary>
         /// The tests that will be run against the <see cref="SqlStatement"/> property.
         /// </summary>
-        [Description("The tests that will be run against the SQLStatement property.")]
+        [Description("The tests that will be run against the SQLStatement property."), Category("Tests")]
         public AuditTestCollection Tests { get; set; }
 
         /// <summary>
@@ -153,7 +155,7 @@ namespace NDataAudit.Framework
         /// <value>
         ///   <c>true</c> if include the result data into the email; otherwise, <c>false</c>.
         /// </value>
-        [Description("Gets or sets a value indicating whether to include the result data into the email.")]
+        [Description("Gets or sets a value indicating whether to include the result data into the email."), Category("Email")]
         public bool IncludeDataInEmail { get; set; }
 
         /// <summary>
@@ -162,7 +164,7 @@ namespace NDataAudit.Framework
         /// <value>
         /// The test server.
         /// </value>
-        [Description("Gets or sets the test server where the test is being run.")]
+        [Description("Gets or sets the test server where the test is being run."), Category("Report")]
         public string TestServer { get; set; }
 
         /// <summary>
@@ -171,7 +173,7 @@ namespace NDataAudit.Framework
         /// <value>
         /// The email subject for this audit test.
         /// </value>
-        [Description("Gets or sets the email subject for this test.")]
+        [Description("Gets or sets the email subject for this test."), Category("Email")]
         public string EmailSubject { get; set; }
 
         /// <summary>
@@ -180,6 +182,7 @@ namespace NDataAudit.Framework
         /// <value>
         /// 	<c>true</c> if [show threshold message]; otherwise, <c>false</c>.
         /// </value>
+        [Description("A flag to determine whether to show the threshold message or not."), Category("Report")]
         public bool ShowThresholdMessage { get; set; }
 
         /// <summary>
@@ -188,6 +191,7 @@ namespace NDataAudit.Framework
         /// <value>
         ///   <c>true</c> if [show query message]; otherwise, <c>false</c>.
         /// </value>
+        [Description("A flag to determine whether to show the query or not."), Category("Report")]
         public bool ShowQueryMessage { get; set; }
 
         /// <summary>
@@ -196,6 +200,7 @@ namespace NDataAudit.Framework
         /// <value>
         ///   <c>true</c> if [showComments]; otherwise, <c>false</c>.
         /// </value>
+        [Description("A flag to determine whether to show the comments/instructions or not."), Category("Report")]
         public bool ShowCommentMessage { get; set; }
 
         /// <summary>
@@ -206,26 +211,31 @@ namespace NDataAudit.Framework
         /// <summary>
         /// The port number for the SMTP server, if it uses something other than 25. This is mostly for TLS and SSL connections.
         /// </summary>
+        [Description("Gets or sets the port for the SMTP Server."), Category("Email Server")]
         public int SmtpPort { get; set; }
 
         /// <summary>
         /// This is the SMTP user name for servers that require authentication.
         /// </summary>
+        [Description("Gets or sets the user name for the SMTP Server."), Category("Email Server")]
         public string SmtpUserName { get; set; }
 
         /// <summary>
         /// This is the SMTP password for servers that require authentication.
         /// </summary>
+        [Description("Gets or sets the password for the SMTP Server."), Category("Email Server")]
         public string SmtpPassword { get; set; }
 
         /// <summary>
         /// A flag to indicate whether or not the SMTP server needs to connect using SSL or TSL.
         /// </summary>
+        [Description("A flag to indicate whether or not the SMTP Server uses SSL or TSL."), Category("Email Server")]
         public bool SmtpUseSsl { get; set; }
 
         /// <summary>
         /// A flag to indicate whether this audit group needs to connect to a SMTP server that requires network credentials.
         /// </summary>
+        [Description("A flag to indicate whether or not the SMTP Server needs credentials."), Category("Email Server")]
         public bool SmtpHasCredentials { get; set; }
 
         #endregion
