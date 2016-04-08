@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Security.Policy;
 using System.Text;
 using Newtonsoft.Json.Linq;
 
@@ -53,6 +54,28 @@ namespace NDataAudit.Framework
 
     internal static class AuditUtils
     {
+        public static string HtmlBreak => "<br/>";
+
+        public static string HtmlSpace => "&nbsp;";
+
+        public static string HtmlTab => "&nbsp;&nbsp;&nbsp;&nbsp;";
+
+        /// <summary>
+        /// Extension method to convert regular strings into HTML text.
+        /// </summary>
+        /// <param name="stringToConvert"></param>
+        /// <returns>Converted string with HTML tags</returns>
+        public static string ToHtml(this string stringToConvert)
+        {
+            string retval = string.Empty;
+
+            retval = stringToConvert.Replace(Environment.NewLine, HtmlBreak)
+                .Replace(" ", HtmlSpace)
+                .Replace("\t", HtmlTab);
+
+            return retval;
+        }
+
         public static string CreateHtmlData(Audit testedAudit, DataSet testData, EmailTableTemplate emailTableTemplate)
         {
             var sb = new StringBuilder();

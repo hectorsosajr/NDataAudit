@@ -589,35 +589,29 @@ namespace NDataAudit.Framework
 
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-            string sourceEmail = config.AppSettings.Settings["sourceEmail"].Value;
             string sourceEmailDescription = config.AppSettings.Settings["sourceEmailDescription"].Value;
-            string smtpServerAddress = config.AppSettings.Settings["smtpServerAddress"].Value;
-
-            const string htmlBreak = "<br/>";
-            const string htmlSpace = "&nbsp;";
-            const string htmlTab = "&nbsp;&nbsp;&nbsp;&nbsp;";
 
             if (testedAudit.ShowQueryMessage)
             {
-                body.Append("The '" + testedAudit.Name + "' audit has failed. The following SQL statement was used to test this audit :" + htmlBreak);
-                body.Append(sqlTested.Replace(Environment.NewLine, htmlBreak).Replace(" ", htmlSpace).Replace("\t", htmlTab) + htmlBreak);
-                body.Append("<b>This query was ran on: " + testedAudit.TestServer + "</b>" + htmlBreak + htmlBreak);
+                body.Append("The '" + testedAudit.Name + "' audit has failed. The following SQL statement was used to test this audit :" + AuditUtils.HtmlBreak);
+                body.Append(sqlTested.ToHtml() + AuditUtils.HtmlBreak);
+                body.Append("<b>This query was ran on: " + testedAudit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
             }
 
             if (testedAudit.ShowThresholdMessage)
             {
-                body.Append(testedAudit.Tests[testIndex].FailedMessage + htmlBreak + htmlBreak);
+                body.Append(testedAudit.Tests[testIndex].FailedMessage + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
             }
 
             if (testedAudit.ShowCommentMessage)
             {
-                body.AppendLine("COMMENTS AND INSTRUCTIONS" + htmlBreak);
-                body.AppendLine("============================" + htmlBreak);
+                body.AppendLine("COMMENTS AND INSTRUCTIONS" + AuditUtils.HtmlBreak);
+                body.AppendLine("============================" + AuditUtils.HtmlBreak);
 
                 if (testedAudit.Tests[testIndex].Instructions.Length > 0)
                 {
-                    body.Append(testedAudit.Tests[testIndex].Instructions + htmlBreak);
-                    body.AppendLine(htmlBreak);
+                    body.Append(testedAudit.Tests[testIndex].Instructions.ToHtml() + AuditUtils.HtmlBreak);
+                    body.AppendLine(AuditUtils.HtmlBreak);
                 }
             }
 
@@ -625,10 +619,10 @@ namespace NDataAudit.Framework
             {
                 if (testedAudit.EmailSubject != null)
                 {
-                    body.AppendLine("<h2>" + testedAudit.EmailSubject + "</h2>" + htmlBreak);
+                    body.AppendLine("<h2>" + testedAudit.EmailSubject + "</h2>" + AuditUtils.HtmlBreak);
                 }
 
-                body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + htmlBreak + htmlBreak);
+                body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
             }
 
             if (testedAudit.IncludeDataInEmail)
@@ -643,7 +637,7 @@ namespace NDataAudit.Framework
                 }
             }
 
-            body.AppendLine(htmlBreak);
+            body.AppendLine(AuditUtils.HtmlBreak);
 
             if (testedAudit.Tests[testIndex].SendReport)
             {
@@ -654,10 +648,10 @@ namespace NDataAudit.Framework
                 body.Append("This audit ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture));
             }
 
-            SendEmail(testedAudit, body.ToString(), sourceEmail, sourceEmailDescription, smtpServerAddress);
+            SendEmail(testedAudit, body.ToString(), sourceEmailDescription);
         }
 
-        private static void SendEmail(Audit testedAudit, string body, string sourceEmail, string sourceEmailDescription, string smtpServerAddress)
+        private static void SendEmail(Audit testedAudit, string body, string sourceEmailDescription)
         {
             var message = new MailMessage {IsBodyHtml = true};
 
@@ -696,20 +690,20 @@ namespace NDataAudit.Framework
                 message.Subject = "Audit Failure - " + testedAudit.Name;
             }
 
-            message.From = new MailAddress(sourceEmail, sourceEmailDescription);
+            message.From = new MailAddress(testedAudit.SmtpSourceEmail, sourceEmailDescription);
 
             var server = new SmtpClient();
 
             if (testedAudit.SmtpHasCredentials)
             {
-                server.Host = smtpServerAddress;
+                server.Host = testedAudit.SmtpServerAddress;
                 server.Port = testedAudit.SmtpPort;
                 server.Credentials = new System.Net.NetworkCredential(testedAudit.SmtpUserName, testedAudit.SmtpPassword);
                 server.EnableSsl = testedAudit.SmtpUseSsl;
             }
             else
             {
-                server.Host = smtpServerAddress;
+                server.Host = testedAudit.SmtpServerAddress;
             }
 
             server.Send(message);

@@ -209,6 +209,12 @@ namespace NDataAudit.Framework
         public bool FailIfTrue { get; set; }
 
         /// <summary>
+        /// The address for the SMTP server.
+        /// </summary>
+        [Description("Gets or sets the address for the SMTP Server."), Category("Email Server")]
+        public string SmtpServerAddress { get; set; }
+
+        /// <summary>
         /// The port number for the SMTP server, if it uses something other than 25. This is mostly for TLS and SSL connections.
         /// </summary>
         [Description("Gets or sets the port for the SMTP Server."), Category("Email Server")]
@@ -237,6 +243,12 @@ namespace NDataAudit.Framework
         /// </summary>
         [Description("A flag to indicate whether or not the SMTP Server needs credentials."), Category("Email Server")]
         public bool SmtpHasCredentials { get; set; }
+
+        /// <summary>
+        /// This is the SMTP FROM email address.
+        /// </summary>
+        [Description("Gets or sets the FROM email used for the SMTP Server."), Category("Email Server")]
+        public string SmtpSourceEmail { get; set; }
 
         #endregion
     }

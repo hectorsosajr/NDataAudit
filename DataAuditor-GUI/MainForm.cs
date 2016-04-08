@@ -670,6 +670,20 @@ namespace DataAuditor.UI
             {
                 MessageBox.Show("There are no audits to run!", "No Audits", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+            catch (System.Net.Mail.SmtpException mailSmtpException)
+            {
+                this.Refresh();
+
+                // Change the icon to the "paused" icon
+                foreach (ListViewItem objItem in lsvAudits.Items)
+                {
+                    objItem.ImageIndex = 4;
+                    objItem.SubItems[2].Text = "Email Failure";
+                    this.Refresh();
+                }
+
+                MessageBox.Show(mailSmtpException.Message, "NAudit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch (Exception ex)
             {
                 this.Refresh();
