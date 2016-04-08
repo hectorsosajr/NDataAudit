@@ -191,14 +191,14 @@ namespace NDataAudit.Framework
             XmlNodeList ccEmailList = auditDoc.GetElementsByTagName("ccEmail");
             if (ccEmailList.Count > 0)
             {
-                ProcessEmails(ref newAudit, emailList, Audit.EmailTypeEnum.CarbonCopy); 
+                ProcessEmails(ref newAudit, ccEmailList, Audit.EmailTypeEnum.CarbonCopy); 
             }
 
             // Process email list
             XmlNodeList bccEmailList = auditDoc.GetElementsByTagName("bccEmail");
             if (bccEmailList.Count > 0)
             {
-                ProcessEmails(ref newAudit, emailList, Audit.EmailTypeEnum.BlindCarbonCopy); 
+                ProcessEmails(ref newAudit, bccEmailList, Audit.EmailTypeEnum.BlindCarbonCopy); 
             }
 
             // See if there is a custom email subject for this audit.
@@ -206,6 +206,13 @@ namespace NDataAudit.Framework
             if (xmlElement != null)
             {
                 newAudit.EmailSubject = xmlElement.InnerText;
+            }
+
+            // See if there is a source email the FROM email address.
+            var xmlSourceElement = auditBranch["sourceEmail"];
+            if (xmlSourceElement != null)
+            {
+                newAudit.SmtpSourceEmail = xmlSourceElement.InnerText;
             }
         }
 
@@ -267,31 +274,47 @@ namespace NDataAudit.Framework
 
         private static void GetSmtpDetails(XmlNode auditBranch, Audit newAudit)
         {
-            // Process SMTP credentials, if any
-            var xmlSmtpElement = auditBranch["smtpcredentials"];
+            var xmlSmtpElement = auditBranch["smtp"];
 
-            if (xmlSmtpElement != null)
+            if (xmlSmtpElement["sourceEmail"] != null)
+            {
+                newAudit.SmtpSourceEmail = xmlSmtpElement["sourceEmail"].InnerText;
+            }
+
+            if (xmlSmtpElement["address"] != null)
+            {
+                newAudit.SmtpServerAddress = xmlSmtpElement["address"].InnerText;
+            }
+
+            if (xmlSmtpElement["port"] != null)
+            {
+                newAudit.SmtpPort = Convert.ToInt32(xmlSmtpElement["port"].InnerText);
+            }
+            else
+            {
+                newAudit.SmtpPort = 25;
+            }
+
+            if (xmlSmtpElement["usessl"] != null)
+            {
+                newAudit.SmtpUseSsl = bool.Parse(xmlSmtpElement["usessl"].InnerText);
+            }
+
+            // Process SMTP credentials, if any
+            XmlNode xmlSmtpCredElement = xmlSmtpElement["smtpcredentials"];
+
+            if (xmlSmtpCredElement != null)
             {
                 newAudit.SmtpHasCredentials = true;
 
-                if (xmlSmtpElement["port"] != null)
+                if (xmlSmtpCredElement["username"] != null)
                 {
-                    newAudit.SmtpPort = Convert.ToInt32(xmlSmtpElement["port"].InnerText);
+                    newAudit.SmtpUserName = xmlSmtpCredElement["username"].InnerText;
                 }
 
-                if (xmlSmtpElement["username"] != null)
+                if (xmlSmtpCredElement["password"] != null)
                 {
-                    newAudit.SmtpUserName = xmlSmtpElement["username"].InnerText;
-                }
-
-                if (xmlSmtpElement["password"] != null)
-                {
-                    newAudit.SmtpPassword = xmlSmtpElement["password"].InnerText;
-                }
-
-                if (xmlSmtpElement["usessl"] != null)
-                {
-                    newAudit.SmtpUseSsl = bool.Parse(xmlSmtpElement["usessl"].InnerText);
+                    newAudit.SmtpPassword = xmlSmtpCredElement["password"].InnerText;
                 }
             }
         }
