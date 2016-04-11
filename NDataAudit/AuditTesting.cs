@@ -418,11 +418,10 @@ namespace NDataAudit.Framework
 
         private DataSet GetTestDataSet(ref Audit auditToRun, int testIndex)
         {
-            // TODO: Changed this to have the ability to use more than just SQL Server.
+            // TODO: Change this to have the ability to use more than just SQL Server.
             var conn = new SqlConnection();
             var cmdAudit = new SqlCommand();
             SqlDataAdapter daAudit = null;
-            CommandType auditCommandType = 0;
             var dsAudit = new DataSet();
 
             conn.ConnectionString = auditToRun.ConnectionString;
@@ -436,8 +435,6 @@ namespace NDataAudit.Framework
                 string strMsg = null;
                 strMsg = ex.Message;
                 auditToRun.Tests[testIndex].FailedMessage = strMsg;
-
-                //AuditLogger?.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message);
 
                 return dsAudit;
             }
@@ -453,15 +450,12 @@ namespace NDataAudit.Framework
             
             if (auditToRun.SqlType == Audit.SqlStatementTypeEnum.SqlText)
             {
-                auditCommandType = CommandType.Text;
+                cmdAudit.CommandType = CommandType.Text;
             }
-
             else if (auditToRun.SqlType == Audit.SqlStatementTypeEnum.StoredProcedure)
             {
-                auditCommandType = CommandType.StoredProcedure;
+                cmdAudit.CommandType = CommandType.StoredProcedure;
             }
-
-            cmdAudit.CommandType = auditCommandType;
 
             daAudit = new SqlDataAdapter(cmdAudit);
 
