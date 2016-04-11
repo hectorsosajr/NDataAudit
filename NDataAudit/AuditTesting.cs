@@ -224,7 +224,7 @@ namespace NDataAudit.Framework
                         else
                         {
                             currentAudit.Result = false;
-                            SendFailureEmail(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit,
+                            PrepareResultsEmailData(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit,
                                              dsTest);
                         }
                     }
@@ -393,7 +393,7 @@ namespace NDataAudit.Framework
                     {
                         if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
                         {
-                            SendFailureEmail(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit, dsTest);
+                            PrepareResultsEmailData(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit, dsTest);
                         }
                     }
                     else
@@ -403,7 +403,7 @@ namespace NDataAudit.Framework
                             if (currentAudit.Tests[testCount].SendReport)
                             {
                                 // It's not really a failure. Just want to send a report-like email.
-                                SendFailureEmail(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit, dsTest);
+                                PrepareResultsEmailData(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit, dsTest);
                             }
                         }
                     }
@@ -583,7 +583,7 @@ namespace NDataAudit.Framework
             return result;
         }
 
-        private void SendFailureEmail(string sqlTested, int testIndex, Audit testedAudit, DataSet testData)
+        private static void PrepareResultsEmailData(string sqlTested, int testIndex, Audit testedAudit, DataSet testData)
         {
             var body = new StringBuilder();
 
