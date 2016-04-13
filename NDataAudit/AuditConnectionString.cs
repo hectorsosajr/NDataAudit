@@ -8,13 +8,6 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AuditConnectionString"/> class.
         /// </summary>
-        public AuditConnectionString()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuditConnectionString"/> class.
-        /// </summary>
         /// <param name="connectionString">The connection string.</param>
         public AuditConnectionString(string connectionString)
         {

@@ -42,9 +42,9 @@ namespace NDataAudit.Framework
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="AuditController"/> class.
         /// </summary>
-        /// <param name="auditFilePath">The full path of the Audit group xml file.</param>
+        /// <param name="auditFilePath">The path to the XML audit file.</param>
         public AuditController(string auditFilePath)
         {
             _colAuditGroup = new AuditCollection();

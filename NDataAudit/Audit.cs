@@ -34,6 +34,7 @@ namespace NDataAudit.Framework
             /// A regular SQL Statement
             /// </summary>
             SqlText = 0,
+
             /// <summary>
             /// A stored procedure
             /// </summary>
@@ -50,10 +51,12 @@ namespace NDataAudit.Framework
             /// Regular email recipient
             /// </summary>
             Recipient,
+
             /// <summary>
             /// Carbon Copy email recipient
             /// </summary>
             CarbonCopy,
+
             /// <summary>
             /// Blind carbon copy email recipient
             /// </summary>
@@ -203,9 +206,12 @@ namespace NDataAudit.Framework
         [Description("A flag to determine whether to show the comments/instructions or not."), Category("Report")]
         public bool ShowCommentMessage { get; set; }
 
+
         /// <summary>
-        /// This is a flag to help NDataAudit send report-like emails.
+        /// Gets or sets whether to fail the audit if the threshold condition is true.
         /// </summary>
+        /// <value><c>true</c> if [fail if true]; otherwise, <c>false</c>.</value>
+        [Description("Gets or sets whether to fail the audit if the threshold condition is true."), Category("Tests")]
         public bool FailIfTrue { get; set; }
 
         /// <summary>
