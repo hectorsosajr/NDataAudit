@@ -87,7 +87,7 @@ namespace NDataAudit.Framework
         /// The connection string needed to connect to the server that contains the needed test data.
         /// </summary>
         [Description("The connection string needed to connect to the server that contains the needed test data."), Category("Database")]
-        public string ConnectionString { get; set; }
+        public AuditConnectionString ConnectionString { get; set; }
 
         /// <summary>
         /// The emails of the people who will receive notifications.

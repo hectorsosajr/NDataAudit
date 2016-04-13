@@ -424,7 +424,7 @@ namespace NDataAudit.Framework
             SqlDataAdapter daAudit = null;
             var dsAudit = new DataSet();
 
-            conn.ConnectionString = auditToRun.ConnectionString;
+            conn.ConnectionString = auditToRun.ConnectionString.ToString();
             
             try
             {

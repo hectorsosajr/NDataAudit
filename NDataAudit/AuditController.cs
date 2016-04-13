@@ -154,7 +154,7 @@ namespace NDataAudit.Framework
                 newAudit.SqlType = (Audit.SqlStatementTypeEnum) Convert.ToInt32(sqlType[0].InnerText);
 
                 XmlNodeList connectionString = auditDoc.GetElementsByTagName("connectionstring");
-                newAudit.ConnectionString = connectionString[0].InnerText;
+                newAudit.ConnectionString = new AuditConnectionString(connectionString[0].InnerText);
 
                 XmlNodeList orderbyNode = auditDoc.GetElementsByTagName("orderbyclause");
                 if (orderbyNode.Count > 0)
@@ -172,6 +172,10 @@ namespace NDataAudit.Framework
                 if (testRunOn.Count > 0)
                 {
                     newAudit.TestServer = testRunOn[0].InnerText;
+                }
+                else
+                {
+                    newAudit.TestServer = newAudit.ConnectionString.DatabaseServer;
                 }
 
                 _colAuditGroup.Add(newAudit);
