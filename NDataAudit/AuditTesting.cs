@@ -588,7 +588,7 @@ namespace NDataAudit.Framework
             {
                 body.Append("The '" + testedAudit.Name + "' audit has failed. The following SQL statement was used to test this audit :" + AuditUtils.HtmlBreak);
                 body.Append(sqlTested.ToHtml() + AuditUtils.HtmlBreak);
-                body.Append("<b>This query was ran on: " + testedAudit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
+                body.Append("<b>This query was run on: " + testedAudit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
             }
 
             if (testedAudit.ShowThresholdMessage)
