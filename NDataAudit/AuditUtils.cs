@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
-using System.Security.Policy;
 using System.Text;
 using Newtonsoft.Json.Linq;
 
@@ -54,10 +53,22 @@ namespace NDataAudit.Framework
 
     internal static class AuditUtils
     {
+        /// <summary>
+        /// Gets the HTML equivalent of line break.
+        /// </summary>
+        /// <value>The HTML break tag.</value>
         public static string HtmlBreak => "<br/>";
 
+        /// <summary>
+        /// Gets the HTML equivalent of space.
+        /// </summary>
+        /// <value>The HTML non-blanking space tag.</value>
         public static string HtmlSpace => "&nbsp;";
 
+        /// <summary>
+        /// Gets the HTML tab.
+        /// </summary>
+        /// <value>The HTML equivalent of a tab. Made it equal to 4 non-blanking space tags.</value>
         public static string HtmlTab => "&nbsp;&nbsp;&nbsp;&nbsp;";
 
         /// <summary>
@@ -67,15 +78,20 @@ namespace NDataAudit.Framework
         /// <returns>Converted string with HTML tags</returns>
         public static string ToHtml(this string stringToConvert)
         {
-            string retval = string.Empty;
-
-            retval = stringToConvert.Replace(Environment.NewLine, HtmlBreak)
+            var retval = stringToConvert.Replace(Environment.NewLine, HtmlBreak)
                 .Replace(" ", HtmlSpace)
                 .Replace("\t", HtmlTab);
 
             return retval;
         }
 
+        /// <summary>
+        /// Creates the HTML content for the email.
+        /// </summary>
+        /// <param name="testedAudit">The tested audit.</param>
+        /// <param name="testData">The test data.</param>
+        /// <param name="emailTableTemplate">The email table template.</param>
+        /// <returns>System.String.</returns>
         public static string CreateHtmlData(Audit testedAudit, DataSet testData, EmailTableTemplate emailTableTemplate)
         {
             var sb = new StringBuilder();
@@ -164,6 +180,10 @@ namespace NDataAudit.Framework
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Gets the email table templates.
+        /// </summary>
+        /// <returns>List&lt;EmailTableTemplate&gt;.</returns>
         public static List<EmailTableTemplate> GeTableTemplates()
         {
             var templates = new List<EmailTableTemplate>();
@@ -173,7 +193,7 @@ namespace NDataAudit.Framework
 
             foreach (var template in results["tabletemplates"])
             {
-                EmailTableTemplate currTemplate = new EmailTableTemplate
+                var currTemplate = new EmailTableTemplate
                 {
                     Name = (string) template["Name"],
                     AlternateRowColor = (string) template["AlternateRowColor"],
@@ -190,6 +210,10 @@ namespace NDataAudit.Framework
             return templates;
         }
 
+        /// <summary>
+        /// Gets the default email table template.
+        /// </summary>
+        /// <returns>EmailTableTemplate.</returns>
         public static EmailTableTemplate GetDefaultTemplate()
         {
             var template = new EmailTableTemplate

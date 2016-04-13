@@ -34,31 +34,33 @@ namespace NDataAudit.Framework
 			//
 		}
 
-		#endregion
+        #endregion
 
-		#region  Properties 
+        #region  Properties 
 
-		/// <summary>
-		/// Gets the <see cref="Audit"/> object at Index position inside this AuditTestCollection.
-		/// </summary>
-		public AuditTest this[int Index]
+        /// <summary>
+        /// Gets the <see cref="Audit" /> object at Index position inside this AuditTestCollection.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <returns>AuditTest.</returns>
+        public AuditTest this[int index]
 		{
 			get
 			{
-				return ((AuditTest)(List[Index]));
+				return ((AuditTest)(List[index]));
 			}
 		}
 
-		#endregion
+        #endregion
 
-		#region  Public Members
+        #region  Public Members
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="Items"></param>
-		/// <returns></returns>
-		public int[] Add(AuditTestCollection Items)
+        /// <summary>
+        /// Adds the specified items.
+        /// </summary>
+        /// <param name="Items">The items.</param>
+        /// <returns>System.Int32[].</returns>
+        public int[] Add(AuditTestCollection Items)
 		{
 			ArrayList indexes = new ArrayList();
 
@@ -70,43 +72,43 @@ namespace NDataAudit.Framework
 			return ((int[])(indexes.ToArray(typeof(int))));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="Item"></param>
-		/// <returns></returns>
-		public int Add(AuditTest Item)
+        /// <summary>
+        /// Adds the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns>System.Int32.</returns>
+        public int Add(AuditTest item)
 		{
-			return List.Add(Item);
+			return List.Add(item);
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="Index"></param>
-		/// <param name="Item"></param>
-		public void Insert(int Index, AuditTest Item)
+        /// <summary>
+        /// Inserts the specified index.
+        /// </summary>
+        /// <param name="index">The index.</param>
+        /// <param name="item">The item.</param>
+        public void Insert(int index, AuditTest item)
 		{
-			List.Insert(Index, Item);
+			List.Insert(index, item);
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="Item"></param>
-		public void Remove(AuditTest Item)
+        /// <summary>
+        /// Removes the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        public void Remove(AuditTest item)
 		{
-			List.Remove(Item);
+			List.Remove(item);
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="Item"></param>
-		/// <returns></returns>
-		public bool Contains(AuditTest Item)
+        /// <summary>
+        /// Determines whether [contains] [the specified item].
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns><c>true</c> if [contains] [the specified item]; otherwise, <c>false</c>.</returns>
+        public bool Contains(AuditTest item)
 		{
-			return List.Contains(Item);
+			return List.Contains(item);
 		}
 
 		#endregion

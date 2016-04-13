@@ -19,7 +19,6 @@
 //*********************************************************************
 
 using System;
-using System.Collections;
 using System.Configuration;
 using System.Globalization;
 using System.Net.Mail;
@@ -224,7 +223,7 @@ namespace NDataAudit.Framework
                         else
                         {
                             currentAudit.Result = false;
-                            SendFailureEmail(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit,
+                            PrepareResultsEmailData(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit,
                                              dsTest);
                         }
                     }
@@ -286,7 +285,7 @@ namespace NDataAudit.Framework
                     {
                         if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
                         {
-                            SendFailureEmail(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit, dsTest);
+                            PrepareResultsEmailData(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit, dsTest);
                         }
                     }
                     else
@@ -296,7 +295,7 @@ namespace NDataAudit.Framework
                             if (currentAudit.Tests[testCount].SendReport)
                             {
                                 // It's not really a failure. Just want to send a report-like email.
-                                SendFailureEmail(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit, dsTest);
+                                PrepareResultsEmailData(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit, dsTest);
                             }
                         }
                     }
@@ -435,14 +434,13 @@ namespace NDataAudit.Framework
 
         private DataSet GetTestDataSet(ref Audit auditToRun, int testIndex)
         {
-            // TODO: Changed this to have the ability to use more than just SQL Server.
+            // TODO: Change this to have the ability to use more than just SQL Server.
             var conn = new SqlConnection();
             var cmdAudit = new SqlCommand();
             SqlDataAdapter daAudit = null;
-            CommandType auditCommandType = 0;
             var dsAudit = new DataSet();
 
-            conn.ConnectionString = auditToRun.ConnectionString;
+            conn.ConnectionString = auditToRun.ConnectionString.ToString();
             
             try
             {
@@ -453,8 +451,6 @@ namespace NDataAudit.Framework
                 string strMsg = null;
                 strMsg = ex.Message;
                 auditToRun.Tests[testIndex].FailedMessage = strMsg;
-
-                //AuditLogger?.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message);
 
                 return dsAudit;
             }
@@ -470,15 +466,12 @@ namespace NDataAudit.Framework
             
             if (auditToRun.SqlType == Audit.SqlStatementTypeEnum.SqlText)
             {
-                auditCommandType = CommandType.Text;
+                cmdAudit.CommandType = CommandType.Text;
             }
-
             else if (auditToRun.SqlType == Audit.SqlStatementTypeEnum.StoredProcedure)
             {
-                auditCommandType = CommandType.StoredProcedure;
+                cmdAudit.CommandType = CommandType.StoredProcedure;
             }
-
-            cmdAudit.CommandType = auditCommandType;
 
             daAudit = new SqlDataAdapter(cmdAudit);
 
@@ -600,7 +593,7 @@ namespace NDataAudit.Framework
             return result;
         }
 
-        private void SendFailureEmail(string sqlTested, int testIndex, Audit testedAudit, DataSet testData)
+        private static void PrepareResultsEmailData(string sqlTested, int testIndex, Audit testedAudit, DataSet testData)
         {
             var body = new StringBuilder();
 
