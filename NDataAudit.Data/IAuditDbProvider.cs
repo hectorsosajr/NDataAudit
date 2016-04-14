@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace NDataAudit.Framework
+namespace NDataAudit.Data
 {
     /// <summary>
     /// Interface IAuditDbProvider

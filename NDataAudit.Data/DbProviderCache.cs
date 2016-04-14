@@ -4,10 +4,10 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Reflection;
 
-namespace NDataAudit.Framework
+namespace NDataAudit.Data
 {
     /// <summary>
-    /// Class #ctor.
+    /// Class DbProviderCache
     /// </summary>
     public class DbProviderCache
     {
