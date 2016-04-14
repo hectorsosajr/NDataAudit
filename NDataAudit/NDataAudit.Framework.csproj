@@ -110,6 +110,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data">
       <Name>System.Data</Name>
@@ -145,6 +146,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AuditUtils.cs" />
+    <Compile Include="DbProviderCache.cs" />
+    <Compile Include="IAuditDbProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
