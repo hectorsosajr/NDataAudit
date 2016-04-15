@@ -90,7 +90,7 @@ namespace NDataAudit.Framework
         /// The connection string needed to connect to the server that contains the needed test data.
         /// </summary>
         [Description("The connection string needed to connect to the server that contains the needed test data."), Category("Database")]
-        public string ConnectionString { get; set; }
+        public AuditConnectionString ConnectionString { get; set; }
 
         /// <summary>
         /// The emails of the people who will receive notifications.
@@ -206,9 +206,12 @@ namespace NDataAudit.Framework
         [Description("A flag to determine whether to show the comments/instructions or not."), Category("Report")]
         public bool ShowCommentMessage { get; set; }
 
+
         /// <summary>
-        /// This is a flag to help NDataAudit send report-like emails.
+        /// Gets or sets whether to fail the audit if the threshold condition is true.
         /// </summary>
+        /// <value><c>true</c> if [fail if true]; otherwise, <c>false</c>.</value>
+        [Description("Gets or sets whether to fail the audit if the threshold condition is true."), Category("Tests")]
         public bool FailIfTrue { get; set; }
 
         /// <summary>
