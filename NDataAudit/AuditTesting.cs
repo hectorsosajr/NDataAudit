@@ -32,12 +32,12 @@ namespace NDataAudit.Framework
     /// <summary>
     /// Delegate for the <seealso cref="AuditTesting.CurrentAuditRunning"/>AuditTesting.CurrentAuditRunning event.
     /// </summary>
-    public delegate void CurrentAuditRunningEventHandler(int AuditIndex, string AuditName);
+    public delegate void CurrentAuditRunningEventHandler(int auditIndex, string auditName);
 
     /// <summary>
     /// Delegate for the <seealso cref="AuditTesting.CurrentAuditDone"/>AuditTesting.CurrentAuditDone event.
     /// </summary>
-    public delegate void CurrentAuditDoneEventHandler(int AuditIndex, string AuditName);
+    public delegate void CurrentAuditDoneEventHandler(int auditIndex, string auditName);
 
     /// <summary>
     /// Delegate for the <seealso cref="AuditTesting.AuditTestingStarting"/>AuditTesting.AuditTestingStarting event.
@@ -48,12 +48,17 @@ namespace NDataAudit.Framework
     /// <summary>
     /// Delegate for the <seealso cref="AuditTesting.CurrentSingleAuditRunning"/>AuditTesting.CurrentSingleAuditRunning event.
     /// </summary>
-    public delegate void CurrentSingleAuditRunningEventHandler(Audit CurrentAudit);
+    public delegate void CurrentSingleAuditRunningEventHandler(Audit currentAudit);
 
     /// <summary>
     /// Delegate for the <seealso cref="AuditTesting.CurrentSingleAuditDone"/>AuditTesting.CurrentSingleAuditDone event.
     /// </summary>
-    public delegate void CurrentSingleAuditDoneEventHandler(Audit CurrentAudit);
+    public delegate void CurrentSingleAuditDoneEventHandler(Audit currentAudit);
+
+    /// <summary>
+    /// Delegate for the <seealso cref="AuditTesting.AuditTestingEnded"/>AuditTesting.AuditTestingEnded event.
+    /// </summary>
+    public delegate void AuditTestingEndedEventHandler();
 
     /// <summary>
     /// Summary description for AuditTesting.
@@ -80,12 +85,12 @@ namespace NDataAudit.Framework
 
         /// <summary>
         /// This event fires when <see cref="AuditTesting"/> object starts processing all of 
-        /// the Audits in the <see cref="AuditCollection"/> object. 
+        /// the <see cref="Audit"/>s in the <see cref="AuditCollection"/> object. 
         /// </summary>
         public event AuditTestingStartingEventHandler AuditTestingStarting;
 
         /// <summary>
-        /// 
+        /// This event fires when the current <see cref="Audit"/> starts running its tests.
         /// </summary>
         public event CurrentSingleAuditRunningEventHandler CurrentSingleAuditRunning;
 
@@ -93,6 +98,12 @@ namespace NDataAudit.Framework
         /// This event fires when a new <see cref="Audit"/> starts running.
         /// </summary>
         public event CurrentSingleAuditDoneEventHandler CurrentSingleAuditDone;
+
+        /// <summary>
+        /// This event fires when <see cref="AuditTesting"/> object ends processing all of 
+        /// the <see cref="Audit"/>s in the <see cref="AuditCollection"/> object. 
+        /// </summary>
+        public event AuditTestingEndedEventHandler AuditTestingEnded;
 
         #endregion
 
