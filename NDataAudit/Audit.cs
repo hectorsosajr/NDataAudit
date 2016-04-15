@@ -13,11 +13,11 @@
 //									conventions.
 //*********************************************************************/
 
-using System.Collections;
-using System.ComponentModel;
-
 namespace NDataAudit.Framework
 {
+    using System.Collections;
+    using System.ComponentModel;
+
     /// <summary>
     /// Summary description for Audit.
     /// </summary>
@@ -34,6 +34,7 @@ namespace NDataAudit.Framework
             /// A regular SQL Statement
             /// </summary>
             SqlText = 0,
+
             /// <summary>
             /// A stored procedure
             /// </summary>
@@ -50,10 +51,12 @@ namespace NDataAudit.Framework
             /// Regular email recipient
             /// </summary>
             Recipient,
+
             /// <summary>
             /// Carbon Copy email recipient
             /// </summary>
             CarbonCopy,
+
             /// <summary>
             /// Blind carbon copy email recipient
             /// </summary>
@@ -65,7 +68,7 @@ namespace NDataAudit.Framework
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Initializes a new instance of the <see cref="Audit"/> class.
         /// </summary>
         public Audit()
         {
