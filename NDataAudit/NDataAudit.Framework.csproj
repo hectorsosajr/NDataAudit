@@ -170,6 +170,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NDataAudit.Data\NDataAudit.Data.csproj">
+      <Project>{B4735746-C56A-4CA0-9B3A-E34F2404212D}</Project>
+      <Name>NDataAudit.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
