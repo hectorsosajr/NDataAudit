@@ -683,6 +683,23 @@ namespace NDataAudit.Framework
             }
 
             message.Body = body;
+
+            switch (testedAudit.EmailPriority)
+            {
+                case Audit.EmailPriorityEnum.Low:
+                    message.Priority = MailPriority.Low;
+                    break;
+                case Audit.EmailPriorityEnum.Normal:
+                    message.Priority = MailPriority.Normal;
+                    break;
+                case Audit.EmailPriorityEnum.High:
+                    message.Priority = MailPriority.High;
+                    break;
+                default:
+                    message.Priority = MailPriority.Normal;
+                    break;
+            }
+
             message.Priority = MailPriority.High;
 
             if (!string.IsNullOrEmpty(testedAudit.EmailSubject))
@@ -769,8 +786,8 @@ namespace NDataAudit.Framework
         }
 
         #endregion
-    }	
-    
+    }
+
     /// <summary>
     /// Custom <see cref="Exception"/> to alert users that no Audits have been loaded for testing.
     /// </summary>
@@ -781,6 +798,7 @@ namespace NDataAudit.Framework
         /// </summary>
         /// <param name="message">The message that will be associated with this <see cref="Exception"/> and that will be shown to users.</param>
         public NoAuditsLoadedException(string message) : base(message)
-        {}
+        {
+        }
     }
 }
