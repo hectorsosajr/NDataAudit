@@ -700,8 +700,6 @@ namespace NDataAudit.Framework
                     break;
             }
 
-            message.Priority = MailPriority.High;
-
             if (!string.IsNullOrEmpty(testedAudit.EmailSubject))
             {
                 message.Subject = testedAudit.EmailSubject;
