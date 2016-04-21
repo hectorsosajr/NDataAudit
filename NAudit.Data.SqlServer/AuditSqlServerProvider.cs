@@ -3,7 +3,6 @@
 using System;
 using System.ComponentModel.Composition;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Text;
@@ -56,7 +55,6 @@ namespace NAudit.Data.SqlServer
         /// Creates the database session.
         /// </summary>
         /// <returns>IDbConnection.</returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         public IDbConnection CreateDatabaseSession()
         {
             StringBuilder errorMessages = new StringBuilder();

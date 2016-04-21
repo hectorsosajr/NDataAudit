@@ -25,6 +25,7 @@ using System.Net.Mail;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
+using NDataAudit.Data;
 
 namespace NDataAudit.Framework
 {
@@ -63,6 +64,8 @@ namespace NDataAudit.Framework
         #region  Declarations
 
         private AuditCollection _colAudits;
+
+        private DbProviderCache _providers = null;
 
         #endregion
 
@@ -103,6 +106,7 @@ namespace NDataAudit.Framework
         /// </summary>
         public AuditTesting()
         {
+            _providers = new DbProviderCache();
         }
 
         /// <summary>
@@ -112,6 +116,8 @@ namespace NDataAudit.Framework
         public AuditTesting(AuditCollection colAudits)
         {
             _colAudits = colAudits;
+
+            _providers = new DbProviderCache();
         }
 
         #endregion
@@ -418,6 +424,12 @@ namespace NDataAudit.Framework
         private DataSet GetTestDataSet(ref Audit auditToRun, int testIndex)
         {
             // TODO: Change this to have the ability to use more than just SQL Server.
+
+            IAuditDbProvider currDbProvider = _providers.Providers["system.data.sqlclient"];
+            currDbProvider.ConnectionString = auditToRun.ConnectionString.ToString();
+
+            IDbConnection currConnection = currDbProvider.CreateDatabaseSession();
+
             var conn = new SqlConnection();
             var cmdAudit = new SqlCommand();
             SqlDataAdapter daAudit = null;

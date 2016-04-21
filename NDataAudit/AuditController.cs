@@ -12,7 +12,6 @@
 //										conventions.
 //*********************************************************************
 
-using NDataAudit.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +26,7 @@ namespace NDataAudit.Framework
     {
         #region  Declarations 
 
-        private AuditCollection _colAuditGroup;
+        private readonly AuditCollection _colAuditGroup;
         private string _auditGroupName;
 
         #endregion
@@ -51,8 +50,6 @@ namespace NDataAudit.Framework
             _colAuditGroup = new AuditCollection();
 
             TableTemplates = AuditUtils.GeTableTemplates();
-
-            var dbcache = new DbProviderCache();
 
             LoadAuditGroup(auditFilePath);
         }
