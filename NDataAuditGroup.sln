@@ -1,5 +1,7 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAuditor-Console", "DataAuditor-Console\DataAuditor-Console.csproj", "{A644A974-A1A9-4989-B9A6-1CE7A582BDCD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAuditor-GUI", "DataAuditor-GUI\DataAuditor-GUI.csproj", "{B09BBCE8-EC11-43EC-BBBC-CE6CED9ADA7D}"

@@ -63,6 +63,27 @@ namespace NDataAudit.Framework
             BlindCarbonCopy
         }
 
+        /// <summary>
+        /// Type of email priority
+        /// </summary>
+        public enum EmailPriorityEnum
+        {
+            /// <summary>
+            /// The low email priority
+            /// </summary>
+            Low = 0,
+
+            /// <summary>
+            /// The normal email priority
+            /// </summary>
+            Normal = 1,
+
+            /// <summary>
+            /// The high email priority
+            /// </summary>
+            High = 2
+        }
+
         #endregion
 
         #region Constructors
@@ -176,8 +197,15 @@ namespace NDataAudit.Framework
         /// <value>
         /// The email subject for this audit test.
         /// </value>
-        [Description("Gets or sets the email subject for this test."), Category("Email")]
+        [Description("Gets or sets the email subject for this audit."), Category("Email")]
         public string EmailSubject { get; set; }
+
+        /// <summary>
+        /// Gets or sets the email priority.
+        /// </summary>
+        /// <value>The email priority.</value>
+        [Description("Gets or sets the email prioirty for this audit."), Category("Email")]
+        public EmailPriorityEnum EmailPriority { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether [show threshold message].
