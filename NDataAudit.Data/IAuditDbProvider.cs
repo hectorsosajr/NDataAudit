@@ -26,9 +26,31 @@ namespace NDataAudit.Data
         string ProviderNamespace { get; }
 
         /// <summary>
+        /// Gets the current connection, is it has been set.
+        /// </summary>
+        /// <value>The current connection.</value>
+        IDbConnection CurrentConnection { get; }
+
+        /// <summary>
+        /// Creates the command object for the specific database engine.
+        /// </summary>
+        /// <param name="commandText">The command text.</param>
+        /// <param name="commandType">Type of the command, stored procedure or SQL text.</param>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns>IDbCommand.</returns>
+        IDbCommand CreateDbCommand(string commandText, CommandType commandType, int commandTimeOut);
+
+        /// <summary>
         /// Creates the database session.
         /// </summary>
         /// <returns>IDbConnection.</returns>
         IDbConnection CreateDatabaseSession();
+
+        /// <summary>
+        /// Creates the database data adapter for the specific database engine.
+        /// </summary>
+        /// <param name="currentDbCommand">The current database command.</param>
+        /// <returns>IDbDataAdapter.</returns>
+        IDbDataAdapter CreateDbDataAdapter(IDbCommand currentDbCommand);
     }
 }

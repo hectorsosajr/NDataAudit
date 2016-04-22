@@ -17,6 +17,9 @@ namespace NAudit.Data.SqlServer
     [Export(typeof(IAuditDbProvider))]
     public class AuditSqlServerProvider : IAuditDbProvider
     {
+        private IDbConnection _currentDbConnection;
+        private IDbCommand _currentDbCommand;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AuditSqlServerProvider"/> class.
         /// </summary>
@@ -52,6 +55,34 @@ namespace NAudit.Data.SqlServer
         public string ProviderNamespace => "system.data.sqlclient";
 
         /// <summary>
+        /// Gets the current connection, if it has been set.
+        /// </summary>
+        /// <value>The current connection.</value>
+        public IDbConnection CurrentConnection => _currentDbConnection;
+
+        /// <summary>
+        /// Gets the current command.
+        /// </summary>
+        /// <value>The current command.</value>
+        public IDbCommand CurrentCommand => _currentDbCommand;
+
+        /// <summary>
+        /// Creates the command object for the specific database engine.
+        /// </summary>
+        /// <param name="commandText">The command text.</param>
+        /// <param name="commandType">Type of the command, stored procedure or SQL text.</param>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns>IDbCommand.</returns>
+        public IDbCommand CreateDbCommand(string commandText, CommandType commandType, int commandTimeOut)
+        {
+            IDbCommand retval = new SqlCommand(commandText);
+            retval.Connection = CurrentConnection;
+            retval.CommandTimeout = commandTimeOut;
+
+            return retval;
+        }
+
+        /// <summary>
         /// Creates the database session.
         /// </summary>
         /// <returns>IDbConnection.</returns>
@@ -69,6 +100,8 @@ namespace NAudit.Data.SqlServer
             try
             {
                 conn.Open();
+
+                _currentDbConnection = conn;
             }
             catch (SqlException ex)
             {
@@ -93,6 +126,19 @@ namespace NAudit.Data.SqlServer
             }
 
             return conn;
+        }
+
+        /// <summary>
+        /// Creates the database data adapter for the specific database engine.
+        /// </summary>
+        /// <param name="currentDbCommand">The current database command.</param>
+        /// <returns>IDbDataAdapter.</returns>
+        public IDbDataAdapter CreateDbDataAdapter(IDbCommand currentDbCommand)
+        {
+            SqlCommand cmd = (SqlCommand) currentDbCommand;
+            IDbDataAdapter retval = new SqlDataAdapter(cmd);
+            
+            return retval;
         }
     }
 }

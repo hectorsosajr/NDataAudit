@@ -23,7 +23,7 @@ using System.Configuration;
 using System.Globalization;
 using System.Net.Mail;
 using System.Data;
-using System.Data.SqlClient;
+//using System.Data.SqlClient;
 using System.Text;
 using NDataAudit.Data;
 
@@ -428,72 +428,50 @@ namespace NDataAudit.Framework
             IAuditDbProvider currDbProvider = _providers.Providers["system.data.sqlclient"];
             currDbProvider.ConnectionString = auditToRun.ConnectionString.ToString();
 
-            IDbConnection currConnection = currDbProvider.CreateDatabaseSession();
+            currDbProvider.CreateDatabaseSession();
 
-            var conn = new SqlConnection();
-            var cmdAudit = new SqlCommand();
-            SqlDataAdapter daAudit = null;
             var dsAudit = new DataSet();
-
-            conn.ConnectionString = auditToRun.ConnectionString.ToString();
-            
-            try
-            {
-                conn.Open();
-            }
-            catch (Exception ex)
-            {
-                string strMsg = null;
-                strMsg = ex.Message;
-                auditToRun.Tests[testIndex].FailedMessage = strMsg;
-
-                return dsAudit;
-            }
 
             string sql = BuildSqlStatement(auditToRun, testIndex);
 
-            cmdAudit.CommandText = sql;
-            cmdAudit.Connection = conn;
-            cmdAudit.CommandTimeout = 180;
-
-            int intCommandTimeout = cmdAudit.CommandTimeout;
-            int intConnectionTimeout = conn.ConnectionTimeout;
+            CommandType commandType = (CommandType) 0;
             
             if (auditToRun.SqlType == Audit.SqlStatementTypeEnum.SqlText)
             {
-                cmdAudit.CommandType = CommandType.Text;
+                commandType = CommandType.Text;
             }
             else if (auditToRun.SqlType == Audit.SqlStatementTypeEnum.StoredProcedure)
             {
-                cmdAudit.CommandType = CommandType.StoredProcedure;
+                commandType = CommandType.StoredProcedure;
             }
 
-            daAudit = new SqlDataAdapter(cmdAudit);
+            IDbCommand cmdAudit = currDbProvider.CreateDbCommand(sql, commandType, 180);
+            IDbDataAdapter daAudit = currDbProvider.CreateDbDataAdapter(cmdAudit);
 
             try
             {
                 daAudit.Fill(dsAudit);
             }
-            catch (SqlException exsql)
-            {
-                int intFound = 0;
-                string strMsg = null;
+            //catch (SqlException exsql)
+            //{
+            //    int intFound = 0;
+            //    string strMsg = null;
 
-                strMsg = exsql.Message;
+            //    strMsg = exsql.Message;
 
-                intFound = (strMsg.IndexOf("Timeout expired.", 0, StringComparison.Ordinal) + 1);
+            //    intFound = (strMsg.IndexOf("Timeout expired.", 0, StringComparison.Ordinal) + 1);
 
-                if (intFound == 1)
-                {
-                    auditToRun.Tests[testIndex].FailedMessage = "Timeout expired while running this audit. The connection timeout was " + intConnectionTimeout.ToString(CultureInfo.InvariantCulture) + " seconds. The command timeout was " + intCommandTimeout.ToString() + " seconds.";
-                }
-                else
-                {
-                    auditToRun.Tests[testIndex].FailedMessage = strMsg;
-                }
+            //    if (intFound == 1)
+            //    {
+            //        //auditToRun.Tests[testIndex].FailedMessage = "Timeout expired while running this audit. The connection timeout was " + intConnectionTimeout.ToString(CultureInfo.InvariantCulture) + " seconds. The command timeout was " + intCommandTimeout.ToString() + " seconds.";
+            //    }
+            //    else
+            //    {
+            //        auditToRun.Tests[testIndex].FailedMessage = strMsg;
+            //    }
 
                 //AuditLogger.Log(LogLevel.Debug, exsql.TargetSite + "::" + exsql.Message, exsql);
-            }
+            //}
             catch (Exception ex)
             {
                 //AuditLogger.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
@@ -503,9 +481,6 @@ namespace NDataAudit.Framework
             }
             finally
             {
-                conn.Close();
-                conn.Dispose();
-                daAudit.Dispose();
                 cmdAudit.Dispose();
             }
 
