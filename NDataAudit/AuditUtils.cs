@@ -49,6 +49,12 @@ namespace NDataAudit.Framework
         /// The color of the alternate row.
         /// </value>
         public string AlternateRowColor { get; set; }
+		
+         /// <summary>
+         /// Gets or sets the CSS table style.
+         /// </summary>
+         /// <value>The CSS table style.</value>
+         public string CssTableStyle { get; set; }
     }
 
     internal static class AuditUtils
@@ -201,6 +207,12 @@ namespace NDataAudit.Framework
                     HtmlHeaderFontColor = (string) template["HtmlHeaderFontColor"],
                     UseAlternateRowColors = Convert.ToBoolean(template["UseAlternateRowColors"])
                 };
+				 
+                if (template["CssTableStyle"] != null)
+                {
+                    JArray styleArray = JArray.Parse(template["CssTableStyle"].ToString());
+                    currTemplate.CssTableStyle = styleArray.ToString();
+                }
 
                 templates.Add(currTemplate);
             }
