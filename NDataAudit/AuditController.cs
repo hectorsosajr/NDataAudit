@@ -205,27 +205,6 @@ namespace NDataAudit.Framework
                 ProcessEmails(ref newAudit, bccEmailList, Audit.EmailTypeEnum.BlindCarbonCopy); 
             }
 
-            // Process email list
-            XmlNodeList emailPriority = auditDoc.GetElementsByTagName("emailpriority");
-            if (emailPriority.Count > 0)
-            {
-                switch (emailPriority[0].InnerText.ToLower())
-                {
-                    case "low":
-                        newAudit.EmailPriority = Audit.EmailPriorityEnum.Low;
-                        break;
-                    case "normal":
-                        newAudit.EmailPriority = Audit.EmailPriorityEnum.Normal;
-                        break;
-                    case "high":
-                        newAudit.EmailPriority = Audit.EmailPriorityEnum.High;
-                        break;
-                    default:
-                        newAudit.EmailPriority = Audit.EmailPriorityEnum.Normal;
-                        break;
-                }
-            }
-
             // See if there is a custom email subject for this audit.
             var xmlElement = auditBranch["emailSubject"];
             if (xmlElement != null)
@@ -370,9 +349,14 @@ namespace NDataAudit.Framework
                 }
 
                 newTest.FailIfConditionIsTrue = Convert.ToBoolean(columnNode["failiftrue"].InnerText);
-                newTest.Instructions = columnNode["instructions"].InnerText;
 
-                var xmlElement = columnNode["sendReport"];
+                var xmlElement = columnNode["instructions"];
+                if (xmlElement != null)
+                {
+                newTest.Instructions = columnNode["instructions"].InnerText;
+                }
+
+                xmlElement = columnNode["sendReport"];
                 if (xmlElement != null)
                 {
                     newTest.SendReport = Convert.ToBoolean(columnNode["sendReport"].InnerText);
