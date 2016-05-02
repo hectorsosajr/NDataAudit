@@ -10,9 +10,17 @@ namespace DataAuditor.CommandLine
     ///	</summary>
     internal sealed class DataAuditorConsole
     {
+        private enum ExitCode : int
+        {
+            Success = 0,
+            InvalidFilename = 1,
+            NoFileToProcess = 2,
+            UnknownError = 10
+        }
+
         private static AuditTesting _auditTesting;
 
-        internal static void Main(string[] cmdArgs)
+        internal static int Main(string[] cmdArgs)
         {
             var errorStream = new StringWriter();
 
@@ -31,6 +39,8 @@ namespace DataAuditor.CommandLine
                         Console.Write("Invalid file name. File or path not found.");
                         errorStream.Write("-1");
                         Console.SetOut(errorStream);
+
+                        return (int)ExitCode.InvalidFilename;
                     }
                 }
                 else
@@ -38,13 +48,19 @@ namespace DataAuditor.CommandLine
                     Console.Write("No file to process!");
                     errorStream.Write("-1");
                     Console.SetOut(errorStream);
+
+                    return (int)ExitCode.NoFileToProcess;
                 }
             }
             catch (Exception ex)
             {
                 //AuditLogger.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
                 Console.WriteLine(ex.TargetSite + "::" + ex.Message);
+
+                return (int)ExitCode.UnknownError;
             }
+
+            return (int)ExitCode.Success;
         }
 
         private static void ProcessAudits(string auditGroupFile)
@@ -77,15 +93,15 @@ namespace DataAuditor.CommandLine
             Console.WriteLine("Starting audits...");
         }
 
-        private static void _auditTesting_CurrentAuditRunning(int AuditNumber, string AuditName)
+        private static void _auditTesting_CurrentAuditRunning(int auditNumber, string auditName)
         {
-            Console.WriteLine("This is audit number {0}", (AuditNumber + 1).ToString());
-            Console.WriteLine("Running the {0} test.", AuditName);
+            Console.WriteLine("This is audit number {0}", (auditNumber + 1).ToString());
+            Console.WriteLine("Running the {0} test.", auditName);
         }
 
-        private static void _auditTesting_CurrentAuditDone(int AuditNumber, string AuditName)
+        private static void _auditTesting_CurrentAuditDone(int auditNumber, string auditName)
         {
-            Console.WriteLine("Finished the {0} test.", AuditName);
+            Console.WriteLine("Finished the {0} test.", auditName);
         }
     }
 }

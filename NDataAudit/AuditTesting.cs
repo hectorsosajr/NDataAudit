@@ -20,10 +20,10 @@
 
 using System;
 using System.Configuration;
-using System.Globalization;
-using System.Net.Mail;
 using System.Data;
-//using System.Data.SqlClient;
+using System.Globalization;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using NDataAudit.Data;
 
@@ -33,12 +33,12 @@ namespace NDataAudit.Framework
     /// <summary>
     /// Delegate for the <seealso cref="AuditTesting.CurrentAuditRunning"/>AuditTesting.CurrentAuditRunning event.
     /// </summary>
-    public delegate void CurrentAuditRunningEventHandler(int AuditIndex, string AuditName);
+    public delegate void CurrentAuditRunningEventHandler(int auditIndex, string auditName);
 
     /// <summary>
     /// Delegate for the <seealso cref="AuditTesting.CurrentAuditDone"/>AuditTesting.CurrentAuditDone event.
     /// </summary>
-    public delegate void CurrentAuditDoneEventHandler(int AuditIndex, string AuditName);
+    public delegate void CurrentAuditDoneEventHandler(int auditIndex, string auditName);
 
     /// <summary>
     /// Delegate for the <seealso cref="AuditTesting.AuditTestingStarting"/>AuditTesting.AuditTestingStarting event.
@@ -49,12 +49,17 @@ namespace NDataAudit.Framework
     /// <summary>
     /// Delegate for the <seealso cref="AuditTesting.CurrentSingleAuditRunning"/>AuditTesting.CurrentSingleAuditRunning event.
     /// </summary>
-    public delegate void CurrentSingleAuditRunningEventHandler(Audit CurrentAudit);
+    public delegate void CurrentSingleAuditRunningEventHandler(Audit currentAudit);
 
     /// <summary>
     /// Delegate for the <seealso cref="AuditTesting.CurrentSingleAuditDone"/>AuditTesting.CurrentSingleAuditDone event.
     /// </summary>
-    public delegate void CurrentSingleAuditDoneEventHandler(Audit CurrentAudit);
+    public delegate void CurrentSingleAuditDoneEventHandler(Audit currentAudit);
+
+    /// <summary>
+    /// Delegate for the <seealso cref="AuditTesting.AuditTestingEnded"/>AuditTesting.AuditTestingEnded event.
+    /// </summary>
+    public delegate void AuditTestingEndedEventHandler();
 
     /// <summary>
     /// Summary description for AuditTesting.
@@ -83,12 +88,12 @@ namespace NDataAudit.Framework
 
         /// <summary>
         /// This event fires when <see cref="AuditTesting"/> object starts processing all of 
-        /// the Audits in the <see cref="AuditCollection"/> object. 
+        /// the <see cref="Audit"/>s in the <see cref="AuditCollection"/> object. 
         /// </summary>
         public event AuditTestingStartingEventHandler AuditTestingStarting;
 
         /// <summary>
-        /// 
+        /// This event fires when the current <see cref="Audit"/> starts running its tests.
         /// </summary>
         public event CurrentSingleAuditRunningEventHandler CurrentSingleAuditRunning;
 
@@ -96,6 +101,12 @@ namespace NDataAudit.Framework
         /// This event fires when a new <see cref="Audit"/> starts running.
         /// </summary>
         public event CurrentSingleAuditDoneEventHandler CurrentSingleAuditDone;
+
+        /// <summary>
+        /// This event fires when <see cref="AuditTesting"/> object ends processing all of 
+        /// the <see cref="Audit"/>s in the <see cref="AuditCollection"/> object. 
+        /// </summary>
+        public event AuditTestingEndedEventHandler AuditTestingEnded;
 
         #endregion
 
@@ -153,11 +164,8 @@ namespace NDataAudit.Framework
             {
                 throw new NoAuditsLoadedException("No audits have been loaded. Please load some audits and try again.");
             }
-            else
-            {
                 GetAudits();
             }
-        }
 
         /// <summary>
         /// Run a single audit.
@@ -299,7 +307,7 @@ namespace NDataAudit.Framework
                                     else
                                     {
                                         threshold = currentAudit.Tests[testCount].RowCount.ToString(CultureInfo.InvariantCulture);
-                                        currentAudit.Tests[testCount].FailedMessage = "The failure threshold was less than " + threshold + " rows. This audit returned " + rowCount.ToString() + " rows.";
+                                        currentAudit.Tests[testCount].FailedMessage = "The failure threshold was less than " + threshold + " rows. This audit returned " + rowCount + " rows.";
                                     }
                                     break;
                                 case "<=":
@@ -311,7 +319,7 @@ namespace NDataAudit.Framework
                                     else
                                     {
                                         threshold = currentAudit.Tests[testCount].RowCount.ToString(CultureInfo.InvariantCulture);
-                                        currentAudit.Tests[testCount].FailedMessage = "The failure threshold was less than or equal to " + threshold + " rows. This audit returned " + rowCount.ToString() + " rows.";
+                                        currentAudit.Tests[testCount].FailedMessage = "The failure threshold was less than or equal to " + threshold + " rows. This audit returned " + rowCount + " rows.";
                                     }
                                     break;
                                 case "=":
@@ -338,7 +346,7 @@ namespace NDataAudit.Framework
                                         }
 
                                         threshold = currentAudit.Tests[testCount].RowCount.ToString(CultureInfo.InvariantCulture);
-                                        currentAudit.Tests[testCount].FailedMessage = "The failure threshold was equal to " + threshold + " rows. This audit returned " + rowCount.ToString() + " rows.";
+                                        currentAudit.Tests[testCount].FailedMessage = "The failure threshold was equal to " + threshold + " rows. This audit returned " + rowCount + " rows.";
                                     }
                                     break;
                                 case "<>":
@@ -423,8 +431,6 @@ namespace NDataAudit.Framework
 
         private DataSet GetTestDataSet(ref Audit auditToRun, int testIndex)
         {
-            // TODO: Change this to have the ability to use more than just SQL Server.
-
             IAuditDbProvider currDbProvider = _providers.Providers["system.data.sqlclient"];
             currDbProvider.ConnectionString = auditToRun.ConnectionString.ToString();
 
@@ -448,36 +454,32 @@ namespace NDataAudit.Framework
             IDbCommand cmdAudit = currDbProvider.CreateDbCommand(sql, commandType, 180);
             IDbDataAdapter daAudit = currDbProvider.CreateDbDataAdapter(cmdAudit);
 
+            int intCommandTimeout = cmdAudit.CommandTimeout;
+            int intConnectionTimeout = currDbProvider.CurrentConnection.ConnectionTimeout;
+
             try
             {
                 daAudit.Fill(dsAudit);
             }
-            //catch (SqlException exsql)
-            //{
-            //    int intFound = 0;
-            //    string strMsg = null;
-
-            //    strMsg = exsql.Message;
-
-            //    intFound = (strMsg.IndexOf("Timeout expired.", 0, StringComparison.Ordinal) + 1);
-
-            //    if (intFound == 1)
-            //    {
-            //        //auditToRun.Tests[testIndex].FailedMessage = "Timeout expired while running this audit. The connection timeout was " + intConnectionTimeout.ToString(CultureInfo.InvariantCulture) + " seconds. The command timeout was " + intCommandTimeout.ToString() + " seconds.";
-            //    }
-            //    else
-            //    {
-            //        auditToRun.Tests[testIndex].FailedMessage = strMsg;
-            //    }
-
-                //AuditLogger.Log(LogLevel.Debug, exsql.TargetSite + "::" + exsql.Message, exsql);
-            //}
             catch (Exception ex)
             {
                 //AuditLogger.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
 
-                string strMsg = ex.Message;
-                auditToRun.Tests[testIndex].FailedMessage = strMsg;
+                int intFound = 0;
+                string strMsg = null;
+
+                strMsg = ex.Message;
+
+                intFound = (strMsg.IndexOf("Timeout expired.", 0, StringComparison.Ordinal) + 1);
+
+                if (intFound == 1)
+                {
+                    auditToRun.Tests[testIndex].FailedMessage = "Timeout expired while running this audit. The connection timeout was " + intConnectionTimeout.ToString(CultureInfo.InvariantCulture) + " seconds. The command timeout was " + intCommandTimeout + " seconds.";
+                }
+                else
+                {
+                    auditToRun.Tests[testIndex].FailedMessage = strMsg;
+                }
             }
             finally
             {
@@ -588,11 +590,14 @@ namespace NDataAudit.Framework
                 body.AppendLine("COMMENTS AND INSTRUCTIONS" + AuditUtils.HtmlBreak);
                 body.AppendLine("============================" + AuditUtils.HtmlBreak);
 
+                if (testedAudit.Tests[testIndex].Instructions != null)
+                {
                 if (testedAudit.Tests[testIndex].Instructions.Length > 0)
                 {
                     body.Append(testedAudit.Tests[testIndex].Instructions.ToHtml() + AuditUtils.HtmlBreak);
                     body.AppendLine(AuditUtils.HtmlBreak);
                 }
+            }
             }
 
             if (testedAudit.Tests[testIndex].SendReport)
@@ -628,7 +633,9 @@ namespace NDataAudit.Framework
                 body.Append("This audit ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture));
             }
 
-            SendEmail(testedAudit, body.ToString(), sourceEmailDescription);
+            string cleanBody = body.ToString().Replace("\r\n", string.Empty);
+
+            SendEmail(testedAudit, cleanBody, sourceEmailDescription);
         }
 
         private static void SendEmail(Audit testedAudit, string body, string sourceEmailDescription)
@@ -659,7 +666,22 @@ namespace NDataAudit.Framework
             }
 
             message.Body = body;
-            message.Priority = MailPriority.High;
+
+            switch (testedAudit.EmailPriority)
+            {
+                case Audit.EmailPriorityEnum.Low:
+                    message.Priority = MailPriority.Low;
+                    break;
+                case Audit.EmailPriorityEnum.Normal:
+                    message.Priority = MailPriority.Normal;
+                    break;
+                case Audit.EmailPriorityEnum.High:
+                    message.Priority = MailPriority.High;
+                    break;
+                default:
+                    message.Priority = MailPriority.Normal;
+                    break;
+            }
 
             if (!string.IsNullOrEmpty(testedAudit.EmailSubject))
             {
@@ -678,7 +700,7 @@ namespace NDataAudit.Framework
             {
                 server.Host = testedAudit.SmtpServerAddress;
                 server.Port = testedAudit.SmtpPort;
-                server.Credentials = new System.Net.NetworkCredential(testedAudit.SmtpUserName, testedAudit.SmtpPassword);
+                server.Credentials = new NetworkCredential(testedAudit.SmtpUserName, testedAudit.SmtpPassword);
                 server.EnableSsl = testedAudit.SmtpUseSsl;
             }
             else
@@ -686,7 +708,23 @@ namespace NDataAudit.Framework
                 server.Host = testedAudit.SmtpServerAddress;
             }
 
+            try
+            {
             server.Send(message);
+        }
+            catch (SmtpException smtpEx)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                sb.AppendLine(smtpEx.Message);
+
+                if (smtpEx.InnerException != null)
+                {
+                    sb.AppendLine(smtpEx.InnerException.Message);
+                }
+
+                throw;
+            }
         }
 
         #endregion
