@@ -212,6 +212,31 @@ namespace NDataAudit.Framework
                 newAudit.EmailSubject = xmlElement.InnerText;
             }
 
+            // See if there is a custom email subject for this audit.
+            xmlElement = auditBranch["emailpriority"];
+            if (xmlElement != null)
+            {
+                switch (xmlElement.InnerText.ToLower())
+                {
+                    case "low":
+                        newAudit.EmailPriority = Audit.EmailPriorityEnum.Low;
+                        break;
+                    case "normal":
+                        newAudit.EmailPriority = Audit.EmailPriorityEnum.Normal;
+                        break;
+                    case "high":
+                        newAudit.EmailPriority = Audit.EmailPriorityEnum.High;
+                        break;
+                    default:
+                        newAudit.EmailPriority = Audit.EmailPriorityEnum.High;
+                        break;
+                }
+            }
+            else
+            {
+                newAudit.EmailPriority = Audit.EmailPriorityEnum.High;
+            }
+
             // See if there is a source email the FROM email address.
             var xmlSourceElement = auditBranch["sourceEmail"];
             if (xmlSourceElement != null)

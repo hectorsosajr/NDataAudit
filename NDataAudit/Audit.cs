@@ -197,7 +197,7 @@ namespace NDataAudit.Framework
         /// <value>
         /// The email subject for this audit test.
         /// </value>
-        [Description("Gets or sets the email subject for this audit."), Category("Email")]
+        [Description("Gets or sets the email subject for this test."), Category("Email")]
         public string EmailSubject { get; set; }
 
         /// <summary>

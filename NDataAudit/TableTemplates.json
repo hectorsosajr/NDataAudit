@@ -23,7 +23,6 @@
         "#emailtable { font-family: \"Trebuchet MS\", Arial, Helvetica, sans-serif; border-collapse: collapse; width: 100%;}",
         "#emailtable td, #emailtable th { border: 1px solid #ddd; text-align: left; padding: 8px; }",
         "#emailtable tr:nth-child(even) { background-color: #f2f2f2 }",
-        "#emailtable tr:hover { background-color: #ddd;}",
         "#emailtable th { padding-top: 12px;padding-bottom: 12px;background-color: #4CAF50;color: white;}"
         ]
       },
@@ -53,6 +52,19 @@
       "HtmlHeaderFontColor": "white",
       "UseAlternateRowColors": "true",
       "AlternateRowColor": "DDEBF7"
+    },
+    {
+      "Name": "BlueFancy",
+      "HtmlHeaderBackgroundColor": "5B9BD5",
+      "HtmlHeaderFontColor": "white",
+      "UseAlternateRowColors": "true",
+      "AlternateRowColor": "DDEBF7",
+      "CssTableStyle": [
+        "#emailtable { font-family: \"Trebuchet MS\", Arial, Helvetica, sans-serif; border-collapse: collapse; width: 100%;}",
+        "#emailtable td, #emailtable th { border: 1px solid #ddd; text-align: left; padding: 8px; }",
+        "#emailtable tr:nth-child(even) { background-color: #DDEBF7 }",
+        "#emailtable th { padding-top: 12px;padding-bottom: 12px;background-color: #5B9BD5;color: white;}"
+      ]
     }
   ]
 }
