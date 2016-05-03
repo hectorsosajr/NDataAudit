@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using System.Data;
 
-namespace NAudit.Data.PostGres
+namespace NAudit.Data.PostgreSql
 {
     /// <summary>
     /// Class AuditPostgreSqlProvider.

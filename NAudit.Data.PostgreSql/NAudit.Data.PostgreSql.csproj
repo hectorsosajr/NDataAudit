@@ -7,8 +7,8 @@
     <ProjectGuid>{91101497-8B55-4D36-BFB3-248FA8D9E803}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NAudit.Data.PostGres</RootNamespace>
-    <AssemblyName>NAudit.Data.PostGres</AssemblyName>
+    <RootNamespace>NAudit.Data.PostgreSql</RootNamespace>
+    <AssemblyName>NAudit.Data.PostgreSql</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
