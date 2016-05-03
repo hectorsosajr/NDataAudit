@@ -7,8 +7,8 @@
     <ProjectGuid>{B4735746-C56A-4CA0-9B3A-E34F2404212D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NDataAudit.Data</RootNamespace>
-    <AssemblyName>NDataAudit.Data</AssemblyName>
+    <RootNamespace>NAudit.Data</RootNamespace>
+    <AssemblyName>NAudit.Data</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
