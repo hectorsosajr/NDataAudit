@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Data;
+using System.Data.Odbc;
+using System.Data.Common;
 
 namespace NAudit.Data.HadoopHive
 {
