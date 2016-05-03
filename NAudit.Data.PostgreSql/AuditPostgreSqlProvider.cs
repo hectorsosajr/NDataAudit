@@ -1,6 +1,9 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Data;
+using System.IO;
+using System.Text;
+using Npgsql;
 
 namespace NAudit.Data.PostgreSql
 {
@@ -15,6 +18,21 @@ namespace NAudit.Data.PostgreSql
         private IDbCommand _currentDbCommand;
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="AuditPostgreSqlProvider"/> class.
+        /// </summary>
+        public AuditPostgreSqlProvider()
+        {}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuditPostgreSqlProvider"/> class.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        public AuditPostgreSqlProvider(string connectionString)
+        {
+            this.ConnectionString = connectionString;
+        }
+
+        /// <summary>
         /// Gets or sets the connection string.
         /// </summary>
         /// <value>The connection string.</value>
@@ -24,19 +42,25 @@ namespace NAudit.Data.PostgreSql
         /// Gets the name of the database.
         /// </summary>
         /// <value>The name of the database.</value>
-        public string DatabaseName { get; }
+        public string DatabaseEngineName => "PostgreSQL";
 
         /// <summary>
         /// Gets the provider namespace.
         /// </summary>
         /// <value>The provider namespace.</value>
-        public string ProviderNamespace { get; }
+        public string ProviderNamespace => "npgsql";
 
         /// <summary>
         /// Gets the current connection, is it has been set.
         /// </summary>
         /// <value>The current connection.</value>
-        public IDbConnection CurrentConnection { get; }
+        public IDbConnection CurrentConnection => _currentDbConnection;
+
+        /// <summary>
+        /// Gets the current command.
+        /// </summary>
+        /// <value>The current command.</value>
+        public IDbCommand CurrentCommand => _currentDbCommand;
 
         /// <summary>
         /// Creates the command object for the specific database engine.
@@ -48,7 +72,11 @@ namespace NAudit.Data.PostgreSql
         /// <exception cref="NotImplementedException"></exception>
         public IDbCommand CreateDbCommand(string commandText, CommandType commandType, int commandTimeOut)
         {
-            throw new NotImplementedException();
+            IDbCommand retval = new NpgsqlCommand(commandText);
+            retval.Connection = CurrentConnection;
+            retval.CommandTimeout = commandTimeOut;
+
+            return retval;
         }
 
         /// <summary>
@@ -58,7 +86,46 @@ namespace NAudit.Data.PostgreSql
         /// <exception cref="NotImplementedException"></exception>
         public IDbConnection CreateDatabaseSession()
         {
-            throw new NotImplementedException();
+            StringBuilder errorMessages = new StringBuilder();
+
+            if (string.IsNullOrEmpty(ConnectionString))
+            {
+                return null;
+            }
+
+            NpgsqlConnection conn = new NpgsqlConnection(this.ConnectionString);
+
+            try
+            {
+                conn.Open();
+
+                _currentDbConnection = conn;
+            }
+            catch (NpgsqlException ex)
+            {
+                for (int i = 0; i < ex.Errors.Count; i++)
+                {
+                    //errorMessages.Append("Index #" + i + "\n" +
+                    //                     "Message: " + ex.Errors[i].Message + "\n" +
+                    //                     "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
+                    //                     "Source: " + ex.Errors[i].Source + "\n" +
+                    //                     "Procedure: " + ex.Errors[i].Procedure + "\n");
+                }
+
+                errorMessages.Append(ex.Message);
+
+                Console.WriteLine(errorMessages.ToString());
+
+                string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".log";
+
+                using (TextWriter writer = File.CreateText(fileName))
+                {
+                    writer.WriteLine(errorMessages.ToString());
+                    writer.WriteLine(ex.StackTrace);
+                }
+            }
+
+            return conn;
         }
 
         /// <summary>
@@ -69,7 +136,10 @@ namespace NAudit.Data.PostgreSql
         /// <exception cref="NotImplementedException"></exception>
         public IDbDataAdapter CreateDbDataAdapter(IDbCommand currentDbCommand)
         {
-            throw new NotImplementedException();
+            NpgsqlCommand cmd = (NpgsqlCommand)currentDbCommand;
+            IDbDataAdapter retval = new NpgsqlDataAdapter(cmd);
+
+            return retval;
         }
     }
 }

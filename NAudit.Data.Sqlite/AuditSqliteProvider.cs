@@ -15,9 +15,19 @@ namespace NAudit.Data.Sqlite
         private IDbCommand _currentDbCommand;
 
         public string ConnectionString { get; set; }
-        public string DatabaseName { get; }
+        public string DatabaseEngineName { get; }
         public string ProviderNamespace { get; }
-        public IDbConnection CurrentConnection { get; }
+        /// <summary>
+        /// Gets the current connection, is it has been set.
+        /// </summary>
+        /// <value>The current connection.</value>
+        public IDbConnection CurrentConnection => _currentDbConnection;
+
+        /// <summary>
+        /// Gets the current command.
+        /// </summary>
+        /// <value>The current command.</value>
+        public IDbCommand CurrentCommand => _currentDbCommand;
 
         public IDbCommand CreateDbCommand(string commandText, CommandType commandType, int commandTimeOut)
         {

@@ -21,8 +21,7 @@ namespace NAudit.Data.SqlServer
         /// Initializes a new instance of the <see cref="AuditSqlServerProvider"/> class.
         /// </summary>
         public AuditSqlServerProvider()
-        {
-        }
+        {}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuditSqlServerProvider"/> class.
@@ -43,7 +42,7 @@ namespace NAudit.Data.SqlServer
         /// Gets the name of the database.
         /// </summary>
         /// <value>The name of the database.</value>
-        public string DatabaseName => "Microsoft SQL Server";
+        public string DatabaseEngineName => "Microsoft SQL Server";
 
         /// <summary>
         /// Gets the database provider namespace.
@@ -75,6 +74,8 @@ namespace NAudit.Data.SqlServer
             IDbCommand retval = new SqlCommand(commandText);
             retval.Connection = CurrentConnection;
             retval.CommandTimeout = commandTimeOut;
+
+            _currentDbCommand = retval;
 
             return retval;
         }
@@ -121,6 +122,8 @@ namespace NAudit.Data.SqlServer
                     writer.WriteLine(ex.StackTrace);
                 }
             }
+
+            _currentDbConnection = conn;
 
             return conn;
         }

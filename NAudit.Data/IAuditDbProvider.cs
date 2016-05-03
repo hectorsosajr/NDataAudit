@@ -17,7 +17,7 @@ namespace NAudit.Data
         /// Gets the name of the database.
         /// </summary>
         /// <value>The name of the database.</value>
-        string DatabaseName { get; }
+        string DatabaseEngineName { get; }
 
         /// <summary>
         /// Gets the provider namespace.
@@ -30,6 +30,12 @@ namespace NAudit.Data
         /// </summary>
         /// <value>The current connection.</value>
         IDbConnection CurrentConnection { get; }
+
+        /// <summary>
+        /// Gets the current command.
+        /// </summary>
+        /// <value>The current command.</value>
+        IDbCommand CurrentCommand { get; }
 
         /// <summary>
         /// Creates the command object for the specific database engine.
