@@ -452,7 +452,7 @@ namespace NAudit.Framework
                 commandType = CommandType.StoredProcedure;
             }
 
-            IDbCommand cmdAudit = currDbProvider.CreateDbCommand(sql, commandType, 180);
+            IDbCommand cmdAudit = currDbProvider.CreateDbCommand(sql, commandType, int.Parse(auditToRun.ConnectionString.CommandTimeout));
             IDbDataAdapter daAudit = currDbProvider.CreateDbDataAdapter(cmdAudit);
 
             int intCommandTimeout = cmdAudit.CommandTimeout;

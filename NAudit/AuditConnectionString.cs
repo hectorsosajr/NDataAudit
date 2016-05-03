@@ -9,10 +9,9 @@
         /// Initializes a new instance of the <see cref="AuditConnectionString" /> class.
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
-        /// <param name="databaseProviderNameName">Name of the database provider.</param>
+        /// <param name="databaseProviderName">Name of the database provider.</param>
         public AuditConnectionString(string connectionString, string databaseProviderName)
         {
-            // TODO: Change this once multi-database support is added
             string[] items = connectionString.Split(';');
 
             DatabaseProviderName = databaseProviderName;
@@ -43,6 +42,18 @@
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets the command timeout.
+        /// </summary>
+        /// <value>The command timeout.</value>
+        public string CommandTimeout { get; set; }
+
+        /// <summary>
+        /// Gets or sets the connection timeout.
+        /// </summary>
+        /// <value>The connection timeout.</value>
+        public string ConnectionTimeout { get; set; }
 
         /// <summary>
         /// Gets the name of the database.

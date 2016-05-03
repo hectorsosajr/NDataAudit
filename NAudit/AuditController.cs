@@ -162,6 +162,26 @@ namespace NAudit.Framework
                 XmlNodeList connectionString = auditDoc.GetElementsByTagName("connectionstring");
                 newAudit.ConnectionString = new AuditConnectionString(connectionString[0].InnerText, newAudit.DatabaseProvider);
 
+                XmlNode commandTimeout = auditBranch["commandtimeout"];
+                if (commandTimeout != null)
+                {
+                    newAudit.ConnectionString.CommandTimeout = commandTimeout.InnerText;
+                }
+                else
+                {
+                    newAudit.ConnectionString.CommandTimeout = "180";
+                }
+
+                XmlNode connectionTimeout = auditBranch["connectiontimeout"];
+                if (connectionTimeout != null)
+                {
+                    newAudit.ConnectionString.ConnectionTimeout = connectionTimeout.InnerText;
+                }
+                else
+                {
+                    newAudit.ConnectionString.CommandTimeout = "15";
+                }
+
                 XmlNodeList orderbyNode = auditDoc.GetElementsByTagName("orderbyclause");
                 if (orderbyNode.Count > 0)
                 {
