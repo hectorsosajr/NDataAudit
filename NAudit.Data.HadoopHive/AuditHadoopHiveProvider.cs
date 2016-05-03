@@ -16,9 +16,26 @@ namespace NAudit.Data.HadoopHive
         private IDbConnection _currentDbConnection;
         private IDbCommand _currentDbCommand;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuditHadoopHiveProvider"/> class.
+        /// </summary>
+        public AuditHadoopHiveProvider()
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AuditHadoopHiveProvider"/> class.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        public AuditHadoopHiveProvider(string connectionString)
+        {
+            this.ConnectionString = connectionString;
+        }
+
         public string ConnectionString { get; set; }
-        public string DatabaseEngineName { get; }
-        public string ProviderNamespace { get; }
+
+        public string DatabaseEngineName => "Hadoop Hive";
+
+        public string ProviderNamespace => "hive";
 
         /// <summary>
         /// Gets the current connection, is it has been set.

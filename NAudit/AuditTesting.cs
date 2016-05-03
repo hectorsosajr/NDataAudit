@@ -431,7 +431,8 @@ namespace NAudit.Framework
 
         private DataSet GetTestDataSet(ref Audit auditToRun, int testIndex)
         {
-            IAuditDbProvider currDbProvider = _providers.Providers["system.data.sqlclient"];
+            IAuditDbProvider currDbProvider = _providers.Providers[auditToRun.DatabaseProvider];
+
             currDbProvider.ConnectionString = auditToRun.ConnectionString.ToString();
 
             currDbProvider.CreateDatabaseSession();
@@ -795,6 +796,20 @@ namespace NAudit.Framework
         /// </summary>
         /// <param name="message">The message that will be associated with this <see cref="Exception"/> and that will be shown to users.</param>
         public NoAuditsLoadedException(string message) : base(message)
+        {}
+    }
+
+    /// <summary>
+    /// Class MissingRequiredConfigurations.
+    /// </summary>
+    /// <seealso cref="System.Exception" />
+    public class MissingRequiredConfigurations : Exception
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MissingRequiredConfigurations"/> class.
+        /// </summary>
+        /// <param name="message">The message that describes the error.</param>
+        public MissingRequiredConfigurations(string message) : base(message)
         {}
     }
 }

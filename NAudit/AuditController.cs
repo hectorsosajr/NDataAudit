@@ -153,8 +153,14 @@ namespace NAudit.Framework
                 XmlNodeList sqlType = auditDoc.GetElementsByTagName("sqltype");
                 newAudit.SqlType = (Audit.SqlStatementTypeEnum) Convert.ToInt32(sqlType[0].InnerText);
 
+                XmlNode dbProvider = auditBranch["databaseprovider"];
+                if (dbProvider != null)
+                {
+                    newAudit.DatabaseProvider = dbProvider.InnerText.ToLower();
+                }
+
                 XmlNodeList connectionString = auditDoc.GetElementsByTagName("connectionstring");
-                newAudit.ConnectionString = new AuditConnectionString(connectionString[0].InnerText);
+                newAudit.ConnectionString = new AuditConnectionString(connectionString[0].InnerText, newAudit.DatabaseProvider);
 
                 XmlNodeList orderbyNode = auditDoc.GetElementsByTagName("orderbyclause");
                 if (orderbyNode.Count > 0)
