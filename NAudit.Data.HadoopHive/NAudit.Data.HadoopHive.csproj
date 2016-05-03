@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4BF12745-95D2-4853-A2BD-5D88221AC1C8}</ProjectGuid>
+    <ProjectGuid>{357E4CA1-209E-4BFA-8F8B-139432771D2D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NAudit.Data.SqlServer</RootNamespace>
-    <AssemblyName>NAudit.Data.SqlServer</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>NAudit.Data.Hive</RootNamespace>
+    <AssemblyName>NAudit.Data.Hive</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,12 +36,12 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuditSqlServerProvider.cs" />
+    <Compile Include="AuditHadoopHiveProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NAudit.Data\NAudit.Data.csproj">
-      <Project>{B4735746-C56A-4CA0-9B3A-E34F2404212D}</Project>
+      <Project>{b4735746-c56a-4ca0-9b3a-e34f2404212d}</Project>
       <Name>NAudit.Data</Name>
     </ProjectReference>
   </ItemGroup>

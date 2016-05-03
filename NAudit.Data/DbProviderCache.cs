@@ -4,7 +4,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Reflection;
 
-namespace NDataAudit.Data
+namespace NAudit.Data
 {
     /// <summary>
     /// Class DbProviderCache

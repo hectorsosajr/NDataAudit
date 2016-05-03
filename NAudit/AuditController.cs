@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 
-namespace NDataAudit.Framework
+namespace NAudit.Framework
 {
     /// <summary>
     /// Summary description for AuditController.

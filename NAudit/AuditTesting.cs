@@ -25,9 +25,9 @@ using System.Globalization;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
-using NDataAudit.Data;
+using NAudit.Data;
 
-namespace NDataAudit.Framework
+namespace NAudit.Framework
 {
     // Delegates for groups of Audits
     /// <summary>

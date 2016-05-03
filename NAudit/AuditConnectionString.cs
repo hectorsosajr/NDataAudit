@@ -1,4 +1,4 @@
-﻿namespace NDataAudit.Framework
+﻿namespace NAudit.Framework
 {
     /// <summary>
     /// Class AuditConnectionString.

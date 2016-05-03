@@ -1,29 +1,33 @@
 //*********************************************************************
-// File:       		AuditCollection.cs
+// File:       		AuditTestCollection.cs
 // Author:  	    Hector Sosa, Jr
-// Date:			2/16/2005
-//**************************************************************************************
+// Date:			3/1/2005
+//*********************************************************************
 // Change Log
-//**************************************************************************************
-// USER					DATE        COMMENTS
-// Hector Sosa, Jr		2/16/2005	Created
-//**************************************************************************************
+//*********************************************************************
+// USER					DATE            COMMENTS
+// Hector Sosa, Jr		3/1/2005	    Created
+//*********************************************************************
 
 using System.Collections;
 
-namespace NDataAudit.Framework
+namespace NAudit.Framework
 {
 	/// <summary>
-	/// Summary description for AuditCollection.
+	/// Summary description for AuditTestCollection.
 	/// </summary>
-	public class AuditCollection : CollectionBase
+	public class AuditTestCollection : CollectionBase
 	{
-		#region Constructors
+		#region  Declarations 
+
+		#endregion
+
+		#region  Constructors 
 
 		/// <summary>
 		/// Empty constructor
 		/// </summary>
-		public AuditCollection()
+		public AuditTestCollection()
 		{
 			//
 			// TODO: Add constructor logic here
@@ -35,32 +39,32 @@ namespace NDataAudit.Framework
         #region  Properties 
 
         /// <summary>
-        /// Gets the <see cref="Audit"/> with the specified index.
+        /// Gets the <see cref="Audit" /> object at Index position inside this AuditTestCollection.
         /// </summary>
-        /// <param name="Index">The index.</param>
-        /// <returns>Audit.</returns>
-        public Audit this[int Index]
+        /// <param name="index">The index.</param>
+        /// <returns>AuditTest.</returns>
+        public AuditTest this[int index]
 		{
 			get
 			{
-				return ((Audit)(List[Index]));
+				return ((AuditTest)(List[index]));
 			}
 		}
 
         #endregion
 
-        #region  Public Members 
+        #region  Public Members
 
         /// <summary>
         /// Adds the specified items.
         /// </summary>
-        /// <param name="items">The items.</param>
+        /// <param name="Items">The items.</param>
         /// <returns>System.Int32[].</returns>
-        public int[] Add(AuditCollection items)
+        public int[] Add(AuditTestCollection Items)
 		{
 			ArrayList indexes = new ArrayList();
 
-			foreach (object Item in items)
+			foreach (object Item in Items)
 			{
 				indexes.Add(this.List.Add(Item));
 			}
@@ -73,7 +77,7 @@ namespace NDataAudit.Framework
         /// </summary>
         /// <param name="item">The item.</param>
         /// <returns>System.Int32.</returns>
-        public int Add(Audit item)
+        public int Add(AuditTest item)
 		{
 			return List.Add(item);
 		}
@@ -83,7 +87,7 @@ namespace NDataAudit.Framework
         /// </summary>
         /// <param name="index">The index.</param>
         /// <param name="item">The item.</param>
-        public void Insert(int index, Audit item)
+        public void Insert(int index, AuditTest item)
 		{
 			List.Insert(index, item);
 		}
@@ -92,7 +96,7 @@ namespace NDataAudit.Framework
         /// Removes the specified item.
         /// </summary>
         /// <param name="item">The item.</param>
-        public void Remove(Audit item)
+        public void Remove(AuditTest item)
 		{
 			List.Remove(item);
 		}
@@ -102,7 +106,7 @@ namespace NDataAudit.Framework
         /// </summary>
         /// <param name="item">The item.</param>
         /// <returns><c>true</c> if [contains] [the specified item]; otherwise, <c>false</c>.</returns>
-        public bool Contains(Audit item)
+        public bool Contains(AuditTest item)
 		{
 			return List.Contains(item);
 		}

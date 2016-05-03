@@ -6,7 +6,7 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json.Linq;
 
-namespace NDataAudit.Framework
+namespace NAudit.Framework
 {
     /// <summary>
     /// Template used to color the HTML table in CreateHtmlData.

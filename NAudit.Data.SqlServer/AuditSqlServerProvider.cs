@@ -1,19 +1,16 @@
-﻿
-
-using System;
+﻿using System;
 using System.ComponentModel.Composition;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Text;
-using NDataAudit.Data;
 
 namespace NAudit.Data.SqlServer
 {
     /// <summary>
     /// Class AuditSqlServerProvider.
     /// </summary>
-    /// <seealso cref="NDataAudit.Data.IAuditDbProvider" />
+    /// <seealso cref="NAudit.Data.IAuditDbProvider" />
     [Export(typeof(IAuditDbProvider))]
     public class AuditSqlServerProvider : IAuditDbProvider
     {

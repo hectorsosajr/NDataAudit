@@ -171,9 +171,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NDataAudit.Data\NDataAudit.Data.csproj">
-      <Project>{B4735746-C56A-4CA0-9B3A-E34F2404212D}</Project>
-      <Name>NDataAudit.Data</Name>
+    <ProjectReference Include="..\NAudit.Data\NAudit.Data.csproj">
+      <Project>{b4735746-c56a-4ca0-9b3a-e34f2404212d}</Project>
+      <Name>NAudit.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

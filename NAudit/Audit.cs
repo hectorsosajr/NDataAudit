@@ -16,7 +16,7 @@
 using System.Collections;
 using System.ComponentModel;
 
-namespace NDataAudit.Framework
+namespace NAudit.Framework
 {
     /// <summary>
     /// Summary description for Audit.
