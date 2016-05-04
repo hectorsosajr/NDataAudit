@@ -1,0 +1,83 @@
+﻿{
+  "tabletemplates": [
+    {
+      "Name": "GreenReport",
+      "HtmlHeaderBackgroundColor": "70AD47",
+      "HtmlHeaderFontColor": "white",
+      "UseAlternateRowColors": "true",
+      "AlternateRowColor": "E2EFDA"
+    },
+    {
+      "Name": "Green",
+      "HtmlHeaderBackgroundColor": "13913F",
+      "HtmlHeaderFontColor": "white",
+      "UseAlternateRowColors": "false"
+    },
+    {
+      "Name": "GreenFancy",
+      "HtmlHeaderBackgroundColor": "70AD47",
+      "HtmlHeaderFontColor": "white",
+      "UseAlternateRowColors": "true",
+      "AlternateRowColor": "E2EFDA",
+      "CssTableStyle": [
+        "#emailtable { font-family: \"Trebuchet MS\", Arial, Helvetica, sans-serif; border-collapse: collapse; width: 100%;}",
+        "#emailtable td, #emailtable th { border: 1px solid #ddd; text-align: left; padding: 8px; }",
+        "#emailtable tr:nth-child(even) { background-color: #f2f2f2 }",
+        "#emailtable th { padding-top: 12px;padding-bottom: 12px;background-color: #4CAF50;color: white;}"
+      ]
+    },
+    {
+      "Name": "RedReport",
+      "HtmlHeaderBackgroundColor": "FF0000",
+      "HtmlHeaderFontColor": "white",
+      "UseAlternateRowColors": "true",
+      "AlternateRowColor": "F2F2F2"
+    },
+    {
+      "Name": "Yellow",
+      "HtmlHeaderBackgroundColor": "FF0000",
+      "HtmlHeaderFontColor": "white",
+      "UseAlternateRowColors": "false"
+    },
+    {
+      "Name": "YellowReport",
+      "HtmlHeaderBackgroundColor": "FF0000",
+      "HtmlHeaderFontColor": "white",
+      "UseAlternateRowColors": "true",
+      "AlternateRowColor": "F2F2F2"
+    },
+    {
+      "Name": "BlueReport",
+      "HtmlHeaderBackgroundColor": "5B9BD5",
+      "HtmlHeaderFontColor": "white",
+      "UseAlternateRowColors": "true",
+      "AlternateRowColor": "DDEBF7"
+    },
+    {
+      "Name": "BlueFancy",
+      "HtmlHeaderBackgroundColor": "5B9BD5",
+      "HtmlHeaderFontColor": "white",
+      "UseAlternateRowColors": "true",
+      "AlternateRowColor": "DDEBF7",
+      "CssTableStyle": [
+        "#emailtable { font-family: \"Trebuchet MS\", Arial, Helvetica, sans-serif; border-collapse: collapse; width: 100%;}",
+        "#emailtable td, #emailtable th { border: 1px solid #ddd; text-align: left; padding: 8px; }",
+        "#emailtable tr:nth-child(even) { background-color: #DDEBF7 }",
+        "#emailtable th { padding-top: 12px;padding-bottom: 12px;background-color: #5B9BD5;color: white;}"
+      ]
+    },
+    {
+      "Name": "RedShift",
+      "HtmlHeaderBackgroundColor": "000000",
+      "HtmlHeaderFontColor": "white",
+      "UseAlternateRowColors": "true",
+      "AlternateRowColor": "ffe0b3",
+      "CssTableStyle": [
+        "#emailtable { font-family: \"Trebuchet MS\", Arial, Helvetica, sans-serif; border-collapse: collapse; width: 100%;}",
+        "#emailtable td, #emailtable th { border: 1px solid #ddd; text-align: left; padding: 8px; }",
+        "#emailtable tr:nth-child(even) { background-color: #ffe0b3 }",
+        "#emailtable th { padding-top: 12px;padding-bottom: 12px;background-color: #000000;color: white;}"
+      ]
+    }
+  ]
+}

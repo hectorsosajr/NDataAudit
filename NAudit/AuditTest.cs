@@ -14,7 +14,7 @@
 
 using System.Collections;
 
-namespace NDataAudit.Framework
+namespace NAudit.Framework
 {
     /// <summary>
     /// Summary description for AuditTest.

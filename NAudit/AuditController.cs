@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 
-namespace NDataAudit.Framework
+namespace NAudit.Framework
 {
     /// <summary>
     /// Summary description for AuditController.
@@ -26,7 +26,7 @@ namespace NDataAudit.Framework
     {
         #region  Declarations 
 
-        private AuditCollection _colAuditGroup;
+        private readonly AuditCollection _colAuditGroup;
         private string _auditGroupName;
 
         #endregion
@@ -153,8 +153,34 @@ namespace NDataAudit.Framework
                 XmlNodeList sqlType = auditDoc.GetElementsByTagName("sqltype");
                 newAudit.SqlType = (Audit.SqlStatementTypeEnum) Convert.ToInt32(sqlType[0].InnerText);
 
+                XmlNode dbProvider = auditBranch["databaseprovider"];
+                if (dbProvider != null)
+                {
+                    newAudit.DatabaseProvider = dbProvider.InnerText.ToLower();
+                }
+
                 XmlNodeList connectionString = auditDoc.GetElementsByTagName("connectionstring");
-                newAudit.ConnectionString = new AuditConnectionString(connectionString[0].InnerText);
+                newAudit.ConnectionString = new AuditConnectionString(connectionString[0].InnerText, newAudit.DatabaseProvider);
+
+                XmlNode commandTimeout = auditBranch["commandtimeout"];
+                if (commandTimeout != null)
+                {
+                    newAudit.ConnectionString.CommandTimeout = commandTimeout.InnerText;
+                }
+                else
+                {
+                    newAudit.ConnectionString.CommandTimeout = "180";
+                }
+
+                XmlNode connectionTimeout = auditBranch["connectiontimeout"];
+                if (connectionTimeout != null)
+                {
+                    newAudit.ConnectionString.ConnectionTimeout = connectionTimeout.InnerText;
+                }
+                else
+                {
+                    newAudit.ConnectionString.CommandTimeout = "15";
+                }
 
                 XmlNodeList orderbyNode = auditDoc.GetElementsByTagName("orderbyclause");
                 if (orderbyNode.Count > 0)
@@ -205,11 +231,18 @@ namespace NDataAudit.Framework
                 ProcessEmails(ref newAudit, bccEmailList, Audit.EmailTypeEnum.BlindCarbonCopy); 
             }
 
-            // Process email list
-            XmlNodeList emailPriority = auditDoc.GetElementsByTagName("emailpriority");
-            if (emailPriority.Count > 0)
+            // See if there is a custom email subject for this audit.
+            var xmlElement = auditBranch["emailSubject"];
+            if (xmlElement != null)
             {
-                switch (emailPriority[0].InnerText.ToLower())
+                newAudit.EmailSubject = xmlElement.InnerText;
+            }
+
+            // See if there is a custom email subject for this audit.
+            xmlElement = auditBranch["emailpriority"];
+            if (xmlElement != null)
+            {
+                switch (xmlElement.InnerText.ToLower())
                 {
                     case "low":
                         newAudit.EmailPriority = Audit.EmailPriorityEnum.Low;
@@ -221,16 +254,13 @@ namespace NDataAudit.Framework
                         newAudit.EmailPriority = Audit.EmailPriorityEnum.High;
                         break;
                     default:
-                        newAudit.EmailPriority = Audit.EmailPriorityEnum.Normal;
+                        newAudit.EmailPriority = Audit.EmailPriorityEnum.High;
                         break;
                 }
             }
-
-            // See if there is a custom email subject for this audit.
-            var xmlElement = auditBranch["emailSubject"];
-            if (xmlElement != null)
+            else
             {
-                newAudit.EmailSubject = xmlElement.InnerText;
+                newAudit.EmailPriority = Audit.EmailPriorityEnum.High;
             }
 
             // See if there is a source email the FROM email address.
@@ -370,9 +400,14 @@ namespace NDataAudit.Framework
                 }
 
                 newTest.FailIfConditionIsTrue = Convert.ToBoolean(columnNode["failiftrue"].InnerText);
-                newTest.Instructions = columnNode["instructions"].InnerText;
 
-                var xmlElement = columnNode["sendReport"];
+                var xmlElement = columnNode["instructions"];
+                if (xmlElement != null)
+                {
+                newTest.Instructions = columnNode["instructions"].InnerText;
+                }
+
+                xmlElement = columnNode["sendReport"];
                 if (xmlElement != null)
                 {
                     newTest.SendReport = Convert.ToBoolean(columnNode["sendReport"].InnerText);

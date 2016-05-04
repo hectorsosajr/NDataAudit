@@ -20,13 +20,14 @@
 
 using System;
 using System.Configuration;
-using System.Globalization;
-using System.Net.Mail;
 using System.Data;
-using System.Data.SqlClient;
+using System.Globalization;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
+using NAudit.Data;
 
-namespace NDataAudit.Framework
+namespace NAudit.Framework
 {
     // Delegates for groups of Audits
     /// <summary>
@@ -68,6 +69,8 @@ namespace NDataAudit.Framework
         #region  Declarations
 
         private AuditCollection _colAudits;
+
+        private DbProviderCache _providers = null;
 
         #endregion
 
@@ -114,6 +117,7 @@ namespace NDataAudit.Framework
         /// </summary>
         public AuditTesting()
         {
+            _providers = new DbProviderCache();
         }
 
         /// <summary>
@@ -123,6 +127,8 @@ namespace NDataAudit.Framework
         public AuditTesting(AuditCollection colAudits)
         {
             _colAudits = colAudits;
+
+            _providers = new DbProviderCache();
         }
 
         #endregion
@@ -158,11 +164,8 @@ namespace NDataAudit.Framework
             {
                 throw new NoAuditsLoadedException("No audits have been loaded. Please load some audits and try again.");
             }
-            else
-            {
                 GetAudits();
             }
-        }
 
         /// <summary>
         /// Run a single audit.
@@ -263,9 +266,59 @@ namespace NDataAudit.Framework
                                     {
                                         currentAudit.Result = true;
                                     }
+<<<<<<< HEAD:NDataAudit/AuditTesting.cs
                                 }
                                 else
                                 {
+=======
+                                    else
+                                    {
+                                        threshold = currentAudit.Tests[testCount].RowCount.ToString(CultureInfo.InvariantCulture);
+                                        currentAudit.Tests[testCount].FailedMessage = "The failure threshold was less than " + threshold + " rows. This audit returned " + rowCount + " rows.";
+                                    }
+                                    break;
+                                case "<=":
+                                case "=<":
+                                    if (rowCount <= currTest.RowCount)
+                                    {
+                                        currentAudit.Result = true;
+                                    }
+                                    else
+                                    {
+                                        threshold = currentAudit.Tests[testCount].RowCount.ToString(CultureInfo.InvariantCulture);
+                                        currentAudit.Tests[testCount].FailedMessage = "The failure threshold was less than or equal to " + threshold + " rows. This audit returned " + rowCount + " rows.";
+                                    }
+                                    break;
+                                case "=":
+                                    if (rowCount == currTest.RowCount)
+                                    {
+                                        if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
+                                        {
+                                            currentAudit.Result = false;
+                                        }
+                                        else
+                                        {
+                                            currentAudit.Result = true;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
+                                        {
+                                            currentAudit.Result = false;
+                                        }
+                                        else
+                                        {
+                                            currentAudit.Result = true;
+                                        }
+
+                                        threshold = currentAudit.Tests[testCount].RowCount.ToString(CultureInfo.InvariantCulture);
+                                        currentAudit.Tests[testCount].FailedMessage = "The failure threshold was equal to " + threshold + " rows. This audit returned " + rowCount + " rows.";
+                                    }
+                                    break;
+                                case "<>":
+                                case "!=":
+>>>>>>> master:NAudit/AuditTesting.cs
                                     if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
                                     {
                                         currentAudit.Result = false;
@@ -445,83 +498,59 @@ namespace NDataAudit.Framework
 
         private DataSet GetTestDataSet(ref Audit auditToRun, int testIndex)
         {
-            // TODO: Change this to have the ability to use more than just SQL Server.
-            var conn = new SqlConnection();
-            var cmdAudit = new SqlCommand();
-            SqlDataAdapter daAudit = null;
+            IAuditDbProvider currDbProvider = _providers.Providers[auditToRun.DatabaseProvider];
+
+            currDbProvider.ConnectionString = auditToRun.ConnectionString.ToString();
+
+            currDbProvider.CreateDatabaseSession();
+
             var dsAudit = new DataSet();
-
-            conn.ConnectionString = auditToRun.ConnectionString.ToString();
-            
-            try
-            {
-                conn.Open();
-            }
-            catch (Exception ex)
-            {
-                string strMsg = null;
-                strMsg = ex.Message;
-                auditToRun.Tests[testIndex].FailedMessage = strMsg;
-
-                return dsAudit;
-            }
 
             string sql = BuildSqlStatement(auditToRun, testIndex);
 
-            cmdAudit.CommandText = sql;
-            cmdAudit.Connection = conn;
-            cmdAudit.CommandTimeout = 180;
-
-            int intCommandTimeout = cmdAudit.CommandTimeout;
-            int intConnectionTimeout = conn.ConnectionTimeout;
+            CommandType commandType = (CommandType) 0;
             
             if (auditToRun.SqlType == Audit.SqlStatementTypeEnum.SqlText)
             {
-                cmdAudit.CommandType = CommandType.Text;
+                commandType = CommandType.Text;
             }
             else if (auditToRun.SqlType == Audit.SqlStatementTypeEnum.StoredProcedure)
             {
-                cmdAudit.CommandType = CommandType.StoredProcedure;
+                commandType = CommandType.StoredProcedure;
             }
 
-            daAudit = new SqlDataAdapter(cmdAudit);
+            IDbCommand cmdAudit = currDbProvider.CreateDbCommand(sql, commandType, int.Parse(auditToRun.ConnectionString.CommandTimeout));
+            IDbDataAdapter daAudit = currDbProvider.CreateDbDataAdapter(cmdAudit);
+
+            int intCommandTimeout = cmdAudit.CommandTimeout;
+            int intConnectionTimeout = currDbProvider.CurrentConnection.ConnectionTimeout;
 
             try
             {
                 daAudit.Fill(dsAudit);
             }
-            catch (SqlException exsql)
+            catch (Exception ex)
             {
+                //AuditLogger.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
+
                 int intFound = 0;
                 string strMsg = null;
 
-                strMsg = exsql.Message;
+                strMsg = ex.Message;
 
                 intFound = (strMsg.IndexOf("Timeout expired.", 0, StringComparison.Ordinal) + 1);
 
                 if (intFound == 1)
                 {
-                    auditToRun.Tests[testIndex].FailedMessage = "Timeout expired while running this audit. The connection timeout was " + intConnectionTimeout.ToString(CultureInfo.InvariantCulture) + " seconds. The command timeout was " + intCommandTimeout.ToString() + " seconds.";
+                    auditToRun.Tests[testIndex].FailedMessage = "Timeout expired while running this audit. The connection timeout was " + intConnectionTimeout.ToString(CultureInfo.InvariantCulture) + " seconds. The command timeout was " + intCommandTimeout + " seconds.";
                 }
                 else
                 {
                     auditToRun.Tests[testIndex].FailedMessage = strMsg;
                 }
-
-                //AuditLogger.Log(LogLevel.Debug, exsql.TargetSite + "::" + exsql.Message, exsql);
-            }
-            catch (Exception ex)
-            {
-                //AuditLogger.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
-
-                string strMsg = ex.Message;
-                auditToRun.Tests[testIndex].FailedMessage = strMsg;
             }
             finally
             {
-                conn.Close();
-                conn.Dispose();
-                daAudit.Dispose();
                 cmdAudit.Dispose();
             }
 
@@ -629,11 +658,14 @@ namespace NDataAudit.Framework
                 body.AppendLine("COMMENTS AND INSTRUCTIONS" + AuditUtils.HtmlBreak);
                 body.AppendLine("============================" + AuditUtils.HtmlBreak);
 
+                if (testedAudit.Tests[testIndex].Instructions != null)
+                {
                 if (testedAudit.Tests[testIndex].Instructions.Length > 0)
                 {
                     body.Append(testedAudit.Tests[testIndex].Instructions.ToHtml() + AuditUtils.HtmlBreak);
                     body.AppendLine(AuditUtils.HtmlBreak);
                 }
+            }
             }
 
             if (testedAudit.Tests[testIndex].SendReport)
@@ -669,7 +701,9 @@ namespace NDataAudit.Framework
                 body.Append("This audit ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture));
             }
 
-            SendEmail(testedAudit, body.ToString(), sourceEmailDescription);
+            string cleanBody = body.ToString().Replace("\r\n", string.Empty);
+
+            SendEmail(testedAudit, cleanBody, sourceEmailDescription);
         }
 
         private static void SendEmail(Audit testedAudit, string body, string sourceEmailDescription)
@@ -734,7 +768,7 @@ namespace NDataAudit.Framework
             {
                 server.Host = testedAudit.SmtpServerAddress;
                 server.Port = testedAudit.SmtpPort;
-                server.Credentials = new System.Net.NetworkCredential(testedAudit.SmtpUserName, testedAudit.SmtpPassword);
+                server.Credentials = new NetworkCredential(testedAudit.SmtpUserName, testedAudit.SmtpPassword);
                 server.EnableSsl = testedAudit.SmtpUseSsl;
             }
             else
@@ -742,7 +776,23 @@ namespace NDataAudit.Framework
                 server.Host = testedAudit.SmtpServerAddress;
             }
 
+            try
+            {
             server.Send(message);
+        }
+            catch (SmtpException smtpEx)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                sb.AppendLine(smtpEx.Message);
+
+                if (smtpEx.InnerException != null)
+                {
+                    sb.AppendLine(smtpEx.InnerException.Message);
+                }
+
+                throw;
+            }
         }
 
         #endregion
@@ -801,8 +851,8 @@ namespace NDataAudit.Framework
         }
 
         #endregion
-    }
-
+    }	
+    
     /// <summary>
     /// Custom <see cref="Exception"/> to alert users that no Audits have been loaded for testing.
     /// </summary>
@@ -813,7 +863,20 @@ namespace NDataAudit.Framework
         /// </summary>
         /// <param name="message">The message that will be associated with this <see cref="Exception"/> and that will be shown to users.</param>
         public NoAuditsLoadedException(string message) : base(message)
-        {
-        }
+        {}
+    }
+
+    /// <summary>
+    /// Class MissingRequiredConfigurations.
+    /// </summary>
+    /// <seealso cref="System.Exception" />
+    public class MissingRequiredConfigurations : Exception
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MissingRequiredConfigurations"/> class.
+        /// </summary>
+        /// <param name="message">The message that describes the error.</param>
+        public MissingRequiredConfigurations(string message) : base(message)
+        {}
     }
 }
