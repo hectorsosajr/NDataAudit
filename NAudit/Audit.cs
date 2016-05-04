@@ -15,8 +15,9 @@
 
 using System.Collections;
 using System.ComponentModel;
+using System.Security.Policy;
 
-namespace NDataAudit.Framework
+namespace NAudit.Framework
 {
     /// <summary>
     /// Summary description for Audit.
@@ -112,6 +113,12 @@ namespace NDataAudit.Framework
         /// </summary>
         [Description("The connection string needed to connect to the server that contains the needed test data."), Category("Database")]
         public AuditConnectionString ConnectionString { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database provider.
+        /// </summary>
+        /// <value>The database provider.</value>
+        public string DatabaseProvider { get; set; }
 
         /// <summary>
         /// The emails of the people who will receive notifications.

@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 
-namespace NDataAudit.Framework
+namespace NAudit.Framework
 {
     /// <summary>
     /// Summary description for AuditController.
@@ -26,7 +26,7 @@ namespace NDataAudit.Framework
     {
         #region  Declarations 
 
-        private AuditCollection _colAuditGroup;
+        private readonly AuditCollection _colAuditGroup;
         private string _auditGroupName;
 
         #endregion
@@ -153,8 +153,34 @@ namespace NDataAudit.Framework
                 XmlNodeList sqlType = auditDoc.GetElementsByTagName("sqltype");
                 newAudit.SqlType = (Audit.SqlStatementTypeEnum) Convert.ToInt32(sqlType[0].InnerText);
 
+                XmlNode dbProvider = auditBranch["databaseprovider"];
+                if (dbProvider != null)
+                {
+                    newAudit.DatabaseProvider = dbProvider.InnerText.ToLower();
+                }
+
                 XmlNodeList connectionString = auditDoc.GetElementsByTagName("connectionstring");
-                newAudit.ConnectionString = new AuditConnectionString(connectionString[0].InnerText);
+                newAudit.ConnectionString = new AuditConnectionString(connectionString[0].InnerText, newAudit.DatabaseProvider);
+
+                XmlNode commandTimeout = auditBranch["commandtimeout"];
+                if (commandTimeout != null)
+                {
+                    newAudit.ConnectionString.CommandTimeout = commandTimeout.InnerText;
+                }
+                else
+                {
+                    newAudit.ConnectionString.CommandTimeout = "180";
+                }
+
+                XmlNode connectionTimeout = auditBranch["connectiontimeout"];
+                if (connectionTimeout != null)
+                {
+                    newAudit.ConnectionString.ConnectionTimeout = connectionTimeout.InnerText;
+                }
+                else
+                {
+                    newAudit.ConnectionString.CommandTimeout = "15";
+                }
 
                 XmlNodeList orderbyNode = auditDoc.GetElementsByTagName("orderbyclause");
                 if (orderbyNode.Count > 0)

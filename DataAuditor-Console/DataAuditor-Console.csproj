@@ -140,13 +140,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NDataAudit\NDataAudit.Framework.csproj">
-      <Project>{53D6FB23-ABBD-4E35-9A5D-91E17BE5F19D}</Project>
-      <Name>NDataAudit.Framework</Name>
-    </ProjectReference>
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <ProjectReference Include="..\NAudit\NAudit.Framework.csproj">
+      <Project>{53d6fb23-abbd-4e35-9a5d-91e17be5f19d}</Project>
+      <Name>NAudit.Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

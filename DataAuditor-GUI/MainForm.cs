@@ -16,7 +16,7 @@
 
 using System;
 using System.Windows.Forms;
-using NDataAudit.Framework;
+using NAudit.Framework;
 
 namespace DataAuditor.UI
 {
