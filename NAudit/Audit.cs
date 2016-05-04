@@ -15,8 +15,9 @@
 
 using System.Collections;
 using System.ComponentModel;
+using NAudit.Framework;
 
-namespace NDataAudit.Framework
+namespace NAudit.Framework
 {
     /// <summary>
     /// Summary description for Audit.
@@ -210,7 +211,7 @@ namespace NDataAudit.Framework
         /// Gets or sets the email priority.
         /// </summary>
         /// <value>The email priority.</value>
-        [Description("Gets or sets the email prioirty for this audit."), Category("Email")]
+        [Description("Gets or sets the email priority for this audit."), Category("Email")]
         public EmailPriorityEnum EmailPriority { get; set; }
 
         /// <summary>
