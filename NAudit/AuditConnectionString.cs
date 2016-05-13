@@ -24,10 +24,12 @@
                 {
                     case "data source":
                     case "server":
+                    case "host":
                         DatabaseServer = currItem[1];
                         break;
                     case "initial catalog":
                     case "database":
+                    case "schema":
                         DatabaseName = currItem[1];
                         break;
                     case "user id":
@@ -38,6 +40,12 @@
                         break;
                     case "port":
                         Port = currItem[1];
+                        break;
+                    case "defaulttable":
+                        DatabaseTargetTable = currItem[1];
+                        break;
+                    case "driver":
+                        DatabaseDriver = currItem[1];
                         break;
                 }
             }
@@ -54,6 +62,12 @@
         /// </summary>
         /// <value>The connection timeout.</value>
         public string ConnectionTimeout { get; set; }
+
+        /// <summary>
+        /// Gets the database driver.
+        /// </summary>
+        /// <value>The database driver.</value>
+        public string DatabaseDriver { get; private set; }
 
         /// <summary>
         /// Gets the name of the database.
@@ -92,6 +106,13 @@
         public string Port { get; private set; }
 
         /// <summary>
+        /// Gets the target table. Some database engines require that a 
+        /// table be part of the connection string.
+        /// </summary>
+        /// <value>The target table.</value>
+        public string DatabaseTargetTable { get; private set; }
+
+        /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
@@ -113,6 +134,10 @@
                     {
                         retval += ";Port=" + Port;
                     }
+                    break;
+                case "hadoop.hive":
+                    retval = "DRIVER=" + DatabaseDriver + ";Host=" + DatabaseServer + ";Port=" + Port + ";Schema=" +
+                             DatabaseName + ";DefaultTable=" + DatabaseTargetTable + ";";
                     break;
             }
 

@@ -3,8 +3,10 @@ using System.ComponentModel.Composition;
 using System.Data;
 using System.Data.Odbc;
 using System.Data.Common;
+using System.IO;
+using System.Text;
 
-namespace NAudit.Data.HadoopHive
+namespace NAudit.Data.Hadoop.Hive
 {
     /// <summary>
     /// Class AuditHadoopHiveProvider.
@@ -31,11 +33,23 @@ namespace NAudit.Data.HadoopHive
             this.ConnectionString = connectionString;
         }
 
+        /// <summary>
+        /// Gets or sets the connection string.
+        /// </summary>
+        /// <value>The connection string.</value>
         public string ConnectionString { get; set; }
 
+        /// <summary>
+        /// Gets the name of the database.
+        /// </summary>
+        /// <value>The name of the database.</value>
         public string DatabaseEngineName => "Hadoop Hive";
 
-        public string ProviderNamespace => "hive";
+        /// <summary>
+        /// Gets the provider namespace.
+        /// </summary>
+        /// <value>The provider namespace.</value>
+        public string ProviderNamespace => "hadoop.hive";
 
         /// <summary>
         /// Gets the current connection, is it has been set.
@@ -59,7 +73,11 @@ namespace NAudit.Data.HadoopHive
         /// <exception cref="System.NotImplementedException"></exception>
         public IDbCommand CreateDbCommand(string commandText, CommandType commandType, int commandTimeOut)
         {
-            throw new NotImplementedException();
+            IDbCommand retval = new OdbcCommand(commandText);
+            retval.Connection = CurrentConnection;
+            retval.CommandTimeout = commandTimeOut;
+
+            return retval;
         }
 
         /// <summary>
@@ -69,7 +87,46 @@ namespace NAudit.Data.HadoopHive
         /// <exception cref="System.NotImplementedException"></exception>
         public IDbConnection CreateDatabaseSession()
         {
-            throw new NotImplementedException();
+            StringBuilder errorMessages = new StringBuilder();
+
+            if (string.IsNullOrEmpty(ConnectionString))
+            {
+                return null;
+            }
+
+            OdbcConnection conn = new OdbcConnection(this.ConnectionString);
+
+            try
+            {
+                conn.Open();
+
+                _currentDbConnection = conn;
+            }
+            catch (OdbcException ex)
+            {
+                //for (int i = 0; i < ex.Errors.Count; i++)
+                //{
+                //    errorMessages.Append("Index #" + i + "\n" +
+                //                         "Message: " + ex.Errors[i].Message + "\n" +
+                //                         "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
+                //                         "Source: " + ex.Errors[i].Source + "\n" +
+                //                         "Procedure: " + ex.Errors[i].Procedure + "\n");
+                //}
+
+                errorMessages.Append(ex.Message);
+
+                Console.WriteLine(errorMessages.ToString());
+
+                string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".log";
+
+                using (TextWriter writer = File.CreateText(fileName))
+                {
+                    writer.WriteLine(errorMessages.ToString());
+                    writer.WriteLine(ex.StackTrace);
+                }
+            }
+
+            return conn;
         }
 
         /// <summary>
@@ -80,7 +137,10 @@ namespace NAudit.Data.HadoopHive
         /// <exception cref="System.NotImplementedException"></exception>
         public IDbDataAdapter CreateDbDataAdapter(IDbCommand currentDbCommand)
         {
-            throw new NotImplementedException();
+            OdbcCommand cmd = (OdbcCommand)currentDbCommand;
+            IDbDataAdapter retval = new OdbcDataAdapter(cmd);
+
+            return retval;
         }
     }
 }
