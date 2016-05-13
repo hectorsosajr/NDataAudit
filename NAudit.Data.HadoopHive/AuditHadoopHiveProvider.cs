@@ -119,6 +119,13 @@ namespace NAudit.Data.Hadoop.Hive
 
                 string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".log";
 
+                string logPath = Path.GetDirectoryName(fileName);
+
+                if (!Directory.Exists(logPath))
+                {
+                    Directory.CreateDirectory(logPath);
+                }
+
                 using (TextWriter writer = File.CreateText(fileName))
                 {
                     writer.WriteLine(errorMessages.ToString());

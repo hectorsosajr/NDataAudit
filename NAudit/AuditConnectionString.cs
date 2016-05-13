@@ -47,6 +47,12 @@
                     case "driver":
                         DatabaseDriver = currItem[1];
                         break;
+                    default:
+                        if (!string.IsNullOrEmpty(currItem[0]))
+                        {
+                            ExtraSettings += currItem[0] + "=" + currItem[1] + ";";
+                        }
+                        break;
                 }
             }
         }
@@ -113,6 +119,12 @@
         public string DatabaseTargetTable { get; private set; }
 
         /// <summary>
+        /// Gets the extra settings.
+        /// </summary>
+        /// <value>The extra settings.</value>
+        public string ExtraSettings { get; private set; }
+
+        /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
@@ -137,7 +149,7 @@
                     break;
                 case "hadoop.hive":
                     retval = "DRIVER=" + DatabaseDriver + ";Host=" + DatabaseServer + ";Port=" + Port + ";Schema=" +
-                             DatabaseName + ";DefaultTable=" + DatabaseTargetTable + ";";
+                             DatabaseName + ";DefaultTable=" + DatabaseTargetTable + ";" + ExtraSettings;
                     break;
             }
 
