@@ -456,12 +456,7 @@ namespace NAudit.Framework
             IDbDataAdapter daAudit = currDbProvider.CreateDbDataAdapter(cmdAudit);
 
             int intCommandTimeout = cmdAudit.CommandTimeout;
-            int intConnectionTimeout = 15;
-
-            if (currDbProvider.CurrentConnection != null)
-            {
-                intConnectionTimeout = currDbProvider.CurrentConnection.ConnectionTimeout;
-            }
+            int intConnectionTimeout = currDbProvider.CurrentConnection.ConnectionTimeout;
 
             try
             {
@@ -469,8 +464,6 @@ namespace NAudit.Framework
             }
             catch (Exception ex)
             {
-                //AuditLogger.Log(LogLevel.Debug, ex.TargetSite + "::" + ex.Message, ex);
-
                 int intFound = 0;
                 string strMsg = null;
 
@@ -481,11 +474,16 @@ namespace NAudit.Framework
                 if (intFound == 1)
                 {
                     auditToRun.Tests[testIndex].FailedMessage = "Timeout expired while running this audit. The connection timeout was " + intConnectionTimeout.ToString(CultureInfo.InvariantCulture) + " seconds. The command timeout was " + intCommandTimeout + " seconds.";
+
+                    auditToRun.ErrorMessages.Add(auditToRun.Tests[testIndex].FailedMessage);
                 }
                 else
                 {
                     auditToRun.Tests[testIndex].FailedMessage = strMsg;
+                    auditToRun.ErrorMessages.Add(strMsg);
                 }
+
+                auditToRun.WasSuccessful = false;
             }
             finally
             {
@@ -579,11 +577,14 @@ namespace NAudit.Framework
 
             string sourceEmailDescription = config.AppSettings.Settings["sourceEmailDescription"].Value;
 
-            if (testedAudit.ShowQueryMessage)
+            if (testedAudit.Tests[testIndex].SendReport)
             {
-                body.Append("The '" + testedAudit.Name + "' audit has failed. The following SQL statement was used to test this audit :" + AuditUtils.HtmlBreak);
-                body.Append(sqlTested.ToHtml() + AuditUtils.HtmlBreak);
-                body.Append("<b>This query was run on: " + testedAudit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
+                if (testedAudit.EmailSubject != null)
+            {
+                    body.AppendLine("<h2>" + testedAudit.EmailSubject + "</h2>");
+                }
+
+                body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
             }
 
             if (testedAudit.ShowThresholdMessage)
@@ -606,16 +607,6 @@ namespace NAudit.Framework
             }
             }
 
-            if (testedAudit.Tests[testIndex].SendReport)
-            {
-                if (testedAudit.EmailSubject != null)
-                {
-                    body.AppendLine("<h2>" + testedAudit.EmailSubject + "</h2>" + AuditUtils.HtmlBreak);
-                }
-
-                body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
-            }
-
             if (testedAudit.IncludeDataInEmail)
             {
                 if (testData.Tables.Count > 0)
@@ -632,11 +623,19 @@ namespace NAudit.Framework
 
             if (testedAudit.Tests[testIndex].SendReport)
             {
-                body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture)); 
+                body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak); 
             }
             else
             {
-                body.Append("This audit ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture));
+                body.Append("This audit ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak);
+            }
+
+            if (testedAudit.ShowQueryMessage)
+            {
+                body.Append(AuditUtils.HtmlBreak);
+                body.Append("The '" + testedAudit.Name + "' audit has failed. The following SQL statement was used to test this audit :" + AuditUtils.HtmlBreak);
+                body.Append(sqlTested.ToHtml() + AuditUtils.HtmlBreak);
+                body.Append("<b>This query was run on: " + testedAudit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
             }
 
             string cleanBody = body.ToString().Replace("\r\n", string.Empty);
