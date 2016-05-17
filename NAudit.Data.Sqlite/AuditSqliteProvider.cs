@@ -1,6 +1,10 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Data;
+using System.Data.SqlClient;
+using System.Data.SQLite;
+using System.IO;
+using System.Text;
 
 namespace NAudit.Data.Sqlite
 {
@@ -65,7 +69,13 @@ namespace NAudit.Data.Sqlite
         /// <exception cref="System.NotImplementedException"></exception>
         public IDbCommand CreateDbCommand(string commandText, CommandType commandType, int commandTimeOut)
         {
-            throw new NotImplementedException();
+            IDbCommand retval = new SQLiteCommand(commandText);
+            retval.Connection = CurrentConnection;
+            retval.CommandTimeout = commandTimeOut;
+
+            _currentDbCommand = retval;
+
+            return retval;
         }
 
         /// <summary>
@@ -75,7 +85,46 @@ namespace NAudit.Data.Sqlite
         /// <exception cref="System.NotImplementedException"></exception>
         public IDbConnection CreateDatabaseSession()
         {
-            throw new NotImplementedException();
+            StringBuilder errorMessages = new StringBuilder();
+
+            if (string.IsNullOrEmpty(ConnectionString))
+            {
+                return null;
+            }
+
+            SQLiteConnection conn = new SQLiteConnection(this.ConnectionString);
+
+            try
+            {
+                conn.Open();
+
+                _currentDbConnection = conn;
+            }
+            catch (SQLiteException ex)
+            {
+                //for (int i = 0; i < ex.Errors.Count; i++)
+                //{
+                //    errorMessages.Append("Index #" + i + "\n" +
+                //                         "Message: " + ex.Errors[i].Message + "\n" +
+                //                         "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
+                //                         "Source: " + ex.Errors[i].Source + "\n" +
+                //                         "Procedure: " + ex.Errors[i].Procedure + "\n");
+                //}
+
+                Console.WriteLine(errorMessages.ToString());
+
+                string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".log";
+
+                using (TextWriter writer = File.CreateText(fileName))
+                {
+                    writer.WriteLine(errorMessages.ToString());
+                    writer.WriteLine(ex.StackTrace);
+                }
+            }
+
+            _currentDbConnection = conn;
+
+            return conn;
         }
 
         /// <summary>
@@ -86,7 +135,10 @@ namespace NAudit.Data.Sqlite
         /// <exception cref="System.NotImplementedException"></exception>
         public IDbDataAdapter CreateDbDataAdapter(IDbCommand currentDbCommand)
         {
-            throw new NotImplementedException();
+            SQLiteCommand cmd = (SQLiteCommand)currentDbCommand;
+            IDbDataAdapter retval = new SQLiteDataAdapter(cmd);
+
+            return retval;
         }
     }
 }
