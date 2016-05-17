@@ -6,10 +6,10 @@ It currently supports the following database engines:
 * PostgreSQL
 * Amazon's RedShift
 * Oracle's MySQL
+* SQLite
 
 In progress:
 
-* SQLite
 * Hadoop Hive
 
 Researching:
