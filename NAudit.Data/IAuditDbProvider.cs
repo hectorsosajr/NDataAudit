@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 
 namespace NAudit.Data
 {
@@ -58,5 +59,11 @@ namespace NAudit.Data
         /// <param name="currentDbCommand">The current database command.</param>
         /// <returns>IDbDataAdapter.</returns>
         IDbDataAdapter CreateDbDataAdapter(IDbCommand currentDbCommand);
+
+        /// <summary>
+        /// Gets the errors.
+        /// </summary>
+        /// <value>The errors.</value>
+        List<string> Errors { get; set; }
     }
 }

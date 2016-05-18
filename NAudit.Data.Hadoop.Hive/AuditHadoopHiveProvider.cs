@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Data;
 using System.Data.Odbc;
@@ -21,7 +22,9 @@ namespace NAudit.Data.Hadoop.Hive
         /// Initializes a new instance of the <see cref="AuditHadoopHiveProvider"/> class.
         /// </summary>
         public AuditHadoopHiveProvider()
-        { }
+        {
+            Errors = new List<string>();
+        }
 
         /// <summary>
         /// Gets or sets the connection string.
@@ -105,6 +108,8 @@ namespace NAudit.Data.Hadoop.Hive
 
                 errorMessages.Append(ex.Message);
 
+                Errors.Add(ex.Message);
+
                 Console.WriteLine(errorMessages.ToString());
 
                 string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".log";
@@ -139,5 +144,11 @@ namespace NAudit.Data.Hadoop.Hive
 
             return retval;
         }
+
+        /// <summary>
+        /// Gets the errors.
+        /// </summary>
+        /// <value>The errors.</value>
+        public List<string> Errors { get; set; }
     }
 }

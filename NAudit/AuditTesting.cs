@@ -452,11 +452,18 @@ namespace NAudit.Framework
                 commandType = CommandType.StoredProcedure;
             }
 
+            int intConnectionTimeout = 15;
+
+            if (currDbProvider.CurrentConnection != null)
+            {
+                intConnectionTimeout = currDbProvider.CurrentConnection.ConnectionTimeout;
+            }
+
             IDbCommand cmdAudit = currDbProvider.CreateDbCommand(sql, commandType, int.Parse(auditToRun.ConnectionString.CommandTimeout));
-            IDbDataAdapter daAudit = currDbProvider.CreateDbDataAdapter(cmdAudit);
 
             int intCommandTimeout = cmdAudit.CommandTimeout;
-            int intConnectionTimeout = currDbProvider.CurrentConnection.ConnectionTimeout;
+
+            IDbDataAdapter daAudit = currDbProvider.CreateDbDataAdapter(cmdAudit);
 
             try
             {
