@@ -23,15 +23,6 @@ namespace NAudit.Data.MySql
         public AuditMySqlProvider()
         {}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuditMySqlProvider"/> class.
-        /// </summary>
-        /// <param name="connectionString">The connection string.</param>
-        public AuditMySqlProvider(string connectionString)
-        {
-            this.ConnectionString = connectionString;
-        }
-
         public string ConnectionString { get; set; }
 
         /// <summary>

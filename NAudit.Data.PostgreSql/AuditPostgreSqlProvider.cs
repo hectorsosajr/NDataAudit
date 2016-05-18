@@ -24,15 +24,6 @@ namespace NAudit.Data.PostgreSql
         {}
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuditPostgreSqlProvider"/> class.
-        /// </summary>
-        /// <param name="connectionString">The connection string.</param>
-        public AuditPostgreSqlProvider(string connectionString)
-        {
-            this.ConnectionString = connectionString;
-        }
-
-        /// <summary>
         /// Gets or sets the connection string.
         /// </summary>
         /// <value>The connection string.</value>

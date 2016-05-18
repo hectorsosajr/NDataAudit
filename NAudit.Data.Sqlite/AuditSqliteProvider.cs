@@ -24,15 +24,6 @@ namespace NAudit.Data.Sqlite
         public AuditSqliteProvider()
         { }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuditSqliteProvider"/> class.
-        /// </summary>
-        /// <param name="connectionString">The connection string.</param>
-        public AuditSqliteProvider(string connectionString)
-        {
-            this.ConnectionString = connectionString;
-        }
-
         public string ConnectionString { get; set; }
 
         /// <summary>

@@ -2,7 +2,6 @@
 using System.ComponentModel.Composition;
 using System.Data;
 using System.Data.Odbc;
-using System.Data.Common;
 using System.IO;
 using System.Text;
 
@@ -23,15 +22,6 @@ namespace NAudit.Data.Hadoop.Hive
         /// </summary>
         public AuditHadoopHiveProvider()
         { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuditHadoopHiveProvider"/> class.
-        /// </summary>
-        /// <param name="connectionString">The connection string.</param>
-        public AuditHadoopHiveProvider(string connectionString)
-        {
-            this.ConnectionString = connectionString;
-        }
 
         /// <summary>
         /// Gets or sets the connection string.
