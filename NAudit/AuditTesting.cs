@@ -435,6 +435,16 @@ namespace NAudit.Framework
 
             currDbProvider.ConnectionString = auditToRun.ConnectionString.ToString();
 
+            if (auditToRun.ConnectionString.ConnectionTimeout != null)
+            {
+                currDbProvider.ConnectionTimeout = auditToRun.ConnectionString.ConnectionTimeout;
+            }
+
+            if (auditToRun.ConnectionString.CommandTimeout != null)
+            {
+                currDbProvider.CommandTimeout = auditToRun.ConnectionString.CommandTimeout;
+            }
+
             currDbProvider.CreateDatabaseSession();
 
             var dsAudit = new DataSet();
@@ -452,18 +462,12 @@ namespace NAudit.Framework
                 commandType = CommandType.StoredProcedure;
             }
 
-            int intConnectionTimeout = 15;
-
-            if (currDbProvider.CurrentConnection != null)
-            {
-                intConnectionTimeout = currDbProvider.CurrentConnection.ConnectionTimeout;
-            }
-
             IDbCommand cmdAudit = currDbProvider.CreateDbCommand(sql, commandType, int.Parse(auditToRun.ConnectionString.CommandTimeout));
 
-            int intCommandTimeout = cmdAudit.CommandTimeout;
-
             IDbDataAdapter daAudit = currDbProvider.CreateDbDataAdapter(cmdAudit);
+
+            string intConnectionTimeout = auditToRun.ConnectionString.ConnectionTimeout;
+            string intCommandTimeout = auditToRun.ConnectionString.CommandTimeout;
 
             try
             {

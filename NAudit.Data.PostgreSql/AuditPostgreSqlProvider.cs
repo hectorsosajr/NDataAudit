@@ -55,6 +55,24 @@ namespace NAudit.Data.PostgreSql
         public IDbCommand CurrentCommand => _currentDbCommand;
 
         /// <summary>
+        /// Gets the errors.
+        /// </summary>
+        /// <value>The errors.</value>
+        public List<string> Errors { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database connection timeout.
+        /// </summary>
+        /// <value>The connection timeout.</value>
+        public string ConnectionTimeout { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database command timeout.
+        /// </summary>
+        /// <value>The command timeout.</value>
+        public string CommandTimeout { get; set; }
+
+        /// <summary>
         /// Creates the command object for the specific database engine.
         /// </summary>
         /// <param name="commandText">The command text.</param>
@@ -95,20 +113,11 @@ namespace NAudit.Data.PostgreSql
             }
             catch (NpgsqlException ex)
             {
-                for (int i = 0; i < ex.Errors.Count; i++)
-                {
-                    //errorMessages.Append("Index #" + i + "\n" +
-                    //                     "Message: " + ex.Errors[i].Message + "\n" +
-                    //                     "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
-                    //                     "Source: " + ex.Errors[i].Source + "\n" +
-                    //                     "Procedure: " + ex.Errors[i].Procedure + "\n");
-                }
-
                 errorMessages.Append(ex.Message);
 
                 Console.WriteLine(errorMessages.ToString());
 
-                string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".log";
+                string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_postgresql.log";
 
                 using (TextWriter writer = File.CreateText(fileName))
                 {
@@ -133,11 +142,5 @@ namespace NAudit.Data.PostgreSql
 
             return retval;
         }
-
-        /// <summary>
-        /// Gets the errors.
-        /// </summary>
-        /// <value>The errors.</value>
-        public List<string> Errors { get; set; }
     }
 }

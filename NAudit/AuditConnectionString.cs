@@ -1,4 +1,6 @@
-﻿namespace NAudit.Framework
+﻿using System.Text;
+
+namespace NAudit.Framework
 {
     /// <summary>
     /// Class AuditConnectionString.
@@ -135,23 +137,60 @@
             switch (DatabaseProviderName)
             {
                 case "system.data.sqlclient":
-                    retval = "Data Source=" + DatabaseServer + ";Initial Catalog=" + DatabaseName + ";User ID=" + UserName +
-                   ";Password=" + Password + ";";
+                    retval = BuildSqlServerConnectionString();
                     break;
                 case "npgsql":
-                    retval = "Server=" + DatabaseServer + ";Database=" + DatabaseName + ";User ID=" + UserName +
-                             ";Password=" + Password;
-
-                    if (!string.IsNullOrEmpty(Port))
-                    {
-                        retval += ";Port=" + Port;
-                    }
+                    retval = BuildPostgreConnectionString();
                     break;
                 case "hadoop.hive":
-                    retval = "DRIVER=" + DatabaseDriver + ";Host=" + DatabaseServer + ";Port=" + Port + ";Schema=" +
-                             DatabaseName + ";DefaultTable=" + DatabaseTargetTable + ";" + ExtraSettings;
+                    retval = BuildHiveConnectionString();
                     break;
             }
+
+            return retval;
+        }
+
+        private string BuildHiveConnectionString()
+        {
+            string retval = string.Empty;
+
+            if (string.IsNullOrEmpty(DatabaseDriver) && string.IsNullOrEmpty(DatabaseServer) && string.IsNullOrEmpty(Port) 
+                && string.IsNullOrEmpty(DatabaseName) && string.IsNullOrEmpty(DatabaseTargetTable) && !string.IsNullOrEmpty(ExtraSettings))
+            {
+                // This is most likely a DSN only connection string.
+                retval = ExtraSettings;
+            }
+            else
+            {
+                // Build a regular connection string.
+                retval = "DRIVER=" + DatabaseDriver + ";Host=" + DatabaseServer + ";Port=" + Port + ";Schema=" +
+                             DatabaseName + ";DefaultTable=" + DatabaseTargetTable + ";" + ExtraSettings;
+            }
+
+            return retval;
+        }
+
+        private string BuildPostgreConnectionString()
+        {
+            string retval = string.Empty;
+
+            retval = "Server=" + DatabaseServer + ";Database=" + DatabaseName + ";User ID=" + UserName +
+                     ";Password=" + Password;
+
+            if (!string.IsNullOrEmpty(Port))
+            {
+                retval += ";Port=" + Port;
+            }
+
+            return retval;
+        }
+
+        private string BuildSqlServerConnectionString()
+        {
+            string retval = string.Empty;
+
+            retval = "Data Source=" + DatabaseServer + ";Initial Catalog=" + DatabaseName + ";User ID=" + UserName +
+           ";Password=" + Password + ";";
 
             return retval;
         }

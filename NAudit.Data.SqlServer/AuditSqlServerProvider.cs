@@ -55,6 +55,24 @@ namespace NAudit.Data.SqlServer
         public IDbCommand CurrentCommand => _currentDbCommand;
 
         /// <summary>
+        /// Gets the errors.
+        /// </summary>
+        /// <value>The errors.</value>
+        public List<string> Errors { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database connection timeout.
+        /// </summary>
+        /// <value>The connection timeout.</value>
+        public string ConnectionTimeout { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database command timeout.
+        /// </summary>
+        /// <value>The command timeout.</value>
+        public string CommandTimeout { get; set; }
+
+        /// <summary>
         /// Creates the command object for the specific database engine.
         /// </summary>
         /// <param name="commandText">The command text.</param>
@@ -106,7 +124,7 @@ namespace NAudit.Data.SqlServer
 
                 Console.WriteLine(errorMessages.ToString());
 
-                string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".log";
+                string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_sqlserver.log";
 
                 using (TextWriter writer = File.CreateText(fileName))
                 {
@@ -132,11 +150,5 @@ namespace NAudit.Data.SqlServer
             
             return retval;
         }
-
-        /// <summary>
-        /// Gets the errors.
-        /// </summary>
-        /// <value>The errors.</value>
-        public List<string> Errors { get; set; }
     }
 }
