@@ -7,9 +7,6 @@ It currently supports the following database engines:
 * Amazon's RedShift
 * Oracle's MySQL
 * SQLite
-
-In progress:
-
 * Hadoop Hive
 
 Researching:
