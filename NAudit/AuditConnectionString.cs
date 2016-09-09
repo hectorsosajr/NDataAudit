@@ -1,4 +1,6 @@
-﻿namespace NAudit.Framework
+﻿using System.Text;
+
+namespace NAudit.Framework
 {
     /// <summary>
     /// Class AuditConnectionString.
@@ -24,10 +26,12 @@
                 {
                     case "data source":
                     case "server":
+                    case "host":
                         DatabaseServer = currItem[1];
                         break;
                     case "initial catalog":
                     case "database":
+                    case "schema":
                         DatabaseName = currItem[1];
                         break;
                     case "user id":
@@ -38,6 +42,18 @@
                         break;
                     case "port":
                         Port = currItem[1];
+                        break;
+                    case "defaulttable":
+                        DatabaseTargetTable = currItem[1];
+                        break;
+                    case "driver":
+                        DatabaseDriver = currItem[1];
+                        break;
+                    default:
+                        if (!string.IsNullOrEmpty(currItem[0]))
+                        {
+                            ExtraSettings += currItem[0] + "=" + currItem[1] + ";";
+                        }
                         break;
                 }
             }
@@ -54,6 +70,12 @@
         /// </summary>
         /// <value>The connection timeout.</value>
         public string ConnectionTimeout { get; set; }
+
+        /// <summary>
+        /// Gets the database driver.
+        /// </summary>
+        /// <value>The database driver.</value>
+        public string DatabaseDriver { get; private set; }
 
         /// <summary>
         /// Gets the name of the database.
@@ -92,6 +114,19 @@
         public string Port { get; private set; }
 
         /// <summary>
+        /// Gets the target table. Some database engines require that a 
+        /// table be part of the connection string.
+        /// </summary>
+        /// <value>The target table.</value>
+        public string DatabaseTargetTable { get; private set; }
+
+        /// <summary>
+        /// Gets the extra settings.
+        /// </summary>
+        /// <value>The extra settings.</value>
+        public string ExtraSettings { get; private set; }
+
+        /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
@@ -102,19 +137,60 @@
             switch (DatabaseProviderName)
             {
                 case "system.data.sqlclient":
-                    retval = "Data Source=" + DatabaseServer + ";Initial Catalog=" + DatabaseName + ";User ID=" + UserName +
-                   ";Password=" + Password + ";";
+                    retval = BuildSqlServerConnectionString();
                     break;
                 case "npgsql":
-                    retval = "Server=" + DatabaseServer + ";Database=" + DatabaseName + ";User ID=" + UserName +
-                             ";Password=" + Password;
-
-                    if (!string.IsNullOrEmpty(Port))
-                    {
-                        retval += ";Port=" + Port;
-                    }
+                    retval = BuildPostgreConnectionString();
+                    break;
+                case "hadoop.hive":
+                    retval = BuildHiveConnectionString();
                     break;
             }
+
+            return retval;
+        }
+
+        private string BuildHiveConnectionString()
+        {
+            string retval = string.Empty;
+
+            if (string.IsNullOrEmpty(DatabaseDriver) && string.IsNullOrEmpty(DatabaseServer) && string.IsNullOrEmpty(Port) 
+                && string.IsNullOrEmpty(DatabaseName) && string.IsNullOrEmpty(DatabaseTargetTable) && !string.IsNullOrEmpty(ExtraSettings))
+            {
+                // This is most likely a DSN only connection string.
+                retval = ExtraSettings;
+            }
+            else
+            {
+                // Build a regular connection string.
+                retval = "DRIVER=" + DatabaseDriver + ";Host=" + DatabaseServer + ";Port=" + Port + ";Schema=" +
+                             DatabaseName + ";DefaultTable=" + DatabaseTargetTable + ";" + ExtraSettings;
+            }
+
+            return retval;
+        }
+
+        private string BuildPostgreConnectionString()
+        {
+            string retval = string.Empty;
+
+            retval = "Server=" + DatabaseServer + ";Database=" + DatabaseName + ";User ID=" + UserName +
+                     ";Password=" + Password;
+
+            if (!string.IsNullOrEmpty(Port))
+            {
+                retval += ";Port=" + Port;
+            }
+
+            return retval;
+        }
+
+        private string BuildSqlServerConnectionString()
+        {
+            string retval = string.Empty;
+
+            retval = "Data Source=" + DatabaseServer + ";Initial Catalog=" + DatabaseName + ";User ID=" + UserName +
+           ";Password=" + Password + ";";
 
             return retval;
         }

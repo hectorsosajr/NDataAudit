@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 
 namespace NAudit.Data
 {
@@ -58,5 +59,23 @@ namespace NAudit.Data
         /// <param name="currentDbCommand">The current database command.</param>
         /// <returns>IDbDataAdapter.</returns>
         IDbDataAdapter CreateDbDataAdapter(IDbCommand currentDbCommand);
+
+        /// <summary>
+        /// Gets the errors from any internally thrown exceptions.
+        /// </summary>
+        /// <value>The errors.</value>
+        List<string> Errors { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database connection timeout.
+        /// </summary>
+        /// <value>The connection timeout.</value>
+        string ConnectionTimeout { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database command timeout.
+        /// </summary>
+        /// <value>The command timeout.</value>
+        string CommandTimeout { get; set; }
     }
 }
