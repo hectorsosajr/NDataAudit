@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Data;
 using System.Data.SqlClient;
@@ -22,15 +23,6 @@ namespace NAudit.Data.SqlServer
         /// </summary>
         public AuditSqlServerProvider()
         {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuditSqlServerProvider"/> class.
-        /// </summary>
-        /// <param name="connectionString">The connection string.</param>
-        public AuditSqlServerProvider(string connectionString)
-        {
-            this.ConnectionString = connectionString;
-        }
 
         /// <summary>
         /// Gets or sets the connection string.
@@ -61,6 +53,24 @@ namespace NAudit.Data.SqlServer
         /// </summary>
         /// <value>The current command.</value>
         public IDbCommand CurrentCommand => _currentDbCommand;
+
+        /// <summary>
+        /// Gets the errors.
+        /// </summary>
+        /// <value>The errors.</value>
+        public List<string> Errors { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database connection timeout.
+        /// </summary>
+        /// <value>The connection timeout.</value>
+        public string ConnectionTimeout { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database command timeout.
+        /// </summary>
+        /// <value>The command timeout.</value>
+        public string CommandTimeout { get; set; }
 
         /// <summary>
         /// Creates the command object for the specific database engine.
@@ -114,7 +124,7 @@ namespace NAudit.Data.SqlServer
 
                 Console.WriteLine(errorMessages.ToString());
 
-                string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".log";
+                string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_sqlserver.log";
 
                 using (TextWriter writer = File.CreateText(fileName))
                 {

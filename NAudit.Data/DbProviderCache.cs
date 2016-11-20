@@ -1,8 +1,10 @@
 ﻿
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.ComponentModel.Composition.Hosting;
+using System.IO;
+using System.Linq;
 using System.Reflection;
+using SimpleInjector;
 
 namespace NAudit.Data
 {
@@ -25,9 +27,6 @@ namespace NAudit.Data
         /// <value>The providers.</value>
         public Dictionary<string, IAuditDbProvider> Providers { get; private set; }
 
-        [ImportMany(typeof(IAuditDbProvider))]
-        private List<IAuditDbProvider> DatabaseProviderCache { get; set; }
-
         private void PopulateProviderCache()
         {
             if (this.Providers == null)
@@ -35,13 +34,22 @@ namespace NAudit.Data
                 this.Providers = new Dictionary<string, IAuditDbProvider>();
             }
 
-            var catalog = new AggregateCatalog(new DirectoryCatalog("."), new AssemblyCatalog(Assembly.GetExecutingAssembly()));
-            var container = new CompositionContainer(catalog);
-            container.ComposeParts(this);
+            string providerDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
-            foreach (IAuditDbProvider dbProvider in this.DatabaseProviderCache)
+            var providerAssemblies = 
+                from file in new DirectoryInfo(providerDirectory).GetFiles()
+                where file.Extension.ToLower() == ".dll"
+                select Assembly.LoadFile(file.FullName);
+
+            Container container = new Container();
+
+            var providerTypes = container.GetTypesToRegister(typeof(IAuditDbProvider), providerAssemblies);
+
+            container.RegisterCollection<IAuditDbProvider>(providerTypes);
+
+            foreach (var provider in container.GetAllInstances<IAuditDbProvider>())
             {
-                this.Providers.Add(dbProvider.ProviderNamespace.ToLowerInvariant(), dbProvider);
+                Providers.Add(provider.ProviderNamespace.ToLowerInvariant(),provider);
             }
         }
     }

@@ -2,41 +2,47 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.Odbc;
 using System.IO;
 using System.Text;
 
-namespace NAudit.Data.Sqlite
+namespace NAudit.Data.Hadoop.Hive
 {
     /// <summary>
-    /// Class AuditSqliteProvider.
+    /// Class AuditHadoopHiveProvider.
     /// </summary>
     /// <seealso cref="NAudit.Data.IAuditDbProvider" />
     [Export(typeof(IAuditDbProvider))]
-    public class AuditSqliteProvider : IAuditDbProvider
+    public class AuditHadoopHiveProvider : IAuditDbProvider
     {
         private IDbConnection _currentDbConnection;
         private IDbCommand _currentDbCommand;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuditSqliteProvider"/> class.
+        /// Initializes a new instance of the <see cref="AuditHadoopHiveProvider"/> class.
         /// </summary>
-        public AuditSqliteProvider()
-        { }
+        public AuditHadoopHiveProvider()
+        {
+            Errors = new List<string>();
+        }
 
+        /// <summary>
+        /// Gets or sets the connection string.
+        /// </summary>
+        /// <value>The connection string.</value>
         public string ConnectionString { get; set; }
 
         /// <summary>
         /// Gets the name of the database.
         /// </summary>
         /// <value>The name of the database.</value>
-        public string DatabaseEngineName => "SQLite";
+        public string DatabaseEngineName => "Hadoop Hive";
 
         /// <summary>
         /// Gets the provider namespace.
         /// </summary>
         /// <value>The provider namespace.</value>
-        public string ProviderNamespace => "system.data.sqlite";
+        public string ProviderNamespace => "hadoop.hive";
 
         /// <summary>
         /// Gets the current connection, is it has been set.
@@ -78,11 +84,9 @@ namespace NAudit.Data.Sqlite
         /// <exception cref="System.NotImplementedException"></exception>
         public IDbCommand CreateDbCommand(string commandText, CommandType commandType, int commandTimeOut)
         {
-            IDbCommand retval = new SQLiteCommand(commandText);
+            IDbCommand retval = new OdbcCommand(commandText);
             retval.Connection = CurrentConnection;
             retval.CommandTimeout = commandTimeOut;
-
-            _currentDbCommand = retval;
 
             return retval;
         }
@@ -101,7 +105,11 @@ namespace NAudit.Data.Sqlite
                 return null;
             }
 
-            SQLiteConnection conn = new SQLiteConnection(this.ConnectionString);
+            OdbcConnection conn = new OdbcConnection(this.ConnectionString)
+            {
+                ConnectionTimeout = int.Parse(ConnectionTimeout)
+            };
+
 
             try
             {
@@ -109,11 +117,22 @@ namespace NAudit.Data.Sqlite
 
                 _currentDbConnection = conn;
             }
-            catch (SQLiteException ex)
+            catch (OdbcException ex)
             {
+                errorMessages.Append(ex.Message);
+
+                Errors.Add(ex.Message);
+
                 Console.WriteLine(errorMessages.ToString());
 
-                string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".log";
+                string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_hive.log";
+
+                string logPath = Path.GetDirectoryName(fileName);
+
+                if (!Directory.Exists(logPath))
+                {
+                    Directory.CreateDirectory(logPath);
+                }
 
                 using (TextWriter writer = File.CreateText(fileName))
                 {
@@ -121,8 +140,6 @@ namespace NAudit.Data.Sqlite
                     writer.WriteLine(ex.StackTrace);
                 }
             }
-
-            _currentDbConnection = conn;
 
             return conn;
         }
@@ -135,8 +152,8 @@ namespace NAudit.Data.Sqlite
         /// <exception cref="System.NotImplementedException"></exception>
         public IDbDataAdapter CreateDbDataAdapter(IDbCommand currentDbCommand)
         {
-            SQLiteCommand cmd = (SQLiteCommand)currentDbCommand;
-            IDbDataAdapter retval = new SQLiteDataAdapter(cmd);
+            OdbcCommand cmd = (OdbcCommand)currentDbCommand;
+            IDbDataAdapter retval = new OdbcDataAdapter(cmd);
 
             return retval;
         }

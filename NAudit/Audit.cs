@@ -14,6 +14,7 @@
 //*********************************************************************/
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using NAudit.Framework;
 
@@ -98,6 +99,7 @@ namespace NAudit.Framework
             EmailCarbonCopySubscribers = new ArrayList();
             EmailBlindCarbonCopySubscribers = new ArrayList();
             Tests = new AuditTestCollection();
+            ErrorMessages = new List<string>();
 
             ShowQueryMessage = true;
             ShowThresholdMessage = true;
@@ -290,6 +292,20 @@ namespace NAudit.Framework
         /// </summary>
         [Description("Gets or sets the FROM email used for the SMTP Server."), Category("Email Server")]
         public string SmtpSourceEmail { get; set; }
+
+        /// <summary>
+        /// Gets or sets the error messages.
+        /// </summary>
+        /// <value>The error messages.</value>
+        [Description("Gets or sets the error messages from exceptions happening inside the auditing engine."), Category("Audit")]
+        public List<string> ErrorMessages { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [was successful].
+        /// </summary>
+        /// <value><c>true</c> if [was successful]; otherwise, <c>false</c>.</value>
+        [Description("Gets or sets whether the audit passed or failed."), Category("Audit")]
+        public bool WasSuccessful { get; set; } 
 
         #endregion
     }

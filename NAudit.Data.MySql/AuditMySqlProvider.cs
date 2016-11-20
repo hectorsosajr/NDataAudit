@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Data;
 using System.IO;
@@ -22,15 +23,6 @@ namespace NAudit.Data.MySql
         /// </summary>
         public AuditMySqlProvider()
         {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AuditMySqlProvider"/> class.
-        /// </summary>
-        /// <param name="connectionString">The connection string.</param>
-        public AuditMySqlProvider(string connectionString)
-        {
-            this.ConnectionString = connectionString;
-        }
 
         public string ConnectionString { get; set; }
 
@@ -59,6 +51,24 @@ namespace NAudit.Data.MySql
         public IDbCommand CurrentCommand => _currentDbCommand;
 
         /// <summary>
+        /// Gets the errors.
+        /// </summary>
+        /// <value>The errors.</value>
+        public List<string> Errors { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database connection timeout.
+        /// </summary>
+        /// <value>The connection timeout.</value>
+        public string ConnectionTimeout { get; set; }
+
+        /// <summary>
+        /// Gets or sets the database command timeout.
+        /// </summary>
+        /// <value>The command timeout.</value>
+        public string CommandTimeout { get; set; }
+
+        /// <summary>
         /// Creates the database session.
         /// </summary>
         /// <returns>IDbConnection.</returns>
@@ -81,20 +91,11 @@ namespace NAudit.Data.MySql
             }
             catch (MySqlException ex)
             {
-                //for (int i = 0; i < ex.Errors.Count; i++)
-                //{
-                //    errorMessages.Append("Index #" + i + "\n" +
-                //                         "Message: " + ex.Errors[i].Message + "\n" +
-                //                         "LineNumber: " + ex.Errors[i].LineNumber + "\n" +
-                //                         "Source: " + ex.Errors[i].Source + "\n" +
-                //                         "Procedure: " + ex.Errors[i].Procedure + "\n");
-                //}
-
                 errorMessages.Append(ex.Message);
 
                 Console.WriteLine(errorMessages.ToString());
 
-                string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".log";
+                string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_mysql.log";
 
                 using (TextWriter writer = File.CreateText(fileName))
                 {
