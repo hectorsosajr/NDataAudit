@@ -331,28 +331,31 @@ namespace NAudit.Framework
         {
             var xmlSmtpElement = auditBranch["smtp"];
 
-            if (xmlSmtpElement["sourceEmail"] != null)
+            if (xmlSmtpElement != null)
             {
-                newAudit.SmtpSourceEmail = xmlSmtpElement["sourceEmail"].InnerText;
-            }
+                if (xmlSmtpElement["sourceEmail"] != null)
+                {
+                    newAudit.SmtpSourceEmail = xmlSmtpElement["sourceEmail"].InnerText;
+                }
 
-            if (xmlSmtpElement["address"] != null)
-            {
-                newAudit.SmtpServerAddress = xmlSmtpElement["address"].InnerText;
-            }
+                if (xmlSmtpElement["address"] != null)
+                {
+                    newAudit.SmtpServerAddress = xmlSmtpElement["address"].InnerText;
+                }
 
-            if (xmlSmtpElement["port"] != null)
-            {
-                newAudit.SmtpPort = Convert.ToInt32(xmlSmtpElement["port"].InnerText);
-            }
-            else
-            {
-                newAudit.SmtpPort = 25;
-            }
+                if (xmlSmtpElement["port"] != null)
+                {
+                    newAudit.SmtpPort = Convert.ToInt32(xmlSmtpElement["port"].InnerText);
+                }
+                else
+                {
+                    newAudit.SmtpPort = 25;
+                }
 
-            if (xmlSmtpElement["usessl"] != null)
-            {
-                newAudit.SmtpUseSsl = bool.Parse(xmlSmtpElement["usessl"].InnerText);
+                if (xmlSmtpElement["usessl"] != null)
+                {
+                    newAudit.SmtpUseSsl = bool.Parse(xmlSmtpElement["usessl"].InnerText);
+                }
             }
 
             // Process SMTP credentials, if any
