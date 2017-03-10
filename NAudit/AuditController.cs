@@ -356,23 +356,23 @@ namespace NAudit.Framework
                 {
                     newAudit.SmtpUseSsl = bool.Parse(xmlSmtpElement["usessl"].InnerText);
                 }
-            }
 
-            // Process SMTP credentials, if any
-            XmlNode xmlSmtpCredElement = xmlSmtpElement["smtpcredentials"];
+                // Process SMTP credentials, if any
+                XmlNode xmlSmtpCredElement = xmlSmtpElement["smtpcredentials"];
 
-            if (xmlSmtpCredElement != null)
-            {
-                newAudit.SmtpHasCredentials = true;
-
-                if (xmlSmtpCredElement["username"] != null)
+                if (xmlSmtpCredElement != null)
                 {
-                    newAudit.SmtpUserName = xmlSmtpCredElement["username"].InnerText;
-                }
+                    newAudit.SmtpHasCredentials = true;
 
-                if (xmlSmtpCredElement["password"] != null)
-                {
-                    newAudit.SmtpPassword = xmlSmtpCredElement["password"].InnerText;
+                    if (xmlSmtpCredElement["username"] != null)
+                    {
+                        newAudit.SmtpUserName = xmlSmtpCredElement["username"].InnerText;
+                    }
+
+                    if (xmlSmtpCredElement["password"] != null)
+                    {
+                        newAudit.SmtpPassword = xmlSmtpCredElement["password"].InnerText;
+                    }
                 }
             }
         }
