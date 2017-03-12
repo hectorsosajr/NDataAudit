@@ -3,11 +3,11 @@
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NAudit.Data.SqlServer")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("NDataAudit.Data.SqlServer")]
+[assembly: AssemblyDescription("Proxy for Microsoft SQL Server database engine.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NAudit.Data.SqlServer")]
+[assembly: AssemblyCompany("Datakido")]
+[assembly: AssemblyProduct("NDataAudit.Data.SqlServer")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NAudit.Data.Sqlite")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("NDataAudit.Data.Sqlite")]
+[assembly: AssemblyDescription("Proxy for the Sqlite database engine.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NAudit.Data.Sqlite")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("Datakido")]
+[assembly: AssemblyProduct("NDataAudit.Data.Sqlite")]
+[assembly: AssemblyCopyright("Copyright Datakido © 2016-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

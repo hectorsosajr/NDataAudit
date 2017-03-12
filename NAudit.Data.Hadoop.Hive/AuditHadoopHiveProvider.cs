@@ -6,18 +6,15 @@ using System.Data.Odbc;
 using System.IO;
 using System.Text;
 
-namespace NAudit.Data.Hadoop.Hive
+namespace NDataAudit.Data.Hadoop.Hive
 {
     /// <summary>
     /// Class AuditHadoopHiveProvider.
     /// </summary>
-    /// <seealso cref="NAudit.Data.IAuditDbProvider" />
+    /// <seealso cref="NDataAudit.Data.IAuditDbProvider" />
     [Export(typeof(IAuditDbProvider))]
     public class AuditHadoopHiveProvider : IAuditDbProvider
     {
-        private IDbConnection _currentDbConnection;
-        private IDbCommand _currentDbCommand;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AuditHadoopHiveProvider"/> class.
         /// </summary>
@@ -48,13 +45,13 @@ namespace NAudit.Data.Hadoop.Hive
         /// Gets the current connection, is it has been set.
         /// </summary>
         /// <value>The current connection.</value>
-        public IDbConnection CurrentConnection => _currentDbConnection;
+        public IDbConnection CurrentConnection { get; private set; }
 
         /// <summary>
         /// Gets the current command.
         /// </summary>
         /// <value>The current command.</value>
-        public IDbCommand CurrentCommand => _currentDbCommand;
+        public IDbCommand CurrentCommand { get; }
 
         /// <summary>
         /// Gets the errors.
@@ -115,7 +112,7 @@ namespace NAudit.Data.Hadoop.Hive
             {
                 conn.Open();
 
-                _currentDbConnection = conn;
+                this.CurrentConnection = conn;
             }
             catch (OdbcException ex)
             {

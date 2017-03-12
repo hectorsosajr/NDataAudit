@@ -3,12 +3,12 @@
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NAudit.Data.PostGres")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("NDataAudit.Data.PostGres")]
+[assembly: AssemblyDescription("Proxy for the PostGres database engine family, including Amazon Redshift.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NAudit.Data.PostGres")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("Datakido")]
+[assembly: AssemblyProduct("NDataAudit.Data.PostGres")]
+[assembly: AssemblyCopyright("Copyright Datakido © 2016-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

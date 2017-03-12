@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 
-namespace NAudit.Data
+namespace NDataAudit.Data
 {
     /// <summary>
     /// Interface IAuditDbProvider

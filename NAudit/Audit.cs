@@ -11,6 +11,7 @@
 // Hector Sosa, Jr		3/21/2005	Changed the private variables
 //									to be compliant with C# naming
 //									conventions.
+// Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
 //*********************************************************************/
 
 using System.Collections;
@@ -18,7 +19,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Security.Policy;
 
-namespace NAudit.Framework
+namespace NDataAudit.Framework
 {
     /// <summary>
     /// Summary description for Audit.

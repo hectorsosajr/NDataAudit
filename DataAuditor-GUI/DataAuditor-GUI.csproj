@@ -169,9 +169,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NAudit\NAudit.Framework.csproj">
+    <ProjectReference Include="..\NAudit\NDataAudit.Framework.csproj">
       <Project>{53d6fb23-abbd-4e35-9a5d-91e17be5f19d}</Project>
-      <Name>NAudit.Framework</Name>
+      <Name>NDataAudit.Framework</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

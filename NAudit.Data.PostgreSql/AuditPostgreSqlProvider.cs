@@ -6,12 +6,12 @@ using System.IO;
 using System.Text;
 using Npgsql;
 
-namespace NAudit.Data.PostgreSql
+namespace NDataAudit.Data.PostgreSql
 {
     /// <summary>
     /// Class AuditPostgreSqlProvider.
     /// </summary>
-    /// <seealso cref="NAudit.Data.IAuditDbProvider" />
+    /// <seealso cref="NDataAudit.Data.IAuditDbProvider" />
     [Export(typeof(IAuditDbProvider))]
     public class AuditPostgreSqlProvider : IAuditDbProvider
     {

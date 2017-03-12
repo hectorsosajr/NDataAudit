@@ -12,11 +12,12 @@
 // Hector Sosa, Jr		3/21/2005	Added event handlers for running a
 //									single audit, instead of all of them.
 // Hector Sosa, Jr      8/22/2012   Renamed to DataAuditor.
+// Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
 //*****************************************************************************
 
 using System;
 using System.Windows.Forms;
-using NAudit.Framework;
+using NDataAudit.Framework;
 
 namespace DataAuditor.UI
 {
@@ -72,7 +73,7 @@ namespace DataAuditor.UI
         internal TD.SandBar.MenuButtonItem mnuNewGroup;
         internal NETXP.Controls.TaskPane.XPLink XpLinkNew;
         internal NETXP.Controls.TaskPane.XPLink XpLinkLoad;
-        internal System.Windows.Forms.OpenFileDialog OpenAudits;
+        internal System.Windows.Forms.OpenFileDialog OpeNDataAudits;
         internal System.Windows.Forms.ImageList imgAudits;
         internal NETXP.Controls.TaskPane.XPTaskPaneGroup xpgAudits;
         internal NETXP.Controls.TaskPane.XPTaskPaneGroup xpgGroups;
@@ -97,7 +98,7 @@ namespace DataAuditor.UI
         private TD.SandBar.ToolBar tbAudit;
         private TD.SandBar.ButtonItem btnAddAudit;
         private TD.SandBar.ButtonItem btnDeleteAudit;
-        private TD.SandBar.ButtonItem btnRunAudit;
+        private TD.SandBar.ButtonItem btnRuNDataAudit;
         internal System.Windows.Forms.Splitter Splitter2;
         [System.Diagnostics.DebuggerStepThrough()]
         private void InitializeComponent()
@@ -127,7 +128,7 @@ namespace DataAuditor.UI
             this.tbAudit = new TD.SandBar.ToolBar();
             this.btnAddAudit = new TD.SandBar.ButtonItem();
             this.btnDeleteAudit = new TD.SandBar.ButtonItem();
-            this.btnRunAudit = new TD.SandBar.ButtonItem();
+            this.btnRuNDataAudit = new TD.SandBar.ButtonItem();
             this.XpTaskPane = new NETXP.Controls.TaskPane.XPTaskPane();
             this.xpgAudits = new NETXP.Controls.TaskPane.XPTaskPaneGroup();
             this.xpLinkAuditRun = new NETXP.Controls.TaskPane.XPLink();
@@ -140,7 +141,7 @@ namespace DataAuditor.UI
             this.XpLinkLoad = new NETXP.Controls.TaskPane.XPLink();
             this.XpLinkNew = new NETXP.Controls.TaskPane.XPLink();
             this.Splitter1 = new System.Windows.Forms.Splitter();
-            this.OpenAudits = new System.Windows.Forms.OpenFileDialog();
+            this.OpeNDataAudits = new System.Windows.Forms.OpenFileDialog();
             this.imgAudits = new System.Windows.Forms.ImageList(this.components);
             this.Panel1 = new System.Windows.Forms.Panel();
             this.Splitter2 = new System.Windows.Forms.Splitter();
@@ -304,7 +305,7 @@ namespace DataAuditor.UI
             this.tbAudit.Items.AddRange(new TD.SandBar.ToolbarItemBase[] {
             this.btnAddAudit,
             this.btnDeleteAudit,
-            this.btnRunAudit});
+            this.btnRuNDataAudit});
             this.tbAudit.Location = new System.Drawing.Point(241, 24);
             this.tbAudit.Name = "tbAudit";
             this.tbAudit.Size = new System.Drawing.Size(243, 40);
@@ -322,11 +323,11 @@ namespace DataAuditor.UI
             this.btnDeleteAudit.Icon = ((System.Drawing.Icon)(resources.GetObject("btnDeleteAudit.Icon")));
             this.btnDeleteAudit.Text = "Delete Audit";
             // 
-            // btnRunAudit
+            // btnRuNDataAudit
             // 
-            this.btnRunAudit.Icon = ((System.Drawing.Icon)(resources.GetObject("btnRunAudit.Icon")));
-            this.btnRunAudit.Text = "Run Audit";
-            this.btnRunAudit.Activate += new System.EventHandler(this.btnRunAudit_Activate);
+            this.btnRuNDataAudit.Icon = ((System.Drawing.Icon)(resources.GetObject("btnRuNDataAudit.Icon")));
+            this.btnRuNDataAudit.Text = "Run Audit";
+            this.btnRuNDataAudit.Activate += new System.EventHandler(this.btnRuNDataAudit_Activate);
             // 
             // XpTaskPane
             // 
@@ -499,12 +500,12 @@ namespace DataAuditor.UI
             this.Splitter1.TabIndex = 6;
             this.Splitter1.TabStop = false;
             // 
-            // OpenAudits
+            // OpeNDataAudits
             // 
-            this.OpenAudits.AddExtension = false;
-            this.OpenAudits.DefaultExt = "xml";
-            this.OpenAudits.Filter = "XML Files|*.xml|Audit Files|*.audit|All Files|*.*";
-            this.OpenAudits.FileOk += new System.ComponentModel.CancelEventHandler(this.OpenAudits_FileOk);
+            this.OpeNDataAudits.AddExtension = false;
+            this.OpeNDataAudits.DefaultExt = "xml";
+            this.OpeNDataAudits.Filter = "XML Files|*.xml|Audit Files|*.audit|All Files|*.*";
+            this.OpeNDataAudits.FileOk += new System.ComponentModel.CancelEventHandler(this.OpeNDataAudits_FileOk);
             // 
             // imgAudits
             // 
@@ -682,7 +683,7 @@ namespace DataAuditor.UI
                     this.Refresh();
                 }
 
-                MessageBox.Show(mailSmtpException.Message, "NAudit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(mailSmtpException.Message, "NDataAudit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -696,7 +697,7 @@ namespace DataAuditor.UI
                     this.Refresh();
                 }
 
-                MessageBox.Show(ex.Message, "NAudit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "NDataAudit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             finally
@@ -746,9 +747,9 @@ namespace DataAuditor.UI
             LoadFileDialog();
         }
 
-        private void OpenAudits_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        private void OpeNDataAudits_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            string auditName = OpenAudits.FileName;
+            string auditName = OpeNDataAudits.FileName;
 
             this.Text = string.Empty;
             this.Text = "DataAuditor";
@@ -813,7 +814,7 @@ namespace DataAuditor.UI
             RunSingleAudit();
         }
 
-        private void btnRunAudit_Activate(object sender, EventArgs e)
+        private void btnRuNDataAudit_Activate(object sender, EventArgs e)
         {
             RunSingleAudit();
         }
@@ -851,7 +852,7 @@ namespace DataAuditor.UI
 
         private void LoadFileDialog()
         {
-            OpenAudits.ShowDialog();
+            OpeNDataAudits.ShowDialog();
         }
 
         private void LoadAuditGroup(string xmlGroup)
@@ -893,7 +894,7 @@ namespace DataAuditor.UI
 
             this.Refresh();
 
-            _auditTesting.RunAudit(ref currentAudit);
+            _auditTesting.RuNDataAudit(ref currentAudit);
         }
 
     #endregion

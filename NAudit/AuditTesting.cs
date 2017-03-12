@@ -16,6 +16,7 @@
 //                                  are exceptions.
 // Hector Sosa, Jr		3/21/2005	Added event handlers for running a
 //									single audit, instead of all of them.
+// Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
 //*********************************************************************
 
 using System;
@@ -25,9 +26,9 @@ using System.Globalization;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
-using NAudit.Data;
+using NDataAudit.Data;
 
-namespace NAudit.Framework
+namespace NDataAudit.Framework
 {
     // Delegates for groups of Audits
     /// <summary>
@@ -171,7 +172,7 @@ namespace NAudit.Framework
         /// Run a single audit.
         /// </summary>
         /// <param name="currentAudit">The Audit object to use</param>
-        public void RunAudit(ref Audit currentAudit)
+        public void RuNDataAudit(ref Audit currentAudit)
         {
             OnSingleAuditRunning(currentAudit);
             RunTests(ref currentAudit);			
@@ -188,7 +189,7 @@ namespace NAudit.Framework
             
             int tempFor1 = _colAudits.Count;
 
-            OnAuditTestingStarting();
+            ONDataAuditTestingStarting();
             
             for (auditCount = 0; auditCount < tempFor1; auditCount++)
             {
@@ -750,7 +751,7 @@ namespace NAudit.Framework
         /// <summary>
         /// Used to fire the <see cref="AuditTestingStarting"/> event.
         /// </summary>
-        protected virtual void OnAuditTestingStarting()
+        protected virtual void ONDataAuditTestingStarting()
         {
             if (AuditTestingStarting != null)
                 AuditTestingStarting();

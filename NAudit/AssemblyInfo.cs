@@ -5,12 +5,12 @@ using System.Reflection;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("NAudit")]
-[assembly: AssemblyDescription("NAudit is a database table auditing framework")]
+[assembly: AssemblyTitle("NDataAudit")]
+[assembly: AssemblyDescription("NDataAudit is a database table auditing framework")]
 [assembly: AssemblyConfiguration("Debug")]
-[assembly: AssemblyCompany("SystemWidgets")]
-[assembly: AssemblyProduct("NAudit.Framework")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCompany("Datakido")]
+[assembly: AssemblyProduct("NDataAudit.Framework")]
+[assembly: AssemblyCopyright("Copyright Datakido © 2016-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
 
@@ -25,7 +25,7 @@ using System.Reflection;
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
 
-[assembly: AssemblyVersion("0.5.*")]
+[assembly: AssemblyVersion("0.7.*")]
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 

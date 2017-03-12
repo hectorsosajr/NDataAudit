@@ -1,12 +1,12 @@
 
 using System;
 using System.IO;
-using NAudit.Framework;
+using NDataAudit.Framework;
 
 namespace DataAuditor.CommandLine
 {
     ///	<summary>
-    ///	Summary	description	for	NAuditModule.
+    ///	Summary	description	for	NDataAuditModule.
     ///	</summary>
     internal sealed class DataAuditorConsole
     {

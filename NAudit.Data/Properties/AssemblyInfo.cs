@@ -6,7 +6,7 @@
 [assembly: AssemblyTitle("NDataAudit.Data")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Datakido")]
 [assembly: AssemblyProduct("NDataAudit.Data")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]

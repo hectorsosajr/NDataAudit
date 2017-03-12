@@ -1,17 +1,18 @@
 //*********************************************************************
 // File:       		AuditTestCollection.cs
 // Author:  	    Hector Sosa, Jr
-// Date:			3/1/2005
+// Date:			1/31/2013
 //*********************************************************************
 // Change Log
 //*********************************************************************
-// USER					DATE            COMMENTS
-// Hector Sosa, Jr		3/1/2005	    Created
+// USER					DATE        COMMENTS
+// Hector Sosa, Jr		1/31/2013	Created
+// Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
 //*********************************************************************
 
 using System.Collections;
 
-namespace NAudit.Framework
+namespace NDataAudit.Framework
 {
 	/// <summary>
 	/// Summary description for AuditTestCollection.

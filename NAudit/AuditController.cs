@@ -5,11 +5,12 @@
 //*********************************************************************
 // Change Log
 //*********************************************************************
-// USER					DATE            COMMENTS
-// Hector Sosa, Jr		2/16/2005	    Created
-// Hector Sosa, Jr		3/21/2005		Changed the private variables
-//										to be compliant with C# naming
-//										conventions.
+// USER					DATE        COMMENTS
+// Hector Sosa, Jr		2/16/2005	Created
+// Hector Sosa, Jr		3/21/2005	Changed the private variables
+//									to be compliant with C# naming
+//									conventions.
+// Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
 //*********************************************************************
 
 using System;
@@ -17,7 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 
-namespace NAudit.Framework
+namespace NDataAudit.Framework
 {
     /// <summary>
     /// Summary description for AuditController.

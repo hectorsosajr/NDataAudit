@@ -3,12 +3,12 @@
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NAudit.Data.MySql")]
+[assembly: AssemblyTitle("NDataAudit.Data.MySql")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NAudit.Data.MySql")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("Datakido")]
+[assembly: AssemblyProduct("NDataAudit.Data.MySql")]
+[assembly: AssemblyCopyright("Copyright Datakido © 2016-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

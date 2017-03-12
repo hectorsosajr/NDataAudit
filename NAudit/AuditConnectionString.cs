@@ -1,6 +1,16 @@
-﻿using System.Text;
+﻿//*********************************************************************
+// File:       		AuditConnectionString.cs
+// Author:  	    Hector Sosa, Jr
+// Date:			4/13/2016
+//*********************************************************************
+// Change Log
+//*********************************************************************
+// USER					DATE        COMMENTS
+// Hector Sosa, Jr		4/13/2016	Created
+// Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
+//*********************************************************************
 
-namespace NAudit.Framework
+namespace NDataAudit.Framework
 {
     /// <summary>
     /// Class AuditConnectionString.

@@ -6,12 +6,12 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 
-namespace NAudit.Data.SqlServer
+namespace NDataAudit.Data.SqlServer
 {
     /// <summary>
     /// Class AuditSqlServerProvider.
     /// </summary>
-    /// <seealso cref="NAudit.Data.IAuditDbProvider" />
+    /// <seealso cref="NDataAudit.Data.IAuditDbProvider" />
     [Export(typeof(IAuditDbProvider))]
     public class AuditSqlServerProvider : IAuditDbProvider
     {

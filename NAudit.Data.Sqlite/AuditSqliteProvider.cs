@@ -6,12 +6,12 @@ using System.Data.SQLite;
 using System.IO;
 using System.Text;
 
-namespace NAudit.Data.Sqlite
+namespace NDataAudit.Data.Sqlite
 {
     /// <summary>
     /// Class AuditSqliteProvider.
     /// </summary>
-    /// <seealso cref="NAudit.Data.IAuditDbProvider" />
+    /// <seealso cref="NDataAudit.Data.IAuditDbProvider" />
     [Export(typeof(IAuditDbProvider))]
     public class AuditSqliteProvider : IAuditDbProvider
     {

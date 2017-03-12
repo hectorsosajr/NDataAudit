@@ -1,11 +1,6 @@
 //using System;
 //INSTANT C# NOTE: Formerly VB.NET project-level imports:
-using System;
-using System.Collections;
-using System.Data;
-using System.Drawing;
-using System.Diagnostics;
-using System.Windows.Forms;
+
 using System.Reflection;
 using System.Runtime.InteropServices;
 

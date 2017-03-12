@@ -1,3 +1,15 @@
+//*********************************************************************
+// File:       		AuditUtils.cs
+// Author:  	    Hector Sosa, Jr
+// Date:			1/31/2013
+//*********************************************************************
+// Change Log
+//*********************************************************************
+// USER					DATE        COMMENTS
+// Hector Sosa, Jr		1/31/2013	Created
+// Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
+//*********************************************************************
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,7 +18,7 @@ using System.IO;
 using System.Text;
 using Newtonsoft.Json.Linq;
 
-namespace NAudit.Framework
+namespace NDataAudit.Framework
 {
     /// <summary>
     /// Template used to color the HTML table in CreateHtmlData.

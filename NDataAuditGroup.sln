@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAuditor-Console", "DataAuditor-Console\DataAuditor-Console.csproj", "{A644A974-A1A9-4989-B9A6-1CE7A582BDCD}"
 EndProject
@@ -11,19 +11,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Audit Tests", "Audit Tests"
 		Audit Tests\TestAudit.xml = Audit Tests\TestAudit.xml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAudit.Data.SqlServer", "NAudit.Data.SqlServer\NAudit.Data.SqlServer.csproj", "{4BF12745-95D2-4853-A2BD-5D88221AC1C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDataAudit.Data.SqlServer", "NAudit.Data.SqlServer\NDataAudit.Data.SqlServer.csproj", "{4BF12745-95D2-4853-A2BD-5D88221AC1C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAudit.Data.MySql", "NAudit.Data.MySql\NAudit.Data.MySql.csproj", "{F2553D1D-3214-47A8-87BC-0B9B278DD23E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDataAudit.Data.MySql", "NAudit.Data.MySql\NDataAudit.Data.MySql.csproj", "{F2553D1D-3214-47A8-87BC-0B9B278DD23E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAudit.Data.Sqlite", "NAudit.Data.Sqlite\NAudit.Data.Sqlite.csproj", "{7A820EDE-657D-4D17-BA22-A6F0C4B3E313}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDataAudit.Data.Sqlite", "NAudit.Data.Sqlite\NDataAudit.Data.Sqlite.csproj", "{7A820EDE-657D-4D17-BA22-A6F0C4B3E313}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAudit.Data", "NAudit.Data\NAudit.Data.csproj", "{B4735746-C56A-4CA0-9B3A-E34F2404212D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDataAudit.Data", "NAudit.Data\NDataAudit.Data.csproj", "{B4735746-C56A-4CA0-9B3A-E34F2404212D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAudit.Framework", "NAudit\NAudit.Framework.csproj", "{53D6FB23-ABBD-4E35-9A5D-91E17BE5F19D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDataAudit.Framework", "NAudit\NDataAudit.Framework.csproj", "{53D6FB23-ABBD-4E35-9A5D-91E17BE5F19D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAudit.Data.PostgreSql", "NAudit.Data.PostgreSql\NAudit.Data.PostgreSql.csproj", "{91101497-8B55-4D36-BFB3-248FA8D9E803}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDataAudit.Data.PostgreSql", "NAudit.Data.PostgreSql\NDataAudit.Data.PostgreSql.csproj", "{91101497-8B55-4D36-BFB3-248FA8D9E803}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAudit.Data.Hadoop.Hive", "NAudit.Data.Hadoop.Hive\NAudit.Data.Hadoop.Hive.csproj", "{357E4CA1-209E-4BFA-8F8B-139432771D2D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDataAudit.Data.Hadoop.Hive", "NAudit.Data.Hadoop.Hive\NDataAudit.Data.Hadoop.Hive.csproj", "{357E4CA1-209E-4BFA-8F8B-139432771D2D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

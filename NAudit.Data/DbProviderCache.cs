@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using SimpleInjector;
 
-namespace NAudit.Data
+namespace NDataAudit.Data
 {
     /// <summary>
     /// Class DbProviderCache

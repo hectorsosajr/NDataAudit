@@ -11,7 +11,7 @@
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>NAudit.Framework</AssemblyName>
+    <AssemblyName>NDataAudit.Framework</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
@@ -19,7 +19,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
-    <RootNamespace>NAudit.Framework</RootNamespace>
+    <RootNamespace>NDataAudit.Framework</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -168,9 +168,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NAudit.Data\NAudit.Data.csproj">
+    <ProjectReference Include="..\NAudit.Data\NDataAudit.Data.csproj">
       <Project>{b4735746-c56a-4ca0-9b3a-e34f2404212d}</Project>
-      <Name>NAudit.Data</Name>
+      <Name>NDataAudit.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

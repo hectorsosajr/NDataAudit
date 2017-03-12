@@ -7,11 +7,12 @@
 //**************************************************************************************
 // USER					DATE        COMMENTS
 // Hector Sosa, Jr		2/16/2005	Created
+// Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
 //**************************************************************************************
 
 using System.Collections;
 
-namespace NAudit.Framework
+namespace NDataAudit.Framework
 {
 	/// <summary>
 	/// Summary description for AuditCollection.

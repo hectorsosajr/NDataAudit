@@ -6,12 +6,12 @@ using System.IO;
 using System.Text;
 using MySql.Data.MySqlClient;
 
-namespace NAudit.Data.MySql
+namespace NDataAudit.Data.MySql
 {
     /// <summary>
     /// Class AuditMySqlProvider.
     /// </summary>
-    /// <seealso cref="NAudit.Data.IAuditDbProvider" />
+    /// <seealso cref="NDataAudit.Data.IAuditDbProvider" />
     [Export(typeof(IAuditDbProvider))]
     public class AuditMySqlProvider : IAuditDbProvider
     {

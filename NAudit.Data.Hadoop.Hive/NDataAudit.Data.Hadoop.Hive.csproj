@@ -7,8 +7,8 @@
     <ProjectGuid>{357E4CA1-209E-4BFA-8F8B-139432771D2D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NAudit.Data.Hadoop.Hive</RootNamespace>
-    <AssemblyName>NAudit.Data.Hadoop.Hive</AssemblyName>
+    <RootNamespace>NDataAudit.Data.Hadoop.Hive</RootNamespace>
+    <AssemblyName>NDataAudit.Data.Hadoop.Hive</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -41,9 +41,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NAudit.Data\NAudit.Data.csproj">
+    <ProjectReference Include="..\NAudit.Data\NDataAudit.Data.csproj">
       <Project>{b4735746-c56a-4ca0-9b3a-e34f2404212d}</Project>
-      <Name>NAudit.Data</Name>
+      <Name>NDataAudit.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
