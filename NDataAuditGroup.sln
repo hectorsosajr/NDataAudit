@@ -25,6 +25,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDataAudit.Data.PostgreSql"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDataAudit.Data.Hadoop.Hive", "NAudit.Data.Hadoop.Hive\NDataAudit.Data.Hadoop.Hive.csproj", "{357E4CA1-209E-4BFA-8F8B-139432771D2D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D242856B-F857-4C27-B68E-55F4B47D167C}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{17909C00-11BE-4AA3-B9FD-6079D83A7E4F}"
+	ProjectSection(SolutionItems) = preProject
+		C:\Users\Hector\Pictures\DB Logos\32_HBase.png = C:\Users\Hector\Pictures\DB Logos\32_HBase.png
+		C:\Users\Hector\Pictures\DB Logos\32_Hive.png = C:\Users\Hector\Pictures\DB Logos\32_Hive.png
+		C:\Users\Hector\Pictures\DB Logos\32_Hortonworks.png = C:\Users\Hector\Pictures\DB Logos\32_Hortonworks.png
+		C:\Users\Hector\Pictures\DB Logos\32_MongoDb.png = C:\Users\Hector\Pictures\DB Logos\32_MongoDb.png
+		C:\Users\Hector\Pictures\DB Logos\32_MySQL.png = C:\Users\Hector\Pictures\DB Logos\32_MySQL.png
+		C:\Users\Hector\Pictures\DB Logos\32_PostGres.png = C:\Users\Hector\Pictures\DB Logos\32_PostGres.png
+		C:\Users\Hector\Pictures\DB Logos\32_RavenDb.png = C:\Users\Hector\Pictures\DB Logos\32_RavenDb.png
+		C:\Users\Hector\Pictures\DB Logos\32_Redshift.png = C:\Users\Hector\Pictures\DB Logos\32_Redshift.png
+		C:\Users\Hector\Pictures\DB Logos\32_ReSharper.png = C:\Users\Hector\Pictures\DB Logos\32_ReSharper.png
+		C:\Users\Hector\Pictures\DB Logos\32_Sqlite.png = C:\Users\Hector\Pictures\DB Logos\32_Sqlite.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
