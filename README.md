@@ -16,5 +16,5 @@ It currently supports the following database engines:
 Researching:
 
 * MongoDB
-* Raven
+* RavenDb
 * HBase
