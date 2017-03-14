@@ -27,6 +27,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDataAudit.Data.Hadoop.Hive
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D242856B-F857-4C27-B68E-55F4B47D167C}"
 	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{74D59B0E-3BC2-4AE8-87E6-4391605373B1}"
+	ProjectSection(SolutionItems) = preProject
 		images\32_HBase.png = images\32_HBase.png
 		images\32_Hive.png = images\32_Hive.png
 		images\32_Hortonworks.png = images\32_Hortonworks.png
@@ -37,7 +42,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		images\32_Redshift.png = images\32_Redshift.png
 		images\32_ReSharper.png = images\32_ReSharper.png
 		images\32_Sqlite.png = images\32_Sqlite.png
-		README.md = README.md
 	EndProjectSection
 EndProject
 Global
