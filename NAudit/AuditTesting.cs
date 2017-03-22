@@ -592,7 +592,7 @@ namespace NDataAudit.Framework
             if (testedAudit.Tests[testIndex].SendReport)
             {
                 if (testedAudit.EmailSubject != null)
-            {
+                {
                     body.AppendLine("<h2>" + testedAudit.EmailSubject + "</h2>");
                 }
 
@@ -601,6 +601,7 @@ namespace NDataAudit.Framework
 
             if (testedAudit.ShowThresholdMessage)
             {
+                body.AppendLine("<h2>ERROR MESSAGE</h2>");
                 body.Append(testedAudit.Tests[testIndex].FailedMessage + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
             }
 
@@ -718,6 +719,8 @@ namespace NDataAudit.Framework
 
             if (testedAudit.SmtpHasCredentials)
             {
+                server.UseDefaultCredentials = false;
+                server.DeliveryMethod = SmtpDeliveryMethod.Network;
                 server.Host = testedAudit.SmtpServerAddress;
                 server.Port = testedAudit.SmtpPort;
                 server.Credentials = new NetworkCredential(testedAudit.SmtpUserName, testedAudit.SmtpPassword);
