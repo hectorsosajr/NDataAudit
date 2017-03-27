@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<auditgroup name="GE-Appliance">
+  <audit name="GE Appliance Warehouse - Bad unicode character in office name">
+    <sqlcommand>
+      SELECT
+        record_import_date,
+        employer_office_name,
+        source_system_id
+      FROM geappliance_warehouse.employer_office
+      where employer_office_name like '%�%';
+    </sqlcommand>
+    <sqltype>0</sqltype>
+    <databaseprovider>mysql.data.mysqlclient</databaseprovider>
+    <includedatainemail>true</includedatainemail>
+    <smtp>
+      <sourceEmail>dataaudits@artemishealth.com</sourceEmail>
+      <address>smtp.gmail.com</address>
+      <port>587</port>
+      <usessl>true</usessl>
+      <smtpcredentials>
+        <username>hsosa@artemishealth.com</username>
+        <password>ta1n0@artimus</password>
+      </smtpcredentials>
+    </smtp>
+    <emails>
+      <email>hsosa@artemishealth.com</email>
+      <!--<ccEmail>greynolds@artemishealth.com</ccEmail>
+      <ccEmail>ksmith@artemishealth.com</ccEmail>-->
+    </emails>
+    <connectionstring>Server=use-dev-warehouse1.internal.artemishealth.com;Uid=hsosa;Pwd=ta1n0@artimus;Database=geappliance_warehouse;</connectionstring>
+    <tests>
+      <test>
+        <reportTemplate>BlueFancy</reportTemplate>
+        <column>employer_office_name</column>
+        <criteria>COUNTROWS</criteria>
+        <operator>&gt;</operator>
+        <testreturnedrows>true</testreturnedrows>
+        <failiftrue>true</failiftrue>
+        <usecriteria>false</usecriteria>
+        <rowcount>0</rowcount>
+        <instructions>The employer_office_name column has badly translated unicode characters. Please remove them.</instructions>
+      </test>
+    </tests>
+  </audit>
+</auditgroup>
