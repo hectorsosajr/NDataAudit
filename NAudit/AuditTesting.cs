@@ -440,10 +440,20 @@ namespace NDataAudit.Framework
             {
                 currDbProvider.ConnectionTimeout = auditToRun.ConnectionString.ConnectionTimeout;
             }
+            else
+            {
+                currDbProvider.CommandTimeout = 15.ToString();
+                auditToRun.ConnectionString.ConnectionTimeout = 15.ToString();
+            }
 
             if (auditToRun.ConnectionString.CommandTimeout != null)
             {
                 currDbProvider.CommandTimeout = auditToRun.ConnectionString.CommandTimeout;
+            }
+            else
+            {
+                currDbProvider.CommandTimeout = 30.ToString();
+                auditToRun.ConnectionString.CommandTimeout = 30.ToString();
             }
 
             currDbProvider.CreateDatabaseSession();
@@ -557,12 +567,17 @@ namespace NDataAudit.Framework
             string criteria = currTest.Criteria;
             string columnName = currTest.ColumnName;
             string Operator = currTest.Operator;
+            string whereClause = auditToParse.Tests[testIndex].WhereClause;
 
             // Add additional custom criteria inside this select statement
             switch (criteria.ToUpper())
             {
                 case "TODAY":
                     result = Today(columnName) + Operator + "0";
+                    auditToParse.Tests[testIndex].WhereClause = result;
+                    break;
+                case "COUNTROWS":
+                    result = whereClause.Replace("COUNTROWS", auditToParse.Tests[testIndex].RowCount.ToString());
                     auditToParse.Tests[testIndex].WhereClause = result;
                     break;
                 default:

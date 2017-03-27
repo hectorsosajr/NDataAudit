@@ -45,9 +45,11 @@ namespace NDataAudit.Framework
                         DatabaseName = currItem[1];
                         break;
                     case "user id":
+                    case "uid":
                         UserName = currItem[1];
                         break;
                     case "password":
+                    case "pwd":
                         Password = currItem[1];
                         break;
                     case "port":
@@ -149,12 +151,30 @@ namespace NDataAudit.Framework
                 case "system.data.sqlclient":
                     retval = BuildSqlServerConnectionString();
                     break;
+                case "mysql.data.mysqlclient":
+                    retval = BuildMySqlConnectionString();
+                    break;
                 case "npgsql":
                     retval = BuildPostgreConnectionString();
                     break;
                 case "hadoop.hive":
                     retval = BuildHiveConnectionString();
                     break;
+            }
+
+            return retval;
+        }
+
+        private string BuildMySqlConnectionString()
+        {
+            string retval = string.Empty;
+
+            retval = "Server=" + DatabaseServer + ";Database=" + DatabaseName + ";UID=" + UserName +
+                     ";Pwd=" + Password;
+
+            if (!string.IsNullOrEmpty(Port))
+            {
+                retval += ";Port=" + Port;
             }
 
             return retval;
