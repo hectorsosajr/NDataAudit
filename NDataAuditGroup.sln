@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAuditor-Console", "DataAuditor-Console\DataAuditor-Console.csproj", "{A644A974-A1A9-4989-B9A6-1CE7A582BDCD}"
 EndProject
@@ -42,6 +42,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{74D59B
 		images\32_Redshift.png = images\32_Redshift.png
 		images\32_ReSharper.png = images\32_ReSharper.png
 		images\32_Sqlite.png = images\32_Sqlite.png
+		images\32_SQLServer.png = images\32_SQLServer.png
 	EndProjectSection
 EndProject
 Global
