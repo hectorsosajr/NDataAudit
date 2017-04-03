@@ -8,6 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAuditor-GUI", "DataAudi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Audit Tests", "Audit Tests", "{F604283F-75D8-4CB2-AA66-CAFFC67A173B}"
 	ProjectSection(SolutionItems) = preProject
+		Audit Tests\chinook.db3 = Audit Tests\chinook.db3
 		Audit Tests\TestAudit.xml = Audit Tests\TestAudit.xml
 	EndProjectSection
 EndProject
