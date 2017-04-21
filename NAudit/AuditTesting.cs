@@ -606,12 +606,17 @@ namespace NDataAudit.Framework
 
             if (testedAudit.Tests[testIndex].SendReport)
             {
+                testedAudit.ShowThresholdMessage = false;
+                testedAudit.ShowQueryMessage = false;
+
                 if (testedAudit.EmailSubject != null)
                 {
                     body.AppendLine("<h2>" + testedAudit.EmailSubject + "</h2>");
                 }
 
-                body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
+                body.Append("This report ran at " +
+                            DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) +
+                            AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
             }
 
             if (testedAudit.ShowThresholdMessage)
@@ -627,12 +632,12 @@ namespace NDataAudit.Framework
 
                 if (testedAudit.Tests[testIndex].Instructions != null)
                 {
-                if (testedAudit.Tests[testIndex].Instructions.Length > 0)
-                {
-                    body.Append(testedAudit.Tests[testIndex].Instructions.ToHtml() + AuditUtils.HtmlBreak);
-                    body.AppendLine(AuditUtils.HtmlBreak);
+                    if (testedAudit.Tests[testIndex].Instructions.Length > 0)
+                    {
+                        body.Append(testedAudit.Tests[testIndex].Instructions.ToHtml() + AuditUtils.HtmlBreak);
+                        body.AppendLine(AuditUtils.HtmlBreak);
+                    }
                 }
-            }
             }
 
             if (testedAudit.IncludeDataInEmail)
@@ -651,7 +656,8 @@ namespace NDataAudit.Framework
 
             if (testedAudit.Tests[testIndex].SendReport)
             {
-                body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak); 
+                body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak);
+                body.Append("<b>This report was run on: " + testedAudit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
             }
             else
             {
