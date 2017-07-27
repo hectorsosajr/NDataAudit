@@ -516,7 +516,7 @@ namespace NAudit.Framework
             string result;
             StringBuilder sql = new StringBuilder();
 
-            string sqlStatement = auditToParse.SqlStatement;
+            string sqlStatement = auditToParse.Tests[testIndex].SqlStatementToCheck;
             string orderBy = auditToParse.OrderByClause;
             bool useCriteria = auditToParse.Tests[testIndex].UseCriteria;
 
@@ -539,10 +539,8 @@ namespace NAudit.Framework
             }
             else
             {
-                result = auditToParse.SqlStatement;
+                result = sqlStatement;
             }
-
-            auditToParse.Tests[testIndex].SqlStatementToCheck = result;
 
             return result;
         }

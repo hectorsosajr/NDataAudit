@@ -35,9 +35,11 @@ namespace NAudit.Framework
                         DatabaseName = currItem[1];
                         break;
                     case "user id":
+                    case "uid":
                         UserName = currItem[1];
                         break;
                     case "password":
+                    case "pwd":
                         Password = currItem[1];
                         break;
                     case "port":

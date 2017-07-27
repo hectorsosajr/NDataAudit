@@ -143,6 +143,30 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NAudit.Data.Hadoop.Hive\NAudit.Data.Hadoop.Hive.csproj">
+      <Project>{357e4ca1-209e-4bfa-8f8b-139432771d2d}</Project>
+      <Name>NAudit.Data.Hadoop.Hive</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NAudit.Data.MySql\NAudit.Data.MySql.csproj">
+      <Project>{f2553d1d-3214-47a8-87bc-0b9b278dd23e}</Project>
+      <Name>NAudit.Data.MySql</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NAudit.Data.PostgreSql\NAudit.Data.PostgreSql.csproj">
+      <Project>{91101497-8b55-4d36-bfb3-248fa8d9e803}</Project>
+      <Name>NAudit.Data.PostgreSql</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NAudit.Data.Sqlite\NAudit.Data.Sqlite.csproj">
+      <Project>{7a820ede-657d-4d17-ba22-a6f0c4b3e313}</Project>
+      <Name>NAudit.Data.Sqlite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NAudit.Data.SqlServer\NAudit.Data.SqlServer.csproj">
+      <Project>{4bf12745-95d2-4853-a2bd-5d88221ac1c8}</Project>
+      <Name>NAudit.Data.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NAudit.Data\NAudit.Data.csproj">
+      <Project>{b4735746-c56a-4ca0-9b3a-e34f2404212d}</Project>
+      <Name>NAudit.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NAudit\NAudit.Framework.csproj">
       <Project>{53d6fb23-abbd-4e35-9a5d-91e17be5f19d}</Project>
       <Name>NAudit.Framework</Name>
