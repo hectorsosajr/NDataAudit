@@ -18,13 +18,10 @@ namespace NAudit.Data.Hadoop.Hive
         private IDbConnection _currentDbConnection;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuditHadoopHiveProvider"/> class.
+        /// Initializes a new instance of the <see cref="AuditHadoopHiveProvider" /> class.
         /// </summary>
-        public AuditHadoopHiveProvider(IDbCommand currentCommand)
-        {
-            CurrentCommand = currentCommand;
-            Errors = new List<string>();
-        }
+        public AuditHadoopHiveProvider()
+        {}
 
         /// <summary>
         /// Gets or sets the connection string.

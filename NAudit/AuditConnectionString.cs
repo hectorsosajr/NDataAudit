@@ -141,12 +141,28 @@ namespace NAudit.Framework
                 case "system.data.sqlclient":
                     retval = BuildSqlServerConnectionString();
                     break;
+                case "mysql.data.mysqlclient":
+                    retval = BuildMySqlConnectionString();
+                    break;
                 case "npgsql":
                     retval = BuildPostgreConnectionString();
                     break;
                 case "hadoop.hive":
                     retval = BuildHiveConnectionString();
                     break;
+            }
+
+            return retval;
+        }
+
+        private string BuildMySqlConnectionString()
+        {
+            var retval = "Server=" + DatabaseServer + ";Database=" + DatabaseName + ";Uid=" + UserName +
+                            ";Pwd=" + Password;
+
+            if (!string.IsNullOrEmpty(Port))
+            {
+                retval += ";Port=" + Port;
             }
 
             return retval;
@@ -174,10 +190,8 @@ namespace NAudit.Framework
 
         private string BuildPostgreConnectionString()
         {
-            string retval = string.Empty;
-
-            retval = "Server=" + DatabaseServer + ";Database=" + DatabaseName + ";User ID=" + UserName +
-                     ";Password=" + Password;
+            var retval = "Server=" + DatabaseServer + ";Database=" + DatabaseName + ";User ID=" + UserName +
+                            ";Password=" + Password;
 
             if (!string.IsNullOrEmpty(Port))
             {
@@ -189,10 +203,8 @@ namespace NAudit.Framework
 
         private string BuildSqlServerConnectionString()
         {
-            string retval = string.Empty;
-
-            retval = "Data Source=" + DatabaseServer + ";Initial Catalog=" + DatabaseName + ";User ID=" + UserName +
-           ";Password=" + Password + ";";
+            var retval = "Data Source=" + DatabaseServer + ";Initial Catalog=" + DatabaseName + ";User ID=" + UserName +
+                            ";Password=" + Password + ";";
 
             return retval;
         }
