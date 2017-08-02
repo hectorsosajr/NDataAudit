@@ -168,27 +168,27 @@ namespace DataAuditor.UI
             this.leftSandBarDock.Location = new System.Drawing.Point(0, 70);
             this.leftSandBarDock.Manager = this.SandBarManager1;
             this.leftSandBarDock.Name = "leftSandBarDock";
-            this.leftSandBarDock.Size = new System.Drawing.Size(0, 416);
+            this.leftSandBarDock.Size = new System.Drawing.Size(0, 436);
             this.leftSandBarDock.TabIndex = 1;
             // 
             // rightSandBarDock
             // 
             this.rightSandBarDock.Dock = System.Windows.Forms.DockStyle.Right;
             this.rightSandBarDock.Guid = new System.Guid("d16b2d2d-d34e-4bc5-8a74-d6961a94a91b");
-            this.rightSandBarDock.Location = new System.Drawing.Point(624, 70);
+            this.rightSandBarDock.Location = new System.Drawing.Point(802, 70);
             this.rightSandBarDock.Manager = this.SandBarManager1;
             this.rightSandBarDock.Name = "rightSandBarDock";
-            this.rightSandBarDock.Size = new System.Drawing.Size(0, 416);
+            this.rightSandBarDock.Size = new System.Drawing.Size(0, 436);
             this.rightSandBarDock.TabIndex = 2;
             // 
             // bottomSandBarDock
             // 
             this.bottomSandBarDock.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.bottomSandBarDock.Guid = new System.Guid("453d2a06-d705-4729-8665-4c03d7a4fc7d");
-            this.bottomSandBarDock.Location = new System.Drawing.Point(0, 486);
+            this.bottomSandBarDock.Location = new System.Drawing.Point(0, 506);
             this.bottomSandBarDock.Manager = this.SandBarManager1;
             this.bottomSandBarDock.Name = "bottomSandBarDock";
-            this.bottomSandBarDock.Size = new System.Drawing.Size(624, 0);
+            this.bottomSandBarDock.Size = new System.Drawing.Size(802, 0);
             this.bottomSandBarDock.TabIndex = 3;
             // 
             // topSandBarDock
@@ -201,7 +201,7 @@ namespace DataAuditor.UI
             this.topSandBarDock.Location = new System.Drawing.Point(0, 0);
             this.topSandBarDock.Manager = this.SandBarManager1;
             this.topSandBarDock.Name = "topSandBarDock";
-            this.topSandBarDock.Size = new System.Drawing.Size(624, 70);
+            this.topSandBarDock.Size = new System.Drawing.Size(802, 70);
             this.topSandBarDock.TabIndex = 4;
             // 
             // MenuBar1
@@ -216,7 +216,7 @@ namespace DataAuditor.UI
             this.MenuBar1.Location = new System.Drawing.Point(2, 0);
             this.MenuBar1.Name = "MenuBar1";
             this.MenuBar1.OwnerForm = this;
-            this.MenuBar1.Size = new System.Drawing.Size(622, 27);
+            this.MenuBar1.Size = new System.Drawing.Size(800, 27);
             this.MenuBar1.TabIndex = 0;
             this.MenuBar1.Text = "MenuBar1";
             // 
@@ -337,7 +337,7 @@ namespace DataAuditor.UI
             this.XpTaskPane.Dock = System.Windows.Forms.DockStyle.Left;
             this.XpTaskPane.Location = new System.Drawing.Point(0, 70);
             this.XpTaskPane.Name = "XpTaskPane";
-            this.XpTaskPane.Size = new System.Drawing.Size(202, 416);
+            this.XpTaskPane.Size = new System.Drawing.Size(202, 436);
             this.XpTaskPane.TabIndex = 5;
             this.XpTaskPane.Text = "XpTaskPane1";
             // 
@@ -495,7 +495,7 @@ namespace DataAuditor.UI
             this.Splitter1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Splitter1.Location = new System.Drawing.Point(202, 70);
             this.Splitter1.Name = "Splitter1";
-            this.Splitter1.Size = new System.Drawing.Size(9, 416);
+            this.Splitter1.Size = new System.Drawing.Size(9, 436);
             this.Splitter1.TabIndex = 6;
             this.Splitter1.TabStop = false;
             // 
@@ -526,15 +526,15 @@ namespace DataAuditor.UI
             this.Panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Panel1.Location = new System.Drawing.Point(211, 70);
             this.Panel1.Name = "Panel1";
-            this.Panel1.Size = new System.Drawing.Size(413, 416);
+            this.Panel1.Size = new System.Drawing.Size(591, 436);
             this.Panel1.TabIndex = 7;
             // 
             // Splitter2
             // 
             this.Splitter2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.Splitter2.Location = new System.Drawing.Point(0, 130);
+            this.Splitter2.Location = new System.Drawing.Point(0, 150);
             this.Splitter2.Name = "Splitter2";
-            this.Splitter2.Size = new System.Drawing.Size(413, 9);
+            this.Splitter2.Size = new System.Drawing.Size(591, 9);
             this.Splitter2.TabIndex = 16;
             this.Splitter2.TabStop = false;
             // 
@@ -542,9 +542,9 @@ namespace DataAuditor.UI
             // 
             this.ppgAudits.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.ppgAudits.LineColor = System.Drawing.SystemColors.ScrollBar;
-            this.ppgAudits.Location = new System.Drawing.Point(0, 139);
+            this.ppgAudits.Location = new System.Drawing.Point(0, 159);
             this.ppgAudits.Name = "ppgAudits";
-            this.ppgAudits.Size = new System.Drawing.Size(413, 277);
+            this.ppgAudits.Size = new System.Drawing.Size(591, 277);
             this.ppgAudits.TabIndex = 15;
             // 
             // lblAuditGroup
@@ -555,7 +555,7 @@ namespace DataAuditor.UI
             this.lblAuditGroup.ForeColor = System.Drawing.Color.White;
             this.lblAuditGroup.Location = new System.Drawing.Point(0, 0);
             this.lblAuditGroup.Name = "lblAuditGroup";
-            this.lblAuditGroup.Size = new System.Drawing.Size(413, 27);
+            this.lblAuditGroup.Size = new System.Drawing.Size(591, 27);
             this.lblAuditGroup.TabIndex = 14;
             this.lblAuditGroup.Text = "Label1";
             this.lblAuditGroup.Click += new System.EventHandler(this.lblAuditGroup_Click);
@@ -574,7 +574,7 @@ namespace DataAuditor.UI
             this.lsvAudits.HideSelection = false;
             this.lsvAudits.Location = new System.Drawing.Point(0, 28);
             this.lsvAudits.Name = "lsvAudits";
-            this.lsvAudits.Size = new System.Drawing.Size(413, 97);
+            this.lsvAudits.Size = new System.Drawing.Size(591, 117);
             this.lsvAudits.SmallImageList = this.imgAudits;
             this.lsvAudits.TabIndex = 13;
             this.lsvAudits.UseCompatibleStateImageBehavior = false;
@@ -600,7 +600,7 @@ namespace DataAuditor.UI
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
-            this.ClientSize = new System.Drawing.Size(624, 486);
+            this.ClientSize = new System.Drawing.Size(802, 506);
             this.Controls.Add(this.Panel1);
             this.Controls.Add(this.Splitter1);
             this.Controls.Add(this.XpTaskPane);
