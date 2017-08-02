@@ -82,10 +82,11 @@ namespace NDataAudit.Data.PostgreSql
         /// <exception cref="NotImplementedException"></exception>
         public IDbCommand CreateDbCommand(string commandText, CommandType commandType, int commandTimeOut)
         {
-            IDbCommand retval = new NpgsqlCommand(commandText);
-            retval.Connection = CurrentConnection;
-            retval.CommandTimeout = commandTimeOut;
-
+            IDbCommand retval = new NpgsqlCommand(commandText)
+            {
+                Connection = (NpgsqlConnection) CurrentConnection,
+                CommandTimeout = commandTimeOut
+            };
             return retval;
         }
 

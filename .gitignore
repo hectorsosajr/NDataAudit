@@ -257,5 +257,5 @@ DataAuditor-Console/obj/Debug/DataAuditor-Console.csproj.FileListAbsolute.txt
 *.xml
 *.ps1
 .vs/config/applicationhost.config
-*.name
-/.idea/.idea.NDataAuditGroup
+*.orig
+UpgradeLog.htm

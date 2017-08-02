@@ -6,22 +6,22 @@ using System.Data.Odbc;
 using System.IO;
 using System.Text;
 
-namespace NDataAudit.Data.Hadoop.Hive
+namespace NAudit.Data.Hadoop.Hive
 {
     /// <summary>
     /// Class AuditHadoopHiveProvider.
     /// </summary>
-    /// <seealso cref="NDataAudit.Data.IAuditDbProvider" />
+    /// <seealso cref="NAudit.Data.IAuditDbProvider" />
     [Export(typeof(IAuditDbProvider))]
     public class AuditHadoopHiveProvider : IAuditDbProvider
     {
+        private IDbConnection _currentDbConnection;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuditHadoopHiveProvider"/> class.
+        /// Initializes a new instance of the <see cref="AuditHadoopHiveProvider" /> class.
         /// </summary>
         public AuditHadoopHiveProvider()
-        {
-            Errors = new List<string>();
-        }
+        {}
 
         /// <summary>
         /// Gets or sets the connection string.
@@ -45,7 +45,7 @@ namespace NDataAudit.Data.Hadoop.Hive
         /// Gets the current connection, is it has been set.
         /// </summary>
         /// <value>The current connection.</value>
-        public IDbConnection CurrentConnection { get; private set; }
+        public IDbConnection CurrentConnection => _currentDbConnection;
 
         /// <summary>
         /// Gets the current command.
@@ -81,10 +81,11 @@ namespace NDataAudit.Data.Hadoop.Hive
         /// <exception cref="System.NotImplementedException"></exception>
         public IDbCommand CreateDbCommand(string commandText, CommandType commandType, int commandTimeOut)
         {
-            IDbCommand retval = new OdbcCommand(commandText);
-            retval.Connection = CurrentConnection;
-            retval.CommandTimeout = commandTimeOut;
-
+            IDbCommand retval = new OdbcCommand(commandText)
+            {
+                Connection = (OdbcConnection) CurrentConnection,
+                CommandTimeout = commandTimeOut
+            };
             return retval;
         }
 
@@ -112,7 +113,7 @@ namespace NDataAudit.Data.Hadoop.Hive
             {
                 conn.Open();
 
-                this.CurrentConnection = conn;
+                _currentDbConnection = conn;
             }
             catch (OdbcException ex)
             {

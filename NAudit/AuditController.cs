@@ -5,12 +5,11 @@
 //*********************************************************************
 // Change Log
 //*********************************************************************
-// USER					DATE        COMMENTS
-// Hector Sosa, Jr		2/16/2005	Created
-// Hector Sosa, Jr		3/21/2005	Changed the private variables
-//									to be compliant with C# naming
-//									conventions.
-// Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
+// USER					DATE            COMMENTS
+// Hector Sosa, Jr		2/16/2005	    Created
+// Hector Sosa, Jr		3/21/2005		Changed the private variables
+//										to be compliant with C# naming
+//										conventions.
 //*********************************************************************
 
 using System;
@@ -137,12 +136,12 @@ namespace NDataAudit.Framework
                 var newAudit = new Audit();
 
                 XmlNode auditBranch = auditList[nodeCount];
-
-                newAudit.SqlStatement = auditBranch["sqlcommand"].InnerText;
                 newAudit.Name = auditBranch.Attributes[0].InnerText;
                 auditDoc.LoadXml(auditBranch.OuterXml);
 
                 GetEmailSettings(auditDoc, ref newAudit, auditBranch);
+
+                GetDatabaseDetails(auditBranch, newAudit);
 
                 GetSmtpDetails(auditBranch, newAudit);
 
@@ -150,44 +149,6 @@ namespace NDataAudit.Framework
 
                 XmlNodeList testList = auditDoc.GetElementsByTagName("test");
                 ProcessTests(ref newAudit, testList);
-
-                XmlNodeList sqlType = auditDoc.GetElementsByTagName("sqltype");
-                newAudit.SqlType = (Audit.SqlStatementTypeEnum) Convert.ToInt32(sqlType[0].InnerText);
-
-                XmlNode dbProvider = auditBranch["databaseprovider"];
-                if (dbProvider != null)
-                {
-                    newAudit.DatabaseProvider = dbProvider.InnerText.ToLower();
-                }
-
-                XmlNodeList connectionString = auditDoc.GetElementsByTagName("connectionstring");
-                newAudit.ConnectionString = new AuditConnectionString(connectionString[0].InnerText, newAudit.DatabaseProvider);
-
-                XmlNode commandTimeout = auditBranch["commandtimeout"];
-                if (commandTimeout != null)
-                {
-                    newAudit.ConnectionString.CommandTimeout = commandTimeout.InnerText;
-                }
-                else
-                {
-                    newAudit.ConnectionString.CommandTimeout = "180";
-                }
-
-                XmlNode connectionTimeout = auditBranch["connectiontimeout"];
-                if (connectionTimeout != null)
-                {
-                    newAudit.ConnectionString.ConnectionTimeout = connectionTimeout.InnerText;
-                }
-                else
-                {
-                    newAudit.ConnectionString.CommandTimeout = "15";
-                }
-
-                XmlNodeList orderbyNode = auditDoc.GetElementsByTagName("orderbyclause");
-                if (orderbyNode.Count > 0)
-                {
-                    newAudit.OrderByClause = orderbyNode[0].InnerText;
-                }
 
                 XmlNodeList includeDataNode = auditDoc.GetElementsByTagName("includedatainemail");
                 if (includeDataNode.Count > 0)
@@ -209,6 +170,48 @@ namespace NDataAudit.Framework
             }
         }
 
+        private static void GetDatabaseDetails(XmlNode auditBranch, Audit newAudit)
+        {
+            var xmlElement = auditBranch["database"];
+            if (xmlElement != null)
+            {
+                XmlNodeList sqlType = xmlElement.GetElementsByTagName("sqltype");
+                newAudit.SqlType = (Audit.SqlStatementTypeEnum)Convert.ToInt32(sqlType[0].InnerText);
+
+                XmlNodeList dbProvider = xmlElement.GetElementsByTagName("databaseprovider");
+                newAudit.DatabaseProvider = dbProvider[0].InnerText;
+
+                XmlNodeList connectionString = xmlElement.GetElementsByTagName("connectionstring");
+                newAudit.ConnectionString = new AuditConnectionString(connectionString[0].InnerText, newAudit.DatabaseProvider);
+
+                XmlNode commandTimeout = auditBranch["commandtimeout"];
+                if (commandTimeout != null)
+                {
+                    newAudit.ConnectionString.CommandTimeout = commandTimeout.InnerText;
+                }
+                else
+                {
+                    newAudit.ConnectionString.CommandTimeout = "180";
+                }
+
+                XmlNode connectionTimeout = auditBranch["connectiontimeout"];
+                if (connectionTimeout != null)
+                {
+                    newAudit.ConnectionString.ConnectionTimeout = connectionTimeout.InnerText;
+                }
+                else
+                {
+                    newAudit.ConnectionString.ConnectionTimeout = "15";
+                }
+
+                XmlNodeList orderbyNode = xmlElement.GetElementsByTagName("orderbyclause");
+                if (orderbyNode.Count > 0)
+                {
+                    newAudit.OrderByClause = orderbyNode[0].InnerText;
+                }
+            }
+        }
+
         private static void GetEmailSettings(XmlDocument auditDoc, ref Audit newAudit, XmlNode auditBranch)
         {
             // Process email list
@@ -219,21 +222,21 @@ namespace NDataAudit.Framework
             }
 
             // Process cc email list
-            XmlNodeList ccEmailList = auditDoc.GetElementsByTagName("ccEmail");
+            XmlNodeList ccEmailList = auditDoc.GetElementsByTagName("ccemail");
             if (ccEmailList.Count > 0)
             {
                 ProcessEmails(ref newAudit, ccEmailList, Audit.EmailTypeEnum.CarbonCopy); 
             }
 
             // Process email list
-            XmlNodeList bccEmailList = auditDoc.GetElementsByTagName("bccEmail");
+            XmlNodeList bccEmailList = auditDoc.GetElementsByTagName("bccemail");
             if (bccEmailList.Count > 0)
             {
                 ProcessEmails(ref newAudit, bccEmailList, Audit.EmailTypeEnum.BlindCarbonCopy); 
             }
 
             // See if there is a custom email subject for this audit.
-            var xmlElement = auditBranch["emailSubject"];
+            var xmlElement = auditBranch["emailsubject"];
             if (xmlElement != null)
             {
                 newAudit.EmailSubject = xmlElement.InnerText;
@@ -265,7 +268,7 @@ namespace NDataAudit.Framework
             }
 
             // See if there is a source email the FROM email address.
-            var xmlSourceElement = auditBranch["sourceEmail"];
+            var xmlSourceElement = auditBranch["sourceemail"];
             if (xmlSourceElement != null)
             {
                 newAudit.SmtpSourceEmail = xmlSourceElement.InnerText;
@@ -306,7 +309,7 @@ namespace NDataAudit.Framework
         private static void GetReportUiElements(XmlNode auditBranch, Audit newAudit)
         {
             // See if we should show the threshold message for this audit.
-            var xmlShowThresholdElement = auditBranch["showThresholdMessage"];
+            var xmlShowThresholdElement = auditBranch["showthresholdmessage"];
 
             if (xmlShowThresholdElement != null)
             {
@@ -314,14 +317,14 @@ namespace NDataAudit.Framework
             }
 
             // See if we should show the query text for this audit.
-            var xmlShowQueryElement = auditBranch["showQueryMessage"];
+            var xmlShowQueryElement = auditBranch["showquerymessage"];
             if (xmlShowQueryElement != null)
             {
                 newAudit.ShowQueryMessage = bool.Parse(xmlShowQueryElement.InnerText);
             }
 
             // See if we should show the comments and instructions for this audit.
-            var xmlShowCommentElement = auditBranch["showComments"];
+            var xmlShowCommentElement = auditBranch["showcomments"];
             if (xmlShowCommentElement != null)
             {
                 newAudit.ShowCommentMessage = bool.Parse(xmlShowCommentElement.InnerText);
@@ -332,48 +335,45 @@ namespace NDataAudit.Framework
         {
             var xmlSmtpElement = auditBranch["smtp"];
 
-            if (xmlSmtpElement != null)
+            if (xmlSmtpElement["sourceemail"] != null)
             {
-                if (xmlSmtpElement["sourceEmail"] != null)
+                newAudit.SmtpSourceEmail = xmlSmtpElement["sourceemail"].InnerText;
+            }
+
+            if (xmlSmtpElement["address"] != null)
+            {
+                newAudit.SmtpServerAddress = xmlSmtpElement["address"].InnerText;
+            }
+
+            if (xmlSmtpElement["port"] != null)
+            {
+                newAudit.SmtpPort = Convert.ToInt32(xmlSmtpElement["port"].InnerText);
+            }
+            else
+            {
+                newAudit.SmtpPort = 25;
+            }
+
+            if (xmlSmtpElement["usessl"] != null)
+            {
+                newAudit.SmtpUseSsl = bool.Parse(xmlSmtpElement["usessl"].InnerText);
+            }
+
+            // Process SMTP credentials, if any
+            XmlNode xmlSmtpCredElement = xmlSmtpElement["smtpcredentials"];
+
+            if (xmlSmtpCredElement != null)
+            {
+                newAudit.SmtpHasCredentials = true;
+
+                if (xmlSmtpCredElement["username"] != null)
                 {
-                    newAudit.SmtpSourceEmail = xmlSmtpElement["sourceEmail"].InnerText;
+                    newAudit.SmtpUserName = xmlSmtpCredElement["username"].InnerText;
                 }
 
-                if (xmlSmtpElement["address"] != null)
+                if (xmlSmtpCredElement["password"] != null)
                 {
-                    newAudit.SmtpServerAddress = xmlSmtpElement["address"].InnerText;
-                }
-
-                if (xmlSmtpElement["port"] != null)
-                {
-                    newAudit.SmtpPort = Convert.ToInt32(xmlSmtpElement["port"].InnerText);
-                }
-                else
-                {
-                    newAudit.SmtpPort = 25;
-                }
-
-                if (xmlSmtpElement["usessl"] != null)
-                {
-                    newAudit.SmtpUseSsl = bool.Parse(xmlSmtpElement["usessl"].InnerText);
-                }
-
-                // Process SMTP credentials, if any
-                XmlNode xmlSmtpCredElement = xmlSmtpElement["smtpcredentials"];
-
-                if (xmlSmtpCredElement != null)
-                {
-                    newAudit.SmtpHasCredentials = true;
-
-                    if (xmlSmtpCredElement["username"] != null)
-                    {
-                        newAudit.SmtpUserName = xmlSmtpCredElement["username"].InnerText;
-                    }
-
-                    if (xmlSmtpCredElement["password"] != null)
-                    {
-                        newAudit.SmtpPassword = xmlSmtpCredElement["password"].InnerText;
-                    }
+                    newAudit.SmtpPassword = xmlSmtpCredElement["password"].InnerText;
                 }
             }
         }
@@ -397,6 +397,8 @@ namespace NDataAudit.Framework
                 newTest.WhereClause = newTest.ColumnName + " " + newTest.Operator + " " + newTest.Criteria;
                 newTest.TestReturnedRows = Convert.ToBoolean(columnNode["testreturnedrows"].InnerText);
                 newTest.UseCriteria = Convert.ToBoolean(columnNode["usecriteria"].InnerText);
+
+                newTest.SqlStatementToCheck = columnNode["sqlcommand"].InnerText;
 
                 if (newTest.Criteria.ToUpper() == "COUNTROWS")
                 {
@@ -440,10 +442,10 @@ namespace NDataAudit.Framework
                     }
                 }
 
-                xmlElement = columnNode["reportTemplate"];
+                xmlElement = columnNode["reporttemplate"];
                 if (xmlElement != null)
                 {
-                    string templateName = columnNode["reportTemplate"].InnerText;
+                    string templateName = columnNode["reporttemplate"].InnerText;
 
                     EmailTableTemplate currTemplate = TableTemplates.FirstOrDefault(t => t.Name.ToLower() == templateName.ToLower());
 

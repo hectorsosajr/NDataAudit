@@ -1,16 +1,4 @@
-﻿//*********************************************************************
-// File:       		AuditConnectionString.cs
-// Author:  	    Hector Sosa, Jr
-// Date:			4/13/2016
-//*********************************************************************
-// Change Log
-//*********************************************************************
-// USER					DATE        COMMENTS
-// Hector Sosa, Jr		4/13/2016	Created
-// Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
-//*********************************************************************
-
-namespace NDataAudit.Framework
+﻿namespace NDataAudit.Framework
 {
     /// <summary>
     /// Class AuditConnectionString.
@@ -167,10 +155,8 @@ namespace NDataAudit.Framework
 
         private string BuildMySqlConnectionString()
         {
-            string retval = string.Empty;
-
-            retval = "Server=" + DatabaseServer + ";Database=" + DatabaseName + ";UID=" + UserName +
-                     ";Pwd=" + Password;
+            var retval = "Server=" + DatabaseServer + ";Database=" + DatabaseName + ";Uid=" + UserName +
+                            ";Pwd=" + Password;
 
             if (!string.IsNullOrEmpty(Port))
             {
@@ -202,10 +188,8 @@ namespace NDataAudit.Framework
 
         private string BuildPostgreConnectionString()
         {
-            string retval = string.Empty;
-
-            retval = "Server=" + DatabaseServer + ";Database=" + DatabaseName + ";User ID=" + UserName +
-                     ";Password=" + Password;
+            var retval = "Server=" + DatabaseServer + ";Database=" + DatabaseName + ";User ID=" + UserName +
+                            ";Password=" + Password;
 
             if (!string.IsNullOrEmpty(Port))
             {
@@ -217,10 +201,8 @@ namespace NDataAudit.Framework
 
         private string BuildSqlServerConnectionString()
         {
-            string retval = string.Empty;
-
-            retval = "Data Source=" + DatabaseServer + ";Initial Catalog=" + DatabaseName + ";User ID=" + UserName +
-           ";Password=" + Password + ";";
+            var retval = "Data Source=" + DatabaseServer + ";Initial Catalog=" + DatabaseName + ";User ID=" + UserName +
+                            ";Password=" + Password + ";";
 
             return retval;
         }

@@ -17,7 +17,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Security.Policy;
+using NAudit.Framework;
 
 namespace NDataAudit.Framework
 {
@@ -92,7 +92,7 @@ namespace NDataAudit.Framework
         #region Constructors
 
         /// <summary>
-        /// Default constructor
+        /// Initializes a new instance of the <see cref="Audit"/> class.
         /// </summary>
         public Audit()
         {
@@ -207,7 +207,7 @@ namespace NDataAudit.Framework
         /// <value>
         /// The email subject for this audit test.
         /// </value>
-        [Description("Gets or sets the email subject for this test."), Category("Email")]
+        [Description("Gets or sets the email subject for this audit."), Category("Email")]
         public string EmailSubject { get; set; }
 
         /// <summary>

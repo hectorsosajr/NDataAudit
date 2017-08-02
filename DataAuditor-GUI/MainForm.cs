@@ -12,12 +12,11 @@
 // Hector Sosa, Jr		3/21/2005	Added event handlers for running a
 //									single audit, instead of all of them.
 // Hector Sosa, Jr      8/22/2012   Renamed to DataAuditor.
-// Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
 //*****************************************************************************
 
 using System;
 using System.Windows.Forms;
-using NDataAudit.Framework;
+using NAudit.Framework;
 
 namespace DataAuditor.UI
 {
@@ -73,7 +72,7 @@ namespace DataAuditor.UI
         internal TD.SandBar.MenuButtonItem mnuNewGroup;
         internal NETXP.Controls.TaskPane.XPLink XpLinkNew;
         internal NETXP.Controls.TaskPane.XPLink XpLinkLoad;
-        internal System.Windows.Forms.OpenFileDialog OpeNDataAudits;
+        internal System.Windows.Forms.OpenFileDialog OpenAudits;
         internal System.Windows.Forms.ImageList imgAudits;
         internal NETXP.Controls.TaskPane.XPTaskPaneGroup xpgAudits;
         internal NETXP.Controls.TaskPane.XPTaskPaneGroup xpgGroups;
@@ -98,13 +97,13 @@ namespace DataAuditor.UI
         private TD.SandBar.ToolBar tbAudit;
         private TD.SandBar.ButtonItem btnAddAudit;
         private TD.SandBar.ButtonItem btnDeleteAudit;
-        private TD.SandBar.ButtonItem btnRuNDataAudit;
+        private TD.SandBar.ButtonItem btnRunAudit;
         internal System.Windows.Forms.Splitter Splitter2;
         [System.Diagnostics.DebuggerStepThrough()]
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            NETXP.Library.DynamicColorTable dynamicColorTable2 = new NETXP.Library.DynamicColorTable();
+            NETXP.Library.DynamicColorTable dynamicColorTable1 = new NETXP.Library.DynamicColorTable();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.SandBarManager1 = new TD.SandBar.SandBarManager();
             this.leftSandBarDock = new TD.SandBar.ToolBarContainer();
@@ -128,7 +127,7 @@ namespace DataAuditor.UI
             this.tbAudit = new TD.SandBar.ToolBar();
             this.btnAddAudit = new TD.SandBar.ButtonItem();
             this.btnDeleteAudit = new TD.SandBar.ButtonItem();
-            this.btnRuNDataAudit = new TD.SandBar.ButtonItem();
+            this.btnRunAudit = new TD.SandBar.ButtonItem();
             this.XpTaskPane = new NETXP.Controls.TaskPane.XPTaskPane();
             this.xpgAudits = new NETXP.Controls.TaskPane.XPTaskPaneGroup();
             this.xpLinkAuditRun = new NETXP.Controls.TaskPane.XPLink();
@@ -141,7 +140,7 @@ namespace DataAuditor.UI
             this.XpLinkLoad = new NETXP.Controls.TaskPane.XPLink();
             this.XpLinkNew = new NETXP.Controls.TaskPane.XPLink();
             this.Splitter1 = new System.Windows.Forms.Splitter();
-            this.OpeNDataAudits = new System.Windows.Forms.OpenFileDialog();
+            this.OpenAudits = new System.Windows.Forms.OpenFileDialog();
             this.imgAudits = new System.Windows.Forms.ImageList(this.components);
             this.Panel1 = new System.Windows.Forms.Panel();
             this.Splitter2 = new System.Windows.Forms.Splitter();
@@ -166,30 +165,30 @@ namespace DataAuditor.UI
             // 
             this.leftSandBarDock.Dock = System.Windows.Forms.DockStyle.Left;
             this.leftSandBarDock.Guid = new System.Guid("0005de62-e1a4-4aed-86e8-8982f974f423");
-            this.leftSandBarDock.Location = new System.Drawing.Point(0, 64);
+            this.leftSandBarDock.Location = new System.Drawing.Point(0, 70);
             this.leftSandBarDock.Manager = this.SandBarManager1;
             this.leftSandBarDock.Name = "leftSandBarDock";
-            this.leftSandBarDock.Size = new System.Drawing.Size(0, 612);
+            this.leftSandBarDock.Size = new System.Drawing.Size(0, 436);
             this.leftSandBarDock.TabIndex = 1;
             // 
             // rightSandBarDock
             // 
             this.rightSandBarDock.Dock = System.Windows.Forms.DockStyle.Right;
             this.rightSandBarDock.Guid = new System.Guid("d16b2d2d-d34e-4bc5-8a74-d6961a94a91b");
-            this.rightSandBarDock.Location = new System.Drawing.Point(1030, 64);
+            this.rightSandBarDock.Location = new System.Drawing.Point(802, 70);
             this.rightSandBarDock.Manager = this.SandBarManager1;
             this.rightSandBarDock.Name = "rightSandBarDock";
-            this.rightSandBarDock.Size = new System.Drawing.Size(0, 612);
+            this.rightSandBarDock.Size = new System.Drawing.Size(0, 436);
             this.rightSandBarDock.TabIndex = 2;
             // 
             // bottomSandBarDock
             // 
             this.bottomSandBarDock.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.bottomSandBarDock.Guid = new System.Guid("453d2a06-d705-4729-8665-4c03d7a4fc7d");
-            this.bottomSandBarDock.Location = new System.Drawing.Point(0, 676);
+            this.bottomSandBarDock.Location = new System.Drawing.Point(0, 506);
             this.bottomSandBarDock.Manager = this.SandBarManager1;
             this.bottomSandBarDock.Name = "bottomSandBarDock";
-            this.bottomSandBarDock.Size = new System.Drawing.Size(1030, 0);
+            this.bottomSandBarDock.Size = new System.Drawing.Size(802, 0);
             this.bottomSandBarDock.TabIndex = 3;
             // 
             // topSandBarDock
@@ -202,7 +201,7 @@ namespace DataAuditor.UI
             this.topSandBarDock.Location = new System.Drawing.Point(0, 0);
             this.topSandBarDock.Manager = this.SandBarManager1;
             this.topSandBarDock.Name = "topSandBarDock";
-            this.topSandBarDock.Size = new System.Drawing.Size(1030, 64);
+            this.topSandBarDock.Size = new System.Drawing.Size(802, 70);
             this.topSandBarDock.TabIndex = 4;
             // 
             // MenuBar1
@@ -217,7 +216,7 @@ namespace DataAuditor.UI
             this.MenuBar1.Location = new System.Drawing.Point(2, 0);
             this.MenuBar1.Name = "MenuBar1";
             this.MenuBar1.OwnerForm = this;
-            this.MenuBar1.Size = new System.Drawing.Size(1028, 24);
+            this.MenuBar1.Size = new System.Drawing.Size(800, 27);
             this.MenuBar1.TabIndex = 0;
             this.MenuBar1.Text = "MenuBar1";
             // 
@@ -273,9 +272,9 @@ namespace DataAuditor.UI
             this.btnNewGroup,
             this.btnLoadGroup,
             this.btnRunGroup});
-            this.tbGroup.Location = new System.Drawing.Point(2, 24);
+            this.tbGroup.Location = new System.Drawing.Point(2, 27);
             this.tbGroup.Name = "tbGroup";
-            this.tbGroup.Size = new System.Drawing.Size(237, 40);
+            this.tbGroup.Size = new System.Drawing.Size(270, 43);
             this.tbGroup.TabIndex = 1;
             this.tbGroup.Text = "AuditGroup";
             this.tbGroup.TextAlign = TD.SandBar.ToolBarTextAlign.Underneath;
@@ -296,7 +295,6 @@ namespace DataAuditor.UI
             // 
             this.btnRunGroup.Icon = ((System.Drawing.Icon)(resources.GetObject("btnRunGroup.Icon")));
             this.btnRunGroup.Text = "Run Audits";
-            this.btnRunGroup.Activate += new System.EventHandler(this.btnRunGroup_Activate);
             // 
             // tbAudit
             // 
@@ -306,10 +304,10 @@ namespace DataAuditor.UI
             this.tbAudit.Items.AddRange(new TD.SandBar.ToolbarItemBase[] {
             this.btnAddAudit,
             this.btnDeleteAudit,
-            this.btnRuNDataAudit});
-            this.tbAudit.Location = new System.Drawing.Point(241, 24);
+            this.btnRunAudit});
+            this.tbAudit.Location = new System.Drawing.Point(274, 27);
             this.tbAudit.Name = "tbAudit";
-            this.tbAudit.Size = new System.Drawing.Size(243, 40);
+            this.tbAudit.Size = new System.Drawing.Size(279, 43);
             this.tbAudit.TabIndex = 2;
             this.tbAudit.Text = "Audits";
             this.tbAudit.TextAlign = TD.SandBar.ToolBarTextAlign.Underneath;
@@ -324,50 +322,50 @@ namespace DataAuditor.UI
             this.btnDeleteAudit.Icon = ((System.Drawing.Icon)(resources.GetObject("btnDeleteAudit.Icon")));
             this.btnDeleteAudit.Text = "Delete Audit";
             // 
-            // btnRuNDataAudit
+            // btnRunAudit
             // 
-            this.btnRuNDataAudit.Icon = ((System.Drawing.Icon)(resources.GetObject("btnRuNDataAudit.Icon")));
-            this.btnRuNDataAudit.Text = "Run Audit";
-            this.btnRuNDataAudit.Activate += new System.EventHandler(this.btnRuNDataAudit_Activate);
+            this.btnRunAudit.Icon = ((System.Drawing.Icon)(resources.GetObject("btnRunAudit.Icon")));
+            this.btnRunAudit.Text = "Run Audit";
+            this.btnRunAudit.Activate += new System.EventHandler(this.btnRunAudit_Activate);
             // 
             // XpTaskPane
             // 
             this.XpTaskPane.AutoScroll = true;
-            this.XpTaskPane.ColorTable = dynamicColorTable2;
+            this.XpTaskPane.ColorTable = dynamicColorTable1;
             this.XpTaskPane.Controls.Add(this.xpgAudits);
             this.XpTaskPane.Controls.Add(this.xpgGroups);
             this.XpTaskPane.Dock = System.Windows.Forms.DockStyle.Left;
-            this.XpTaskPane.Location = new System.Drawing.Point(0, 64);
+            this.XpTaskPane.Location = new System.Drawing.Point(0, 70);
             this.XpTaskPane.Name = "XpTaskPane";
-            this.XpTaskPane.Size = new System.Drawing.Size(168, 612);
+            this.XpTaskPane.Size = new System.Drawing.Size(202, 436);
             this.XpTaskPane.TabIndex = 5;
             this.XpTaskPane.Text = "XpTaskPane1";
             // 
             // xpgAudits
             // 
-            //this.xpgAudits.ColorTable = dynamicColorTable1;
+            this.xpgAudits.ColorTable = dynamicColorTable1;
             this.xpgAudits.Controls.Add(this.xpLinkAuditRun);
             this.xpgAudits.Controls.Add(this.xpLinkDown);
             this.xpgAudits.Controls.Add(this.xpLinkUp);
             this.xpgAudits.Controls.Add(this.xpLinkDelete);
             this.xpgAudits.Controls.Add(this.xpLinkAdd);
-            this.xpgAudits.Location = new System.Drawing.Point(8, 152);
+            this.xpgAudits.Location = new System.Drawing.Point(10, 175);
             this.xpgAudits.Name = "xpgAudits";
-            this.xpgAudits.Size = new System.Drawing.Size(144, 152);
+            this.xpgAudits.Size = new System.Drawing.Size(172, 176);
             this.xpgAudits.TabIndex = 1;
             this.xpgAudits.Text = "Audit Actions";
             // 
             // xpLinkAuditRun
             // 
             this.xpLinkAuditRun.BackColor = System.Drawing.Color.Transparent;
-            //this.xpLinkAuditRun.ColorTable = dynamicColorTable1;
+            this.xpLinkAuditRun.ColorTable = dynamicColorTable1;
             this.xpLinkAuditRun.Cursor = System.Windows.Forms.Cursors.Hand;
             this.xpLinkAuditRun.HotForeColor = System.Drawing.SystemColors.HotTrack;
             this.xpLinkAuditRun.Image = ((System.Drawing.Image)(resources.GetObject("xpLinkAuditRun.Image")));
             this.xpLinkAuditRun.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.xpLinkAuditRun.Location = new System.Drawing.Point(8, 80);
+            this.xpLinkAuditRun.Location = new System.Drawing.Point(10, 92);
             this.xpLinkAuditRun.Name = "xpLinkAuditRun";
-            this.xpLinkAuditRun.Size = new System.Drawing.Size(128, 16);
+            this.xpLinkAuditRun.Size = new System.Drawing.Size(153, 19);
             this.xpLinkAuditRun.TabIndex = 5;
             this.xpLinkAuditRun.Text = "Run Audit";
             this.xpLinkAuditRun.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -376,14 +374,14 @@ namespace DataAuditor.UI
             // xpLinkDown
             // 
             this.xpLinkDown.BackColor = System.Drawing.Color.Transparent;
-            //this.xpLinkDown.ColorTable = dynamicColorTable1;
+            this.xpLinkDown.ColorTable = dynamicColorTable1;
             this.xpLinkDown.Cursor = System.Windows.Forms.Cursors.Hand;
             this.xpLinkDown.HotForeColor = System.Drawing.SystemColors.HotTrack;
             this.xpLinkDown.Image = ((System.Drawing.Image)(resources.GetObject("xpLinkDown.Image")));
             this.xpLinkDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.xpLinkDown.Location = new System.Drawing.Point(8, 128);
+            this.xpLinkDown.Location = new System.Drawing.Point(10, 148);
             this.xpLinkDown.Name = "xpLinkDown";
-            this.xpLinkDown.Size = new System.Drawing.Size(128, 16);
+            this.xpLinkDown.Size = new System.Drawing.Size(153, 18);
             this.xpLinkDown.TabIndex = 4;
             this.xpLinkDown.Text = "Move Down";
             this.xpLinkDown.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -391,14 +389,14 @@ namespace DataAuditor.UI
             // xpLinkUp
             // 
             this.xpLinkUp.BackColor = System.Drawing.Color.Transparent;
-            //this.xpLinkUp.ColorTable = dynamicColorTable1;
+            this.xpLinkUp.ColorTable = dynamicColorTable1;
             this.xpLinkUp.Cursor = System.Windows.Forms.Cursors.Hand;
             this.xpLinkUp.HotForeColor = System.Drawing.SystemColors.HotTrack;
             this.xpLinkUp.Image = ((System.Drawing.Image)(resources.GetObject("xpLinkUp.Image")));
             this.xpLinkUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.xpLinkUp.Location = new System.Drawing.Point(8, 104);
+            this.xpLinkUp.Location = new System.Drawing.Point(10, 120);
             this.xpLinkUp.Name = "xpLinkUp";
-            this.xpLinkUp.Size = new System.Drawing.Size(128, 16);
+            this.xpLinkUp.Size = new System.Drawing.Size(153, 18);
             this.xpLinkUp.TabIndex = 3;
             this.xpLinkUp.Text = "Move Up";
             this.xpLinkUp.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -406,14 +404,14 @@ namespace DataAuditor.UI
             // xpLinkDelete
             // 
             this.xpLinkDelete.BackColor = System.Drawing.Color.Transparent;
-            //this.xpLinkDelete.ColorTable = dynamicColorTable1;
+            this.xpLinkDelete.ColorTable = dynamicColorTable1;
             this.xpLinkDelete.Cursor = System.Windows.Forms.Cursors.Hand;
             this.xpLinkDelete.HotForeColor = System.Drawing.SystemColors.HotTrack;
             this.xpLinkDelete.Image = ((System.Drawing.Image)(resources.GetObject("xpLinkDelete.Image")));
             this.xpLinkDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.xpLinkDelete.Location = new System.Drawing.Point(8, 56);
+            this.xpLinkDelete.Location = new System.Drawing.Point(10, 65);
             this.xpLinkDelete.Name = "xpLinkDelete";
-            this.xpLinkDelete.Size = new System.Drawing.Size(128, 16);
+            this.xpLinkDelete.Size = new System.Drawing.Size(153, 18);
             this.xpLinkDelete.TabIndex = 2;
             this.xpLinkDelete.Text = "Delete Audit";
             this.xpLinkDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -421,41 +419,41 @@ namespace DataAuditor.UI
             // xpLinkAdd
             // 
             this.xpLinkAdd.BackColor = System.Drawing.Color.Transparent;
-            //this.xpLinkAdd.ColorTable = dynamicColorTable1;
+            this.xpLinkAdd.ColorTable = dynamicColorTable1;
             this.xpLinkAdd.Cursor = System.Windows.Forms.Cursors.Hand;
             this.xpLinkAdd.HotForeColor = System.Drawing.SystemColors.HotTrack;
             this.xpLinkAdd.Image = ((System.Drawing.Image)(resources.GetObject("xpLinkAdd.Image")));
             this.xpLinkAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.xpLinkAdd.Location = new System.Drawing.Point(8, 32);
+            this.xpLinkAdd.Location = new System.Drawing.Point(10, 37);
             this.xpLinkAdd.Name = "xpLinkAdd";
-            this.xpLinkAdd.Size = new System.Drawing.Size(128, 16);
+            this.xpLinkAdd.Size = new System.Drawing.Size(153, 18);
             this.xpLinkAdd.TabIndex = 1;
             this.xpLinkAdd.Text = "Add Audit";
             this.xpLinkAdd.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // xpgGroups
             // 
-            //this.xpgGroups.ColorTable = dynamicColorTable1;
+            this.xpgGroups.ColorTable = dynamicColorTable1;
             this.xpgGroups.Controls.Add(this.XpLinkRun);
             this.xpgGroups.Controls.Add(this.XpLinkLoad);
             this.xpgGroups.Controls.Add(this.XpLinkNew);
-            this.xpgGroups.Location = new System.Drawing.Point(8, 24);
+            this.xpgGroups.Location = new System.Drawing.Point(10, 28);
             this.xpgGroups.Name = "xpgGroups";
-            this.xpgGroups.Size = new System.Drawing.Size(144, 112);
+            this.xpgGroups.Size = new System.Drawing.Size(172, 129);
             this.xpgGroups.TabIndex = 0;
             this.xpgGroups.Text = "Group Actions";
             // 
             // XpLinkRun
             // 
             this.XpLinkRun.BackColor = System.Drawing.Color.Transparent;
-            //this.XpLinkRun.ColorTable = dynamicColorTable1;
+            this.XpLinkRun.ColorTable = dynamicColorTable1;
             this.XpLinkRun.Cursor = System.Windows.Forms.Cursors.Hand;
             this.XpLinkRun.HotForeColor = System.Drawing.SystemColors.HotTrack;
             this.XpLinkRun.Image = ((System.Drawing.Image)(resources.GetObject("XpLinkRun.Image")));
             this.XpLinkRun.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.XpLinkRun.Location = new System.Drawing.Point(8, 80);
+            this.XpLinkRun.Location = new System.Drawing.Point(10, 92);
             this.XpLinkRun.Name = "XpLinkRun";
-            this.XpLinkRun.Size = new System.Drawing.Size(128, 16);
+            this.XpLinkRun.Size = new System.Drawing.Size(153, 19);
             this.XpLinkRun.TabIndex = 2;
             this.XpLinkRun.Text = "Run Audits";
             this.XpLinkRun.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -464,14 +462,14 @@ namespace DataAuditor.UI
             // XpLinkLoad
             // 
             this.XpLinkLoad.BackColor = System.Drawing.Color.Transparent;
-            //this.XpLinkLoad.ColorTable = dynamicColorTable1;
+            this.XpLinkLoad.ColorTable = dynamicColorTable1;
             this.XpLinkLoad.Cursor = System.Windows.Forms.Cursors.Hand;
             this.XpLinkLoad.HotForeColor = System.Drawing.SystemColors.HotTrack;
             this.XpLinkLoad.Image = ((System.Drawing.Image)(resources.GetObject("XpLinkLoad.Image")));
             this.XpLinkLoad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.XpLinkLoad.Location = new System.Drawing.Point(8, 56);
+            this.XpLinkLoad.Location = new System.Drawing.Point(10, 65);
             this.XpLinkLoad.Name = "XpLinkLoad";
-            this.XpLinkLoad.Size = new System.Drawing.Size(128, 16);
+            this.XpLinkLoad.Size = new System.Drawing.Size(153, 18);
             this.XpLinkLoad.TabIndex = 1;
             this.XpLinkLoad.Text = "Load Audit Group";
             this.XpLinkLoad.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -480,14 +478,14 @@ namespace DataAuditor.UI
             // XpLinkNew
             // 
             this.XpLinkNew.BackColor = System.Drawing.Color.Transparent;
-            //this.XpLinkNew.ColorTable = dynamicColorTable1;
+            this.XpLinkNew.ColorTable = dynamicColorTable1;
             this.XpLinkNew.Cursor = System.Windows.Forms.Cursors.Hand;
             this.XpLinkNew.HotForeColor = System.Drawing.SystemColors.HotTrack;
             this.XpLinkNew.Image = ((System.Drawing.Image)(resources.GetObject("XpLinkNew.Image")));
             this.XpLinkNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.XpLinkNew.Location = new System.Drawing.Point(8, 32);
+            this.XpLinkNew.Location = new System.Drawing.Point(10, 37);
             this.XpLinkNew.Name = "XpLinkNew";
-            this.XpLinkNew.Size = new System.Drawing.Size(128, 16);
+            this.XpLinkNew.Size = new System.Drawing.Size(153, 18);
             this.XpLinkNew.TabIndex = 0;
             this.XpLinkNew.Text = "New Audit Group";
             this.XpLinkNew.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -495,18 +493,18 @@ namespace DataAuditor.UI
             // Splitter1
             // 
             this.Splitter1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Splitter1.Location = new System.Drawing.Point(168, 64);
+            this.Splitter1.Location = new System.Drawing.Point(202, 70);
             this.Splitter1.Name = "Splitter1";
-            this.Splitter1.Size = new System.Drawing.Size(8, 612);
+            this.Splitter1.Size = new System.Drawing.Size(9, 436);
             this.Splitter1.TabIndex = 6;
             this.Splitter1.TabStop = false;
             // 
-            // OpeNDataAudits
+            // OpenAudits
             // 
-            this.OpeNDataAudits.AddExtension = false;
-            this.OpeNDataAudits.DefaultExt = "xml";
-            this.OpeNDataAudits.Filter = "XML Files|*.xml|Audit Files|*.audit|All Files|*.*";
-            this.OpeNDataAudits.FileOk += new System.ComponentModel.CancelEventHandler(this.OpeNDataAudits_FileOk);
+            this.OpenAudits.AddExtension = false;
+            this.OpenAudits.DefaultExt = "xml";
+            this.OpenAudits.Filter = "XML Files|*.xml|Audit Files|*.audit|All Files|*.*";
+            this.OpenAudits.FileOk += new System.ComponentModel.CancelEventHandler(this.OpenAudits_FileOk);
             // 
             // imgAudits
             // 
@@ -526,17 +524,17 @@ namespace DataAuditor.UI
             this.Panel1.Controls.Add(this.lblAuditGroup);
             this.Panel1.Controls.Add(this.lsvAudits);
             this.Panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Panel1.Location = new System.Drawing.Point(176, 64);
+            this.Panel1.Location = new System.Drawing.Point(211, 70);
             this.Panel1.Name = "Panel1";
-            this.Panel1.Size = new System.Drawing.Size(854, 612);
+            this.Panel1.Size = new System.Drawing.Size(591, 436);
             this.Panel1.TabIndex = 7;
             // 
             // Splitter2
             // 
             this.Splitter2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.Splitter2.Location = new System.Drawing.Point(0, 246);
+            this.Splitter2.Location = new System.Drawing.Point(0, 150);
             this.Splitter2.Name = "Splitter2";
-            this.Splitter2.Size = new System.Drawing.Size(854, 10);
+            this.Splitter2.Size = new System.Drawing.Size(591, 9);
             this.Splitter2.TabIndex = 16;
             this.Splitter2.TabStop = false;
             // 
@@ -544,9 +542,9 @@ namespace DataAuditor.UI
             // 
             this.ppgAudits.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.ppgAudits.LineColor = System.Drawing.SystemColors.ScrollBar;
-            this.ppgAudits.Location = new System.Drawing.Point(0, 256);
+            this.ppgAudits.Location = new System.Drawing.Point(0, 159);
             this.ppgAudits.Name = "ppgAudits";
-            this.ppgAudits.Size = new System.Drawing.Size(854, 356);
+            this.ppgAudits.Size = new System.Drawing.Size(591, 277);
             this.ppgAudits.TabIndex = 15;
             // 
             // lblAuditGroup
@@ -557,7 +555,7 @@ namespace DataAuditor.UI
             this.lblAuditGroup.ForeColor = System.Drawing.Color.White;
             this.lblAuditGroup.Location = new System.Drawing.Point(0, 0);
             this.lblAuditGroup.Name = "lblAuditGroup";
-            this.lblAuditGroup.Size = new System.Drawing.Size(854, 23);
+            this.lblAuditGroup.Size = new System.Drawing.Size(591, 27);
             this.lblAuditGroup.TabIndex = 14;
             this.lblAuditGroup.Text = "Label1";
             this.lblAuditGroup.Click += new System.EventHandler(this.lblAuditGroup_Click);
@@ -574,9 +572,9 @@ namespace DataAuditor.UI
             this.lsvAudits.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lsvAudits.FullRowSelect = true;
             this.lsvAudits.HideSelection = false;
-            this.lsvAudits.Location = new System.Drawing.Point(0, 24);
+            this.lsvAudits.Location = new System.Drawing.Point(0, 28);
             this.lsvAudits.Name = "lsvAudits";
-            this.lsvAudits.Size = new System.Drawing.Size(854, 336);
+            this.lsvAudits.Size = new System.Drawing.Size(591, 117);
             this.lsvAudits.SmallImageList = this.imgAudits;
             this.lsvAudits.TabIndex = 13;
             this.lsvAudits.UseCompatibleStateImageBehavior = false;
@@ -586,7 +584,7 @@ namespace DataAuditor.UI
             // clhIcon
             // 
             this.clhIcon.Text = "Audit Name";
-            this.clhIcon.Width = 372;
+            this.clhIcon.Width = 145;
             // 
             // clhDesc
             // 
@@ -601,8 +599,8 @@ namespace DataAuditor.UI
             // 
             // MainForm
             // 
-            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(1030, 676);
+            this.AutoScaleBaseSize = new System.Drawing.Size(6, 15);
+            this.ClientSize = new System.Drawing.Size(802, 506);
             this.Controls.Add(this.Panel1);
             this.Controls.Add(this.Splitter1);
             this.Controls.Add(this.XpTaskPane);
@@ -639,11 +637,28 @@ namespace DataAuditor.UI
 
         private void MainForm_Load(object sender, System.EventArgs e)
         {
-            InitialLoadUI();
-
             xpgAudits.GroupState = NETXP.Controls.TaskPane.GroupState.Collapsed;
             lblAuditGroup.Text = "No Audits Loaded";
-        } 
+
+            DisableAuditCommands();
+            XpLinkRun.Enabled = false;
+        }
+
+        private void DisableAuditCommands()
+        {
+            btnRunAudit.Enabled = false;
+            btnDeleteAudit.Enabled = false;
+            btnAddAudit.Enabled = false;
+            btnRunGroup.Enabled = false;
+        }
+
+        private void EnableAuditCommands()
+        {
+            btnRunAudit.Enabled = true;
+            btnDeleteAudit.Enabled = true;
+            btnAddAudit.Enabled = true;
+            btnRunGroup.Enabled = true;
+        }
 
         private void mnuExit_Activate(object sender, System.EventArgs e)
         {
@@ -685,7 +700,7 @@ namespace DataAuditor.UI
                     this.Refresh();
                 }
 
-                MessageBox.Show(mailSmtpException.Message, "NDataAudit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(mailSmtpException.Message, "NAudit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -699,7 +714,7 @@ namespace DataAuditor.UI
                     this.Refresh();
                 }
 
-                MessageBox.Show(ex.Message, "NDataAudit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "NAudit Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             finally
@@ -740,9 +755,9 @@ namespace DataAuditor.UI
                 {				
                     xpgGroups.GroupState = NETXP.Controls.TaskPane.GroupState.Collapsed;
                     xpgAudits.GroupState = NETXP.Controls.TaskPane.GroupState.Expanded;
-
-                    xpgAudits.Enabled = true;
                 }
+
+                EnableAuditCommands();
             } // end if
         }
 
@@ -751,9 +766,9 @@ namespace DataAuditor.UI
             LoadFileDialog();
         }
 
-        private void OpeNDataAudits_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        private void OpenAudits_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            string auditName = OpeNDataAudits.FileName;
+            string auditName = OpenAudits.FileName;
 
             this.Text = string.Empty;
             this.Text = "DataAuditor";
@@ -818,7 +833,7 @@ namespace DataAuditor.UI
             RunSingleAudit();
         }
 
-        private void btnRuNDataAudit_Activate(object sender, EventArgs e)
+        private void btnRunAudit_Activate(object sender, EventArgs e)
         {
             RunSingleAudit();
         }
@@ -850,78 +865,13 @@ namespace DataAuditor.UI
             this.Refresh();
         }
 
-        private void btnRunGroup_Activate(object sender, EventArgs e)
-        {
-            if (_auditTesting == null)
-            {
-                _auditTesting = new AuditTesting();
-            }
+    #endregion
 
-            foreach (var audit in _audits.AuditGroup)
-            {
-                // Wire events
-                //_auditTesting.CurrentSingleAuditRunning += _auditTesting_CurrentSingleAuditRunning;
-                //_auditTesting.CurrentSingleAuditDone += _auditTesting_CurrentSingleAuditDone;
-
-                var currentAudit = (Audit)audit;
-                this.Refresh();
-
-                _auditTesting.RuNDataAudit(ref currentAudit);
-
-            }
-        }
-
-        #endregion
-
-        #region  Private Members 
-
-        private void InitialLoadUI()
-        {
-            // Button Bar
-            btnNewGroup.Enabled = false;
-            btnRunGroup.Enabled = false;
-            btnAddAudit.Enabled = false;
-            btnDeleteAudit.Enabled = false;
-            btnRuNDataAudit.Enabled = false;
-
-            // Group Actions
-            XpLinkRun.Enabled = false;
-            XpLinkNew.Enabled = false;
-
-            // Audit Actions
-            xpLinkAdd.Enabled = false;
-            xpLinkDelete.Enabled = false;
-            xpLinkAuditRun.Enabled = false;
-            xpLinkUp.Enabled = false;
-            xpLinkDown.Enabled = false;
-
-            xpgAudits.Enabled = false;
-        }
-
-        private void SetUIToLoad()
-        {
-            // Button Bar
-            btnNewGroup.Enabled = false;
-            btnRunGroup.Enabled = true;
-            btnAddAudit.Enabled = false;
-            btnDeleteAudit.Enabled = false;
-            btnRuNDataAudit.Enabled = true;
-
-            // Group Actions
-            XpLinkRun.Enabled = true;
-            XpLinkNew.Enabled = false;
-
-            // Audit Actions
-            xpLinkAdd.Enabled = false;
-            xpLinkDelete.Enabled = false;
-            xpLinkAuditRun.Enabled = true;
-            xpLinkUp.Enabled = false;
-            xpLinkDown.Enabled = false;
-        }
+    #region  Private Members 
 
         private void LoadFileDialog()
         {
-            OpeNDataAudits.ShowDialog();
+            OpenAudits.ShowDialog();
         }
 
         private void LoadAuditGroup(string xmlGroup)
@@ -948,8 +898,6 @@ namespace DataAuditor.UI
                 currViewItem.SubItems.Add("");
                 currViewItem.SubItems.Add("");
             }
-
-            SetUIToLoad();
         }
 
         private void RunSingleAudit()
@@ -965,7 +913,7 @@ namespace DataAuditor.UI
 
             this.Refresh();
 
-            _auditTesting.RuNDataAudit(ref currentAudit);
+            _auditTesting.RunAudit(ref currentAudit);
         }
 
     #endregion
@@ -975,6 +923,7 @@ namespace DataAuditor.UI
         {
             Application.Run(new MainForm());
         }
+
     } // end of class
 
 } //end of root namespace
