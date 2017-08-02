@@ -16,13 +16,13 @@ namespace NAudit.Data.Hadoop.Hive
     public class AuditHadoopHiveProvider : IAuditDbProvider
     {
         private IDbConnection _currentDbConnection;
-        private IDbCommand _currentDbCommand;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuditHadoopHiveProvider"/> class.
         /// </summary>
-        public AuditHadoopHiveProvider()
+        public AuditHadoopHiveProvider(IDbCommand currentCommand)
         {
+            CurrentCommand = currentCommand;
             Errors = new List<string>();
         }
 
@@ -54,7 +54,7 @@ namespace NAudit.Data.Hadoop.Hive
         /// Gets the current command.
         /// </summary>
         /// <value>The current command.</value>
-        public IDbCommand CurrentCommand => _currentDbCommand;
+        public IDbCommand CurrentCommand { get; }
 
         /// <summary>
         /// Gets the errors.
@@ -84,10 +84,11 @@ namespace NAudit.Data.Hadoop.Hive
         /// <exception cref="System.NotImplementedException"></exception>
         public IDbCommand CreateDbCommand(string commandText, CommandType commandType, int commandTimeOut)
         {
-            IDbCommand retval = new OdbcCommand(commandText);
-            retval.Connection = CurrentConnection;
-            retval.CommandTimeout = commandTimeOut;
-
+            IDbCommand retval = new OdbcCommand(commandText)
+            {
+                Connection = (OdbcConnection) CurrentConnection,
+                CommandTimeout = commandTimeOut
+            };
             return retval;
         }
 

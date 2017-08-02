@@ -81,10 +81,11 @@ namespace NAudit.Data.SqlServer
         /// <returns>IDbCommand.</returns>
         public IDbCommand CreateDbCommand(string commandText, CommandType commandType, int commandTimeOut)
         {
-            IDbCommand retval = new SqlCommand(commandText);
-            retval.Connection = CurrentConnection;
-            retval.CommandTimeout = commandTimeOut;
-
+            IDbCommand retval = new SqlCommand(commandText)
+            {
+                Connection = (SqlConnection) CurrentConnection,
+                CommandTimeout = commandTimeOut
+            };
             _currentDbCommand = retval;
 
             return retval;

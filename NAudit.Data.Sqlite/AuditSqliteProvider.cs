@@ -78,10 +78,11 @@ namespace NAudit.Data.Sqlite
         /// <exception cref="System.NotImplementedException"></exception>
         public IDbCommand CreateDbCommand(string commandText, CommandType commandType, int commandTimeOut)
         {
-            IDbCommand retval = new SQLiteCommand(commandText);
-            retval.Connection = CurrentConnection;
-            retval.CommandTimeout = commandTimeOut;
-
+            IDbCommand retval = new SQLiteCommand(commandText)
+            {
+                Connection = (SQLiteConnection) CurrentConnection,
+                CommandTimeout = commandTimeOut
+            };
             _currentDbCommand = retval;
 
             return retval;

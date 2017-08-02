@@ -119,10 +119,11 @@ namespace NAudit.Data.MySql
 
         public IDbCommand CreateDbCommand(string commandText, CommandType commandType, int commandTimeOut)
         {
-            IDbCommand retval = new MySqlCommand(commandText);
-            retval.Connection = CurrentConnection;
-            retval.CommandTimeout = commandTimeOut;
-
+            IDbCommand retval = new MySqlCommand(commandText)
+            {
+                Connection = (MySqlConnection) CurrentConnection,
+                CommandTimeout = commandTimeOut
+            };
             _currentDbCommand = retval;
 
             return retval;
