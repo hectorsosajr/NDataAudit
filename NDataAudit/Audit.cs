@@ -17,7 +17,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using NAudit.Framework;
+using NDataAudit.Framework;
 
 namespace NDataAudit.Framework
 {

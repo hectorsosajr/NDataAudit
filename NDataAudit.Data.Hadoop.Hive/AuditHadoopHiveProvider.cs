@@ -6,7 +6,7 @@ using System.Data.Odbc;
 using System.IO;
 using System.Text;
 
-namespace NAudit.Data.Hadoop.Hive
+namespace NDataAudit.Data.Hadoop.Hive
 {
     /// <summary>
     /// Class AuditHadoopHiveProvider.

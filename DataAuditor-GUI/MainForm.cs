@@ -16,7 +16,7 @@
 
 using System;
 using System.Windows.Forms;
-using NAudit.Framework;
+using NDataAudit.Framework;
 
 namespace DataAuditor.UI
 {
@@ -913,7 +913,7 @@ namespace DataAuditor.UI
 
             this.Refresh();
 
-            _auditTesting.RunAudit(ref currentAudit);
+            _auditTesting.RunDataAudit(ref currentAudit);
         }
 
     #endregion

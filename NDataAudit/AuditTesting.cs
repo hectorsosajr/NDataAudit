@@ -172,7 +172,7 @@ namespace NDataAudit.Framework
         /// Run a single audit.
         /// </summary>
         /// <param name="currentAudit">The Audit object to use</param>
-        public void RuNDataAudit(ref Audit currentAudit)
+        public void RunDataAudit(ref Audit currentAudit)
         {
             OnSingleAuditRunning(currentAudit);
             RunTests(ref currentAudit);			
