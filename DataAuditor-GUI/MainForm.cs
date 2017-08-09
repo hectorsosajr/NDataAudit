@@ -82,7 +82,6 @@ namespace DataAuditor.UI
         internal System.Windows.Forms.Label lblAuditGroup;
         internal System.Windows.Forms.ListView lsvAudits;
         internal System.Windows.Forms.ColumnHeader clhIcon;
-        internal System.Windows.Forms.ColumnHeader clhDesc;
         internal System.Windows.Forms.ColumnHeader clhStatus;
         internal NETXP.Controls.TaskPane.XPTaskPane XpTaskPane;
         internal NETXP.Controls.TaskPane.XPLink xpLinkAdd;
@@ -148,7 +147,6 @@ namespace DataAuditor.UI
             this.lblAuditGroup = new System.Windows.Forms.Label();
             this.lsvAudits = new System.Windows.Forms.ListView();
             this.clhIcon = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.clhDesc = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.clhStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.topSandBarDock.SuspendLayout();
             this.XpTaskPane.SuspendLayout();
@@ -567,7 +565,6 @@ namespace DataAuditor.UI
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lsvAudits.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.clhIcon,
-            this.clhDesc,
             this.clhStatus});
             this.lsvAudits.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lsvAudits.FullRowSelect = true;
@@ -584,13 +581,7 @@ namespace DataAuditor.UI
             // clhIcon
             // 
             this.clhIcon.Text = "Audit Name";
-            this.clhIcon.Width = 145;
-            // 
-            // clhDesc
-            // 
-            this.clhDesc.Text = "Description";
-            this.clhDesc.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.clhDesc.Width = 222;
+            this.clhIcon.Width = 374;
             // 
             // clhStatus
             // 
@@ -795,7 +786,7 @@ namespace DataAuditor.UI
             foreach (ListViewItem objItem in lsvAudits.Items)
             {
                 objItem.ImageIndex = 2;
-                objItem.SubItems[2].Text = "Waiting...";
+                objItem.SubItems[1].Text = "Waiting...";
 
                 this.Refresh();
             }
@@ -804,7 +795,7 @@ namespace DataAuditor.UI
         private void _auditTesting_CurrentAuditRunning(int AuditNumber, string AuditName)
         {
             lsvAudits.Items[AuditNumber].ImageIndex = 1;
-            lsvAudits.Items[AuditNumber].SubItems[2].Text = "Processing";
+            lsvAudits.Items[AuditNumber].SubItems[1].Text = "Processing";
 
             this.Refresh();
         }
@@ -817,12 +808,12 @@ namespace DataAuditor.UI
             if (result)
             {
                 lsvAudits.Items[AuditNumber].ImageIndex = 3;
-                lsvAudits.Items[AuditNumber].SubItems[2].Text = "Completed";
+                lsvAudits.Items[AuditNumber].SubItems[1].Text = "Completed";
             }
             else
             {
                 lsvAudits.Items[AuditNumber].ImageIndex = 4;
-                lsvAudits.Items[AuditNumber].SubItems[2].Text = "Failure";
+                lsvAudits.Items[AuditNumber].SubItems[1].Text = "Failure";
             }
 
             this.Refresh();
@@ -842,7 +833,7 @@ namespace DataAuditor.UI
         {
             
             lsvAudits.Items[_selectedIndex].ImageIndex = 1;
-            lsvAudits.Items[_selectedIndex].SubItems[2].Text = "Processing";
+            lsvAudits.Items[_selectedIndex].SubItems[1].Text = "Processing";
 
             this.Refresh();
         }
@@ -854,12 +845,12 @@ namespace DataAuditor.UI
             if (result)
             {
                 lsvAudits.Items[_selectedIndex].ImageIndex = 3;
-                lsvAudits.Items[_selectedIndex].SubItems[2].Text = "Completed";
+                lsvAudits.Items[_selectedIndex].SubItems[1].Text = "Completed";
             }
             else
             {
                 lsvAudits.Items[_selectedIndex].ImageIndex = 4;
-                lsvAudits.Items[_selectedIndex].SubItems[2].Text = "Failure";
+                lsvAudits.Items[_selectedIndex].SubItems[1].Text = "Failure";
             }
 
             this.Refresh();

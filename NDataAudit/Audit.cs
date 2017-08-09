@@ -99,7 +99,7 @@ namespace NDataAudit.Framework
             EmailSubscribers = new ArrayList();
             EmailCarbonCopySubscribers = new ArrayList();
             EmailBlindCarbonCopySubscribers = new ArrayList();
-            Tests = new AuditTestCollection();
+            Test = new AuditTest();
             ErrorMessages = new List<string>();
 
             ShowQueryMessage = true;
@@ -172,16 +172,10 @@ namespace NDataAudit.Framework
         public string OrderByClause { get; set; }
 
         /// <summary>
-        /// The type needed to be passed to the ADO.NET Command object.
+        /// The test that will be run in this audit. <see cref="SqlStatement"/> property.
         /// </summary>
-        [Description("The type needed to be passed to the ADO.NET Command object."), Category("Database")]
-        public SqlStatementTypeEnum SqlType { get; set; }
-
-        /// <summary>
-        /// The tests that will be run against the <see cref="SqlStatement"/> property.
-        /// </summary>
-        [Description("The tests that will be run against the SQLStatement property."), Category("Tests")]
-        public AuditTestCollection Tests { get; set; }
+        [Description("The test that will be run in this Audit. See the SQLStatement property."), Category("Test")]
+        public AuditTest Test { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to include the result data into the email.

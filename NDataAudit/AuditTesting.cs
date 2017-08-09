@@ -206,7 +206,7 @@ namespace NDataAudit.Framework
         private void RunTests(ref Audit currentAudit)
         {
             int testCount;
-            int tempFor1 = currentAudit.Tests.Count;
+            int tempFor1 = 1;
             
             for (testCount = 0; testCount < tempFor1; testCount++)
             {
@@ -214,7 +214,7 @@ namespace NDataAudit.Framework
 
                 if (dsTest.Tables.Count == 0)
                 {
-                    AuditTest currTest = currentAudit.Tests[testCount];
+                    AuditTest currTest = currentAudit.Test;
 
                     if (!currTest.FailIfConditionIsTrue)
                     {
@@ -238,14 +238,14 @@ namespace NDataAudit.Framework
                         else
                         {
                             currentAudit.Result = false;
-                            PrepareResultsEmailData(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit,
+                            PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, testCount, currentAudit,
                                              dsTest);
                         }
                     }
                 }
                 else
                 {
-                    var currTest = currentAudit.Tests[testCount];
+                    var currTest = currentAudit.Test;
 
                     int rowCount = dsTest.Tables[0].Rows.Count;					
         
@@ -265,8 +265,8 @@ namespace NDataAudit.Framework
                                         }
                                         else
                                         {
-                                            threshold = currentAudit.Tests[testCount].RowCount.ToString(CultureInfo.InvariantCulture);
-                                            currentAudit.Tests[testCount].FailedMessage = "The failure threshold was greater than " + threshold + " rows. This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
+                                            threshold = currentAudit.Test.RowCount.ToString(CultureInfo.InvariantCulture);
+                                            currentAudit.Test.FailedMessage = "The failure threshold was greater than " + threshold + " rows. This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
                                         }
                                     }
                                     else
@@ -279,9 +279,9 @@ namespace NDataAudit.Framework
                                         else
                                         {
                                             threshold =
-                                                currentAudit.Tests[testCount].RowCount.ToString(
+                                                currentAudit.Test.RowCount.ToString(
                                                     CultureInfo.InvariantCulture);
-                                            currentAudit.Tests[testCount].FailedMessage =
+                                            currentAudit.Test.FailedMessage =
                                                 "The failure threshold was greater than " + threshold +
                                                 " rows. This audit returned " +
                                                 rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
@@ -296,8 +296,8 @@ namespace NDataAudit.Framework
                                     }
                                     else
                                     {
-                                        threshold = currentAudit.Tests[testCount].RowCount.ToString(CultureInfo.InvariantCulture);
-                                        currentAudit.Tests[testCount].FailedMessage = "The failure threshold was greater than or equal to " + threshold + " rows. This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
+                                        threshold = currentAudit.Test.RowCount.ToString(CultureInfo.InvariantCulture);
+                                        currentAudit.Test.FailedMessage = "The failure threshold was greater than or equal to " + threshold + " rows. This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
                                     }
                                     break;
                                 case "<":
@@ -307,8 +307,8 @@ namespace NDataAudit.Framework
                                     }
                                     else
                                     {
-                                        threshold = currentAudit.Tests[testCount].RowCount.ToString(CultureInfo.InvariantCulture);
-                                        currentAudit.Tests[testCount].FailedMessage = "The failure threshold was less than " + threshold + " rows. This audit returned " + rowCount + " rows.";
+                                        threshold = currentAudit.Test.RowCount.ToString(CultureInfo.InvariantCulture);
+                                        currentAudit.Test.FailedMessage = "The failure threshold was less than " + threshold + " rows. This audit returned " + rowCount + " rows.";
                                     }
                                     break;
                                 case "<=":
@@ -319,14 +319,14 @@ namespace NDataAudit.Framework
                                     }
                                     else
                                     {
-                                        threshold = currentAudit.Tests[testCount].RowCount.ToString(CultureInfo.InvariantCulture);
-                                        currentAudit.Tests[testCount].FailedMessage = "The failure threshold was less than or equal to " + threshold + " rows. This audit returned " + rowCount + " rows.";
+                                        threshold = currentAudit.Test.RowCount.ToString(CultureInfo.InvariantCulture);
+                                        currentAudit.Test.FailedMessage = "The failure threshold was less than or equal to " + threshold + " rows. This audit returned " + rowCount + " rows.";
                                     }
                                     break;
                                 case "=":
                                     if (rowCount == currTest.RowCount)
                                     {
-                                        if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
+                                        if (currentAudit.Test.FailIfConditionIsTrue)
                                         {
                                             currentAudit.Result = false;
                                         }
@@ -337,7 +337,7 @@ namespace NDataAudit.Framework
                                     }
                                     else
                                     {
-                                        if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
+                                        if (currentAudit.Test.FailIfConditionIsTrue)
                                         {
                                             currentAudit.Result = false;
                                         }
@@ -346,13 +346,13 @@ namespace NDataAudit.Framework
                                             currentAudit.Result = true;
                                         }
 
-                                        threshold = currentAudit.Tests[testCount].RowCount.ToString(CultureInfo.InvariantCulture);
-                                        currentAudit.Tests[testCount].FailedMessage = "The failure threshold was equal to " + threshold + " rows. This audit returned " + rowCount + " rows.";
+                                        threshold = currentAudit.Test.RowCount.ToString(CultureInfo.InvariantCulture);
+                                        currentAudit.Test.FailedMessage = "The failure threshold was equal to " + threshold + " rows. This audit returned " + rowCount + " rows.";
                                     }
                                     break;
                                 case "<>":
                                 case "!=":
-                                    if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
+                                    if (currentAudit.Test.FailIfConditionIsTrue)
                                     {
                                         currentAudit.Result = false;
                                     }
@@ -367,7 +367,7 @@ namespace NDataAudit.Framework
                         {
                             if (rowCount > 0)
                             {
-                                if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
+                                if (currentAudit.Test.FailIfConditionIsTrue)
                                 {
                                     currentAudit.Result = false;
                                 }
@@ -378,11 +378,11 @@ namespace NDataAudit.Framework
                             }
                             else
                             {
-                                if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
+                                if (currentAudit.Test.FailIfConditionIsTrue)
                                 {
                                     currentAudit.Result = false;
 
-                                    currentAudit.Tests[testCount].FailedMessage = "This audit was set to have more than zero rows returned. " + "This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
+                                    currentAudit.Test.FailedMessage = "This audit was set to have more than zero rows returned. " + "This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
                                 }
                                 else
                                 {
@@ -399,25 +399,25 @@ namespace NDataAudit.Framework
                         }
                         else
                         {
-                            currentAudit.Tests[testCount].FailedMessage = "This audit was set to not return any rows. " + "This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
+                            currentAudit.Test.FailedMessage = "This audit was set to not return any rows. " + "This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
                         }
                     }
 
                     if (currentAudit.Result == false)
                     {
-                        if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
+                        if (currentAudit.Test.FailIfConditionIsTrue)
                         {
-                            PrepareResultsEmailData(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit, dsTest);
+                            PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, testCount, currentAudit, dsTest);
                         }
                     }
                     else
                     {
-                        if (currentAudit.Tests[testCount].FailIfConditionIsTrue)
+                        if (currentAudit.Test.FailIfConditionIsTrue)
                         {
-                            if (currentAudit.Tests[testCount].SendReport)
+                            if (currentAudit.Test.SendReport)
                             {
                                 // It's not really a failure. Just want to send a report-like email.
-                                PrepareResultsEmailData(currentAudit.Tests[testCount].SqlStatementToCheck, testCount, currentAudit, dsTest);
+                                PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, testCount, currentAudit, dsTest);
                             }
                         }
                     }
@@ -464,11 +464,11 @@ namespace NDataAudit.Framework
 
             CommandType commandType = (CommandType) 0;
             
-            if (auditToRun.SqlType == Audit.SqlStatementTypeEnum.SqlText)
+            if (auditToRun.Test.SqlType == Audit.SqlStatementTypeEnum.SqlText)
             {
                 commandType = CommandType.Text;
             }
-            else if (auditToRun.SqlType == Audit.SqlStatementTypeEnum.StoredProcedure)
+            else if (auditToRun.Test.SqlType == Audit.SqlStatementTypeEnum.StoredProcedure)
             {
                 commandType = CommandType.StoredProcedure;
             }
@@ -495,13 +495,13 @@ namespace NDataAudit.Framework
 
                 if (intFound == 1)
                 {
-                    auditToRun.Tests[testIndex].FailedMessage = "Timeout expired while running this audit. The connection timeout was " + intConnectionTimeout.ToString(CultureInfo.InvariantCulture) + " seconds. The command timeout was " + intCommandTimeout + " seconds.";
+                    auditToRun.Test.FailedMessage = "Timeout expired while running this audit. The connection timeout was " + intConnectionTimeout.ToString(CultureInfo.InvariantCulture) + " seconds. The command timeout was " + intCommandTimeout + " seconds.";
 
-                    auditToRun.ErrorMessages.Add(auditToRun.Tests[testIndex].FailedMessage);
+                    auditToRun.ErrorMessages.Add(auditToRun.Test.FailedMessage);
                 }
                 else
                 {
-                    auditToRun.Tests[testIndex].FailedMessage = strMsg;
+                    auditToRun.Test.FailedMessage = strMsg;
                     auditToRun.ErrorMessages.Add(strMsg);
                 }
 
@@ -527,9 +527,9 @@ namespace NDataAudit.Framework
             string result;
             StringBuilder sql = new StringBuilder();
 
-            string sqlStatement = auditToParse.Tests[testIndex].SqlStatementToCheck;
+            string sqlStatement = auditToParse.Test.SqlStatementToCheck;
             string orderBy = auditToParse.OrderByClause;
-            bool useCriteria = auditToParse.Tests[testIndex].UseCriteria;
+            bool useCriteria = auditToParse.Test.UseCriteria;
 
             if (useCriteria)
             {
@@ -560,26 +560,26 @@ namespace NDataAudit.Framework
         {
             string result;
 
-            AuditTest currTest = auditToParse.Tests[testIndex];
+            AuditTest currTest = auditToParse.Test;
 
             string criteria = currTest.Criteria;
             string columnName = currTest.ColumnName;
             string Operator = currTest.Operator;
-            string whereClause = auditToParse.Tests[testIndex].WhereClause;
+            string whereClause = auditToParse.Test.WhereClause;
 
             // Add additional custom criteria inside this select statement
             switch (criteria.ToUpper())
             {
                 case "TODAY":
                     result = Today(columnName) + Operator + "0";
-                    auditToParse.Tests[testIndex].WhereClause = result;
+                    auditToParse.Test.WhereClause = result;
                     break;
                 case "COUNTROWS":
-                    result = whereClause.Replace("COUNTROWS", auditToParse.Tests[testIndex].RowCount.ToString());
-                    auditToParse.Tests[testIndex].WhereClause = result;
+                    result = whereClause.Replace("COUNTROWS", auditToParse.Test.RowCount.ToString());
+                    auditToParse.Test.WhereClause = result;
                     break;
                 default:
-                    result = auditToParse.Tests[testIndex].WhereClause;
+                    result = auditToParse.Test.WhereClause;
                     break;
             }
 
@@ -602,7 +602,7 @@ namespace NDataAudit.Framework
 
             string sourceEmailDescription = config.AppSettings.Settings["sourceEmailDescription"].Value;
 
-            if (testedAudit.Tests[testIndex].SendReport)
+            if (testedAudit.Test.SendReport)
             {
                 testedAudit.ShowThresholdMessage = false;
                 testedAudit.ShowQueryMessage = false;
@@ -620,7 +620,7 @@ namespace NDataAudit.Framework
             if (testedAudit.ShowThresholdMessage)
             {
                 body.AppendLine("<h2>ERROR MESSAGE</h2>");
-                body.Append(testedAudit.Tests[testIndex].FailedMessage + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
+                body.Append(testedAudit.Test.FailedMessage + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
             }
 
             if (testedAudit.ShowCommentMessage)
@@ -628,11 +628,11 @@ namespace NDataAudit.Framework
                 body.AppendLine("COMMENTS AND INSTRUCTIONS" + AuditUtils.HtmlBreak);
                 body.AppendLine("============================" + AuditUtils.HtmlBreak);
 
-                if (testedAudit.Tests[testIndex].Instructions != null)
+                if (testedAudit.Test.Instructions != null)
                 {
-                    if (testedAudit.Tests[testIndex].Instructions.Length > 0)
+                    if (testedAudit.Test.Instructions.Length > 0)
                     {
-                        body.Append(testedAudit.Tests[testIndex].Instructions.ToHtml() + AuditUtils.HtmlBreak);
+                        body.Append(testedAudit.Test.Instructions.ToHtml() + AuditUtils.HtmlBreak);
                         body.AppendLine(AuditUtils.HtmlBreak);
                     }
                 }
@@ -642,7 +642,7 @@ namespace NDataAudit.Framework
             {
                 if (testData.Tables.Count > 0)
                 {
-                    EmailTableTemplate currTemplate = testedAudit.Tests[testIndex].TemplateColorScheme;
+                    EmailTableTemplate currTemplate = testedAudit.Test.TemplateColorScheme;
 
                     string htmlData = AuditUtils.CreateHtmlData(testedAudit, testData, currTemplate);
 
@@ -652,7 +652,7 @@ namespace NDataAudit.Framework
 
             body.AppendLine(AuditUtils.HtmlBreak);
 
-            if (testedAudit.Tests[testIndex].SendReport)
+            if (testedAudit.Test.SendReport)
             {
                 body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak);
                 body.Append("<b>This report was run on: " + testedAudit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);

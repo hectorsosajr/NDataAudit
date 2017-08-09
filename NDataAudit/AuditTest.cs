@@ -14,6 +14,7 @@
 //*********************************************************************
 
 using System.Collections;
+using System.ComponentModel;
 
 namespace NDataAudit.Framework
 {
@@ -92,6 +93,12 @@ namespace NDataAudit.Framework
         /// The SQL statement that gets built from the audit object properties.
         /// </summary>
         public string SqlStatementToCheck { get; set; }
+
+        /// <summary>
+        /// The type needed to be passed to the ADO.NET Command object.
+        /// </summary>
+        [Description("The type needed to be passed to the ADO.NET Command object."), Category("Database")]
+        public Audit.SqlStatementTypeEnum SqlType { get; set; }
 
         /// <summary>
         /// Gets or sets the template color scheme for the data HTML table in emails.

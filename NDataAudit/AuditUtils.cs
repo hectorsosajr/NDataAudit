@@ -123,10 +123,10 @@ namespace NDataAudit.Framework
 
             foreach (DataTable currTable in testData.Tables)
             {
-                if (testedAudit.Tests[0].MultipleResults)
+                if (testedAudit.Test.MultipleResults)
                 {
                     sb.Append("<B>");
-                    sb.Append(testedAudit.Tests[0].TableNames[tableNamesCount]);
+                    sb.Append(testedAudit.Test.TableNames[tableNamesCount]);
                     sb.Append("</B>");
                     sb.AppendLine("<br>");
                 }

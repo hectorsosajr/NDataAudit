@@ -175,9 +175,6 @@ namespace NDataAudit.Framework
             var xmlElement = auditBranch["database"];
             if (xmlElement != null)
             {
-                XmlNodeList sqlType = xmlElement.GetElementsByTagName("sqltype");
-                newAudit.SqlType = (Audit.SqlStatementTypeEnum)Convert.ToInt32(sqlType[0].InnerText);
-
                 XmlNodeList dbProvider = xmlElement.GetElementsByTagName("databaseprovider");
                 newAudit.DatabaseProvider = dbProvider[0].InnerText;
 
@@ -400,6 +397,8 @@ namespace NDataAudit.Framework
 
                 newTest.SqlStatementToCheck = columnNode["sqlcommand"].InnerText;
 
+                newTest.SqlType = (Audit.SqlStatementTypeEnum)Convert.ToInt32(columnNode["sqltype"].InnerText);
+
                 if (newTest.Criteria.ToUpper() == "COUNTROWS")
                 {
                     newTest.RowCount = Convert.ToInt32(columnNode["rowcount"].InnerText);
@@ -456,7 +455,7 @@ namespace NDataAudit.Framework
                     newTest.TemplateColorScheme = AuditUtils.GetDefaultTemplate();
                 }
 
-                currentAudit.Tests.Add(newTest);
+                currentAudit.Test = newTest;
             }
         }
 
