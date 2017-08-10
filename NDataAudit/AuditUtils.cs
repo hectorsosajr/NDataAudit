@@ -69,6 +69,48 @@ namespace NDataAudit.Framework
          public string CssTableStyle { get; set; }
     }
 
+    /// <summary>
+    /// Type of email priority
+    /// </summary>
+    public enum EmailPriorityEnum
+    {
+        /// <summary>
+        /// The low email priority
+        /// </summary>
+        Low = 0,
+
+        /// <summary>
+        /// The normal email priority
+        /// </summary>
+        Normal = 1,
+
+        /// <summary>
+        /// The high email priority
+        /// </summary>
+        High = 2
+    }
+
+    /// <summary>
+    /// Type of email entry
+    /// </summary>
+    public enum EmailTypeEnum
+    {
+        /// <summary>
+        /// Regular email recipient
+        /// </summary>
+        Recipient,
+
+        /// <summary>
+        /// Carbon Copy email recipient
+        /// </summary>
+        CarbonCopy,
+
+        /// <summary>
+        /// Blind carbon copy email recipient
+        /// </summary>
+        BlindCarbonCopy
+    }
+
     internal static class AuditUtils
     {
         /// <summary>

@@ -622,7 +622,7 @@ namespace DataAuditor.UI
     #region Declarations
 
         private string _auditName;
-        private AuditController _audits;
+        private AuditController _auditController;
         private AuditTesting _auditTesting;
         private int _selectedIndex = 0;
 
@@ -672,7 +672,7 @@ namespace DataAuditor.UI
 
         private void btnRunGroup_Activate(object sender, EventArgs e)
         {
-            _auditTesting = new AuditTesting(_audits.AuditGroup);
+            _auditTesting = new AuditTesting(_auditController.AuditGroup);
 
             // Wire up the events
             _auditTesting.AuditTestingStarting += _auditTesting_AuditTestingStarting;
@@ -808,7 +808,7 @@ namespace DataAuditor.UI
 
         private void _auditTesting_CurrentAuditDone(int auditNumber, string auditName)
         {
-            Audit currAudit = _audits.AuditGroup[auditNumber];
+            Audit currAudit = _auditController.AuditGroup[auditNumber];
             bool result = currAudit.Result;
 
             if (result)
@@ -877,11 +877,11 @@ namespace DataAuditor.UI
 
             lsvAudits.Items.Clear();
 
-            _audits = new AuditController(xmlGroup);
+            _auditController = new AuditController(xmlGroup);
 
-            lblAuditGroup.Text = _audits.AuditGroupName;
+            lblAuditGroup.Text = _auditController.AuditGroupName;
 
-            foreach (Audit currItem in _audits.AuditGroup)
+            foreach (Audit currItem in _auditController.AuditGroup)
             {
                 var currAudit = currItem;
 
@@ -897,7 +897,7 @@ namespace DataAuditor.UI
 
         private void RunSingleAudit()
         {
-            _auditTesting = new AuditTesting();
+            _auditTesting = new AuditTesting(_auditController.AuditGroup);
             bool result = false;
 
             // Wire events

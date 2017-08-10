@@ -11,6 +11,7 @@
 //**************************************************************************************
 
 using System.Collections;
+using System.ComponentModel;
 
 namespace NDataAudit.Framework
 {
@@ -26,10 +27,10 @@ namespace NDataAudit.Framework
 		/// </summary>
 		public AuditCollection()
 		{
-			//
-			// TODO: Add constructor logic here
-			//
-		}
+            EmailSubscribers = new ArrayList();
+            EmailCarbonCopySubscribers = new ArrayList();
+            EmailBlindCarbonCopySubscribers = new ArrayList();
+        }
 
         #endregion
 
@@ -38,15 +39,97 @@ namespace NDataAudit.Framework
         /// <summary>
         /// Gets the <see cref="Audit"/> with the specified index.
         /// </summary>
-        /// <param name="Index">The index.</param>
+        /// <param name="index">The index.</param>
         /// <returns>Audit.</returns>
-        public Audit this[int Index]
-		{
-			get
-			{
-				return ((Audit)(List[Index]));
-			}
-		}
+        public Audit this[int index] => ((Audit)(List[index]));
+
+	    /// <summary>
+	    /// The connection string needed to connect to the server that contains the needed test data.
+	    /// </summary>
+	    [Description("The connection string needed to connect to the server that contains the needed test data."), Category("Database")]
+	    public AuditConnectionString ConnectionString { get; set; }
+
+	    /// <summary>
+	    /// Gets or sets the database provider.
+	    /// </summary>
+	    /// <value>The database provider.</value>
+	    public string DatabaseProvider { get; set; }
+
+	    /// <summary>
+	    /// The emails of the people who will receive notifications.
+	    /// </summary>
+	    [Description("The emails of the people who will receive notifications."), Category("Email")]
+	    public ArrayList EmailSubscribers { get; set; }
+
+	    /// <summary>
+	    /// The emails of the people who will receive notifications as carbon copies.
+	    /// </summary>
+	    [Description("The emails of the people who will receive notifications as carbon copies."), Category("Email")]
+	    public ArrayList EmailCarbonCopySubscribers { get; set; }
+
+	    /// <summary>
+	    /// The emails of the people who will receive notifications as blind carbon copies.
+	    /// </summary>
+	    [Description("The emails of the people who will receive notifications as blind carbon copies."), Category("Email")]
+	    public ArrayList EmailBlindCarbonCopySubscribers { get; set; }
+
+	    /// <summary>
+	    /// The address for the SMTP server.
+	    /// </summary>
+	    [Description("Gets or sets the address for the SMTP Server."), Category("Email Server")]
+	    public string SmtpServerAddress { get; set; }
+
+	    /// <summary>
+	    /// The port number for the SMTP server, if it uses something other than 25. This is mostly for TLS and SSL connections.
+	    /// </summary>
+	    [Description("Gets or sets the port for the SMTP Server."), Category("Email Server")]
+	    public int SmtpPort { get; set; }
+
+	    /// <summary>
+	    /// This is the SMTP user name for servers that require authentication.
+	    /// </summary>
+	    [Description("Gets or sets the user name for the SMTP Server."), Category("Email Server")]
+	    public string SmtpUserName { get; set; }
+
+	    /// <summary>
+	    /// This is the SMTP password for servers that require authentication.
+	    /// </summary>
+	    [Description("Gets or sets the password for the SMTP Server."), Category("Email Server")]
+	    public string SmtpPassword { get; set; }
+
+	    /// <summary>
+	    /// A flag to indicate whether or not the SMTP server needs to connect using SSL or TSL.
+	    /// </summary>
+	    [Description("A flag to indicate whether or not the SMTP Server uses SSL or TSL."), Category("Email Server")]
+	    public bool SmtpUseSsl { get; set; }
+
+	    /// <summary>
+	    /// A flag to indicate whether this audit group needs to connect to a SMTP server that requires network credentials.
+	    /// </summary>
+	    [Description("A flag to indicate whether or not the SMTP Server needs credentials."), Category("Email Server")]
+	    public bool SmtpHasCredentials { get; set; }
+
+	    /// <summary>
+	    /// This is the SMTP FROM email address.
+	    /// </summary>
+	    [Description("Gets or sets the FROM email used for the SMTP Server."), Category("Email Server")]
+	    public string SmtpSourceEmail { get; set; }
+
+	    /// <summary>
+	    /// Gets or sets the email subject.
+	    /// </summary>
+	    /// <value>
+	    /// The email subject for this audit test.
+	    /// </value>
+	    [Description("Gets or sets the email subject for this audit."), Category("Email")]
+	    public string EmailSubject { get; set; }
+
+	    /// <summary>
+	    /// Gets or sets the email priority.
+	    /// </summary>
+	    /// <value>The email priority.</value>
+	    [Description("Gets or sets the email priority for this audit."), Category("Email")]
+	    public EmailPriorityEnum EmailPriority { get; set; }
 
         #endregion
 
@@ -61,9 +144,9 @@ namespace NDataAudit.Framework
 		{
 			ArrayList indexes = new ArrayList();
 
-			foreach (object Item in items)
+			foreach (object item in items)
 			{
-				indexes.Add(this.List.Add(Item));
+				indexes.Add(this.List.Add(item));
 			}
 
 			return ((int[])(indexes.ToArray(typeof(int))));

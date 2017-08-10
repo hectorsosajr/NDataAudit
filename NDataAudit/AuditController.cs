@@ -26,7 +26,7 @@ namespace NDataAudit.Framework
     {
         #region  Declarations 
 
-        private readonly AuditCollection _colAuditGroup;
+        private static AuditCollection _colAuditGroup;
         private string _auditGroupName;
 
         #endregion
@@ -109,6 +109,10 @@ namespace NDataAudit.Framework
 
                 _auditGroupName = auditGroup.DocumentElement.Attributes[0].InnerText;
 
+                GetEmailSettings(auditGroup);
+                GetDatabaseDetails(auditGroup);
+                GetSmtpDetails(auditGroup);
+
                 XmlNodeList auditList = auditGroup.GetElementsByTagName("audit");
 
                 ProcessAudits(auditList);
@@ -139,12 +143,6 @@ namespace NDataAudit.Framework
                 newAudit.Name = auditBranch.Attributes[0].InnerText;
                 auditDoc.LoadXml(auditBranch.OuterXml);
 
-                GetEmailSettings(auditDoc, ref newAudit, auditBranch);
-
-                GetDatabaseDetails(auditBranch, newAudit);
-
-                GetSmtpDetails(auditBranch, newAudit);
-
                 GetReportUiElements(auditBranch, newAudit);
 
                 XmlNodeList testList = auditDoc.GetElementsByTagName("test");
@@ -163,116 +161,116 @@ namespace NDataAudit.Framework
                 }
                 else
                 {
-                    newAudit.TestServer = newAudit.ConnectionString.DatabaseServer;
+                    newAudit.TestServer = _colAuditGroup.ConnectionString.DatabaseServer;
                 }
 
                 _colAuditGroup.Add(newAudit);
             }
         }
 
-        private static void GetDatabaseDetails(XmlNode auditBranch, Audit newAudit)
+        private static void GetDatabaseDetails(XmlDocument auditGroup)
         {
-            var xmlElement = auditBranch["database"];
+            var xmlElement = auditGroup.GetElementsByTagName("database");
             if (xmlElement != null)
             {
-                XmlNodeList dbProvider = xmlElement.GetElementsByTagName("databaseprovider");
-                newAudit.DatabaseProvider = dbProvider[0].InnerText;
+                XmlElement dbProvider = xmlElement[0]["databaseprovider"];
+                _colAuditGroup.DatabaseProvider = dbProvider.InnerText;
 
-                XmlNodeList connectionString = xmlElement.GetElementsByTagName("connectionstring");
-                newAudit.ConnectionString = new AuditConnectionString(connectionString[0].InnerText, newAudit.DatabaseProvider);
+                XmlElement connectionString = xmlElement[0]["connectionstring"];
+                _colAuditGroup.ConnectionString = new AuditConnectionString(connectionString.InnerText, _colAuditGroup.DatabaseProvider);
 
-                XmlNode commandTimeout = auditBranch["commandtimeout"];
+                XmlNode commandTimeout = auditGroup["commandtimeout"];
                 if (commandTimeout != null)
                 {
-                    newAudit.ConnectionString.CommandTimeout = commandTimeout.InnerText;
+                    _colAuditGroup.ConnectionString.CommandTimeout = commandTimeout.InnerText;
                 }
                 else
                 {
-                    newAudit.ConnectionString.CommandTimeout = "180";
+                    _colAuditGroup.ConnectionString.CommandTimeout = "180";
                 }
 
-                XmlNode connectionTimeout = auditBranch["connectiontimeout"];
+                XmlNode connectionTimeout = auditGroup["connectiontimeout"];
                 if (connectionTimeout != null)
                 {
-                    newAudit.ConnectionString.ConnectionTimeout = connectionTimeout.InnerText;
+                    _colAuditGroup.ConnectionString.ConnectionTimeout = connectionTimeout.InnerText;
                 }
                 else
                 {
-                    newAudit.ConnectionString.ConnectionTimeout = "15";
+                    _colAuditGroup.ConnectionString.ConnectionTimeout = "15";
                 }
 
-                XmlNodeList orderbyNode = xmlElement.GetElementsByTagName("orderbyclause");
-                if (orderbyNode.Count > 0)
-                {
-                    newAudit.OrderByClause = orderbyNode[0].InnerText;
-                }
+                //XmlNodeList orderbyNode = xmlElement.GetElementsByTagName("orderbyclause");
+                //if (orderbyNode.Count > 0)
+                //{
+                //    newAudit.OrderByClause = orderbyNode[0].InnerText;
+                //}
             }
         }
 
-        private static void GetEmailSettings(XmlDocument auditDoc, ref Audit newAudit, XmlNode auditBranch)
+        private static void GetEmailSettings(XmlDocument auditDoc)
         {
             // Process email list
             XmlNodeList emailList = auditDoc.GetElementsByTagName("email");
             if (emailList.Count > 0)
             {
-                ProcessEmails(ref newAudit, emailList, Audit.EmailTypeEnum.Recipient); 
+                ProcessEmails(emailList, EmailTypeEnum.Recipient); 
             }
 
             // Process cc email list
             XmlNodeList ccEmailList = auditDoc.GetElementsByTagName("ccemail");
             if (ccEmailList.Count > 0)
             {
-                ProcessEmails(ref newAudit, ccEmailList, Audit.EmailTypeEnum.CarbonCopy); 
+                ProcessEmails(ccEmailList, EmailTypeEnum.CarbonCopy); 
             }
 
             // Process email list
             XmlNodeList bccEmailList = auditDoc.GetElementsByTagName("bccemail");
             if (bccEmailList.Count > 0)
             {
-                ProcessEmails(ref newAudit, bccEmailList, Audit.EmailTypeEnum.BlindCarbonCopy); 
+                ProcessEmails(bccEmailList, EmailTypeEnum.BlindCarbonCopy); 
             }
 
             // See if there is a custom email subject for this audit.
-            var xmlElement = auditBranch["emailsubject"];
+            var xmlElement = auditDoc["emailsubject"];
             if (xmlElement != null)
             {
-                newAudit.EmailSubject = xmlElement.InnerText;
+                _colAuditGroup.EmailSubject = xmlElement.InnerText;
             }
 
             // See if there is a custom email subject for this audit.
-            xmlElement = auditBranch["emailpriority"];
+            xmlElement = auditDoc["emailpriority"];
             if (xmlElement != null)
             {
                 switch (xmlElement.InnerText.ToLower())
                 {
                     case "low":
-                        newAudit.EmailPriority = Audit.EmailPriorityEnum.Low;
+                        _colAuditGroup.EmailPriority = EmailPriorityEnum.Low;
                         break;
                     case "normal":
-                        newAudit.EmailPriority = Audit.EmailPriorityEnum.Normal;
+                        _colAuditGroup.EmailPriority = EmailPriorityEnum.Normal;
                         break;
                     case "high":
-                        newAudit.EmailPriority = Audit.EmailPriorityEnum.High;
+                        _colAuditGroup.EmailPriority = EmailPriorityEnum.High;
                         break;
                     default:
-                        newAudit.EmailPriority = Audit.EmailPriorityEnum.High;
+                        _colAuditGroup.EmailPriority = EmailPriorityEnum.High;
                         break;
                 }
             }
             else
             {
-                newAudit.EmailPriority = Audit.EmailPriorityEnum.High;
+                _colAuditGroup.EmailPriority = EmailPriorityEnum.High;
             }
 
             // See if there is a source email the FROM email address.
-            var xmlSourceElement = auditBranch["sourceemail"];
+            var xmlSourceElement = auditDoc["sourceemail"];
             if (xmlSourceElement != null)
             {
-                newAudit.SmtpSourceEmail = xmlSourceElement.InnerText;
+                _colAuditGroup.SmtpSourceEmail = xmlSourceElement.InnerText;
             }
         }
 
-        private static void ProcessEmails(ref Audit currentAudit, XmlNodeList auditEmails, Audit.EmailTypeEnum emailType)
+        private static void ProcessEmails(XmlNodeList auditEmails, EmailTypeEnum emailType)
         {
             int nodeCount;
 
@@ -288,14 +286,14 @@ namespace NDataAudit.Framework
 
                 switch (emailType)
                 {
-                    case Audit.EmailTypeEnum.Recipient:
-                        currentAudit.EmailSubscribers.Add(currEmail);
+                    case EmailTypeEnum.Recipient:
+                        _colAuditGroup.EmailSubscribers.Add(currEmail);
                         break;
-                    case Audit.EmailTypeEnum.CarbonCopy:
-                        currentAudit.EmailCarbonCopySubscribers.Add(currEmail);
+                    case EmailTypeEnum.CarbonCopy:
+                        _colAuditGroup.EmailCarbonCopySubscribers.Add(currEmail);
                         break;
-                    case Audit.EmailTypeEnum.BlindCarbonCopy:
-                        currentAudit.EmailBlindCarbonCopySubscribers.Add(currEmail);
+                    case EmailTypeEnum.BlindCarbonCopy:
+                        _colAuditGroup.EmailBlindCarbonCopySubscribers.Add(currEmail);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(emailType), emailType, null);
@@ -328,49 +326,49 @@ namespace NDataAudit.Framework
             }
         }
 
-        private static void GetSmtpDetails(XmlNode auditBranch, Audit newAudit)
+        private static void GetSmtpDetails(XmlDocument auditDoc)
         {
-            var xmlSmtpElement = auditBranch["smtp"];
+            XmlNodeList smtpNode = auditDoc.GetElementsByTagName("smtp"); //auditDoc["smtp"];
 
-            if (xmlSmtpElement["sourceemail"] != null)
+            if (smtpNode[0]["sourceemail"] != null)
             {
-                newAudit.SmtpSourceEmail = xmlSmtpElement["sourceemail"].InnerText;
+                _colAuditGroup.SmtpSourceEmail = smtpNode[0]["sourceemail"].InnerText;
             }
 
-            if (xmlSmtpElement["address"] != null)
+            if (smtpNode[0]["address"] != null)
             {
-                newAudit.SmtpServerAddress = xmlSmtpElement["address"].InnerText;
+                _colAuditGroup.SmtpServerAddress = smtpNode[0]["address"].InnerText;
             }
 
-            if (xmlSmtpElement["port"] != null)
+            if (smtpNode[0]["port"] != null)
             {
-                newAudit.SmtpPort = Convert.ToInt32(xmlSmtpElement["port"].InnerText);
+                _colAuditGroup.SmtpPort = Convert.ToInt32(smtpNode[0]["port"].InnerText);
             }
             else
             {
-                newAudit.SmtpPort = 25;
+                _colAuditGroup.SmtpPort = 25;
             }
 
-            if (xmlSmtpElement["usessl"] != null)
+            if (smtpNode[0]["usessl"] != null)
             {
-                newAudit.SmtpUseSsl = bool.Parse(xmlSmtpElement["usessl"].InnerText);
+                _colAuditGroup.SmtpUseSsl = bool.Parse(smtpNode[0]["usessl"].InnerText);
             }
 
             // Process SMTP credentials, if any
-            XmlNode xmlSmtpCredElement = xmlSmtpElement["smtpcredentials"];
+            XmlNode xmlSmtpCredElement = smtpNode[0]["smtpcredentials"];
 
             if (xmlSmtpCredElement != null)
             {
-                newAudit.SmtpHasCredentials = true;
+                _colAuditGroup.SmtpHasCredentials = true;
 
                 if (xmlSmtpCredElement["username"] != null)
                 {
-                    newAudit.SmtpUserName = xmlSmtpCredElement["username"].InnerText;
+                    _colAuditGroup.SmtpUserName = xmlSmtpCredElement["username"].InnerText;
                 }
 
                 if (xmlSmtpCredElement["password"] != null)
                 {
-                    newAudit.SmtpPassword = xmlSmtpCredElement["password"].InnerText;
+                    _colAuditGroup.SmtpPassword = xmlSmtpCredElement["password"].InnerText;
                 }
             }
         }

@@ -69,7 +69,7 @@ namespace NDataAudit.Framework
     {
         #region  Declarations
 
-        private AuditCollection _colAudits;
+        private static AuditCollection _colAudits;
 
         private DbProviderCache _providers = null;
 
@@ -432,28 +432,28 @@ namespace NDataAudit.Framework
 
         private DataSet GetTestDataSet(ref Audit auditToRun, int testIndex)
         {
-            IAuditDbProvider currDbProvider = _providers.Providers[auditToRun.DatabaseProvider];
+            IAuditDbProvider currDbProvider = _providers.Providers[_colAudits.DatabaseProvider];
 
-            currDbProvider.ConnectionString = auditToRun.ConnectionString.ToString();
+            currDbProvider.ConnectionString = _colAudits.ConnectionString.ToString();
 
-            if (auditToRun.ConnectionString.ConnectionTimeout != null)
+            if (_colAudits.ConnectionString.ConnectionTimeout != null)
             {
-                currDbProvider.ConnectionTimeout = auditToRun.ConnectionString.ConnectionTimeout;
+                currDbProvider.ConnectionTimeout = _colAudits.ConnectionString.ConnectionTimeout;
             }
             else
             {
                 currDbProvider.CommandTimeout = 15.ToString();
-                auditToRun.ConnectionString.ConnectionTimeout = 15.ToString();
+                _colAudits.ConnectionString.ConnectionTimeout = 15.ToString();
             }
 
-            if (auditToRun.ConnectionString.CommandTimeout != null)
+            if (_colAudits.ConnectionString.CommandTimeout != null)
             {
-                currDbProvider.CommandTimeout = auditToRun.ConnectionString.CommandTimeout;
+                currDbProvider.CommandTimeout = _colAudits.ConnectionString.CommandTimeout;
             }
             else
             {
                 currDbProvider.CommandTimeout = 30.ToString();
-                auditToRun.ConnectionString.CommandTimeout = 30.ToString();
+                _colAudits.ConnectionString.CommandTimeout = 30.ToString();
             }
 
             currDbProvider.CreateDatabaseSession();
@@ -473,12 +473,12 @@ namespace NDataAudit.Framework
                 commandType = CommandType.StoredProcedure;
             }
 
-            IDbCommand cmdAudit = currDbProvider.CreateDbCommand(sql, commandType, int.Parse(auditToRun.ConnectionString.CommandTimeout));
+            IDbCommand cmdAudit = currDbProvider.CreateDbCommand(sql, commandType, int.Parse(_colAudits.ConnectionString.CommandTimeout));
 
             IDbDataAdapter daAudit = currDbProvider.CreateDbDataAdapter(cmdAudit);
 
-            string intConnectionTimeout = auditToRun.ConnectionString.ConnectionTimeout;
-            string intCommandTimeout = auditToRun.ConnectionString.CommandTimeout;
+            string intConnectionTimeout = _colAudits.ConnectionString.ConnectionTimeout;
+            string intCommandTimeout = _colAudits.ConnectionString.CommandTimeout;
 
             try
             {
@@ -679,24 +679,24 @@ namespace NDataAudit.Framework
         {
             var message = new MailMessage {IsBodyHtml = true};
 
-            foreach (string recipient in testedAudit.EmailSubscribers)
+            foreach (string recipient in _colAudits.EmailSubscribers)
             {
                 message.To.Add(new MailAddress(recipient));
             }
 
-            if (testedAudit.EmailCarbonCopySubscribers != null)
+            if (_colAudits.EmailCarbonCopySubscribers != null)
             {
                 // Carbon Copies - CC
-                foreach (string ccemail in testedAudit.EmailCarbonCopySubscribers)
+                foreach (string ccemail in _colAudits.EmailCarbonCopySubscribers)
                 {
                     message.CC.Add(new MailAddress(ccemail));
                 } 
             }
             
-            if (testedAudit.EmailBlindCarbonCopySubscribers != null)
+            if (_colAudits.EmailBlindCarbonCopySubscribers != null)
             {
                 // Blind Carbon Copies - BCC
-                foreach (string bccemail in testedAudit.EmailBlindCarbonCopySubscribers)
+                foreach (string bccemail in _colAudits.EmailBlindCarbonCopySubscribers)
                 {
                     message.Bcc.Add(new MailAddress(bccemail));
                 }
@@ -706,13 +706,13 @@ namespace NDataAudit.Framework
 
             switch (testedAudit.EmailPriority)
             {
-                case Audit.EmailPriorityEnum.Low:
+                case EmailPriorityEnum.Low:
                     message.Priority = MailPriority.Low;
                     break;
-                case Audit.EmailPriorityEnum.Normal:
+                case EmailPriorityEnum.Normal:
                     message.Priority = MailPriority.Normal;
                     break;
-                case Audit.EmailPriorityEnum.High:
+                case EmailPriorityEnum.High:
                     message.Priority = MailPriority.High;
                     break;
                 default:
@@ -729,22 +729,22 @@ namespace NDataAudit.Framework
                 message.Subject = "Audit Failure - " + testedAudit.Name;
             }
 
-            message.From = new MailAddress(testedAudit.SmtpSourceEmail, sourceEmailDescription);
+            message.From = new MailAddress(_colAudits.SmtpSourceEmail, sourceEmailDescription);
 
             var server = new SmtpClient();
 
-            if (testedAudit.SmtpHasCredentials)
+            if (_colAudits.SmtpHasCredentials)
             {
                 server.UseDefaultCredentials = false;
                 server.DeliveryMethod = SmtpDeliveryMethod.Network;
-                server.Host = testedAudit.SmtpServerAddress;
-                server.Port = testedAudit.SmtpPort;
-                server.Credentials = new NetworkCredential(testedAudit.SmtpUserName, testedAudit.SmtpPassword);
-                server.EnableSsl = testedAudit.SmtpUseSsl;
+                server.Host = _colAudits.SmtpServerAddress;
+                server.Port = _colAudits.SmtpPort;
+                server.Credentials = new NetworkCredential(_colAudits.SmtpUserName, _colAudits.SmtpPassword);
+                server.EnableSsl = _colAudits.SmtpUseSsl;
             }
             else
             {
-                server.Host = testedAudit.SmtpServerAddress;
+                server.Host = _colAudits.SmtpServerAddress;
             }
 
             try
