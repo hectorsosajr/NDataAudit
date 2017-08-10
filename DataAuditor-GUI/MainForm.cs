@@ -280,6 +280,7 @@ namespace DataAuditor.UI
             // btnNewGroup
             // 
             this.btnNewGroup.BeginGroup = true;
+            this.btnNewGroup.Enabled = false;
             this.btnNewGroup.Icon = ((System.Drawing.Icon)(resources.GetObject("btnNewGroup.Icon")));
             this.btnNewGroup.Text = "New Group";
             // 
@@ -293,6 +294,7 @@ namespace DataAuditor.UI
             // 
             this.btnRunGroup.Icon = ((System.Drawing.Icon)(resources.GetObject("btnRunGroup.Icon")));
             this.btnRunGroup.Text = "Run Audits";
+            this.btnRunGroup.Activate += new System.EventHandler(this.btnRunGroup_Activate);
             // 
             // tbAudit
             // 
@@ -317,6 +319,7 @@ namespace DataAuditor.UI
             // 
             // btnDeleteAudit
             // 
+            this.btnDeleteAudit.Enabled = false;
             this.btnDeleteAudit.Icon = ((System.Drawing.Icon)(resources.GetObject("btnDeleteAudit.Icon")));
             this.btnDeleteAudit.Text = "Delete Audit";
             // 
@@ -404,6 +407,7 @@ namespace DataAuditor.UI
             this.xpLinkDelete.BackColor = System.Drawing.Color.Transparent;
             this.xpLinkDelete.ColorTable = dynamicColorTable1;
             this.xpLinkDelete.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.xpLinkDelete.Enabled = false;
             this.xpLinkDelete.HotForeColor = System.Drawing.SystemColors.HotTrack;
             this.xpLinkDelete.Image = ((System.Drawing.Image)(resources.GetObject("xpLinkDelete.Image")));
             this.xpLinkDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -646,8 +650,8 @@ namespace DataAuditor.UI
         private void EnableAuditCommands()
         {
             btnRunAudit.Enabled = true;
-            btnDeleteAudit.Enabled = true;
-            btnAddAudit.Enabled = true;
+            //btnDeleteAudit.Enabled = true;
+            //btnAddAudit.Enabled = true;
             btnRunGroup.Enabled = true;
         }
 
@@ -663,12 +667,17 @@ namespace DataAuditor.UI
 
         private void XpLinkRun_Click(object sender, System.EventArgs e)
         {
+            RunSingleAudit();
+        }
+
+        private void btnRunGroup_Activate(object sender, EventArgs e)
+        {
             _auditTesting = new AuditTesting(_audits.AuditGroup);
-            
+
             // Wire up the events
             _auditTesting.AuditTestingStarting += _auditTesting_AuditTestingStarting;
-            _auditTesting.CurrentAuditRunning +=_auditTesting_CurrentAuditRunning;
-            _auditTesting.CurrentAuditDone +=_auditTesting_CurrentAuditDone;
+            _auditTesting.CurrentAuditRunning += _auditTesting_CurrentAuditRunning;
+            _auditTesting.CurrentAuditDone += _auditTesting_CurrentAuditDone;
 
             try
             {
@@ -711,14 +720,11 @@ namespace DataAuditor.UI
             finally
             {
                 this.Cursor = Cursors.Default;
-            }		
+            }
         }
 
         private void lsvAudits_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            ListView currView;
-            ListViewItem currItem;
-
             if (lsvAudits.SelectedItems.Count == 0)
             {
                 if (ppgAudits.SelectedObject != null)
@@ -730,11 +736,11 @@ namespace DataAuditor.UI
             {
                 ppgAudits.SelectedObject = null;
 
-                currView = ((ListView)(sender));
+                var currView = ((ListView)(sender));
 
                 try
                 {
-                    currItem = currView.SelectedItems[0];
+                    var currItem = currView.SelectedItems[0];
                     ppgAudits.SelectedObject = currItem.Tag;
                     _selectedIndex = currItem.Index;
                 }
@@ -792,28 +798,28 @@ namespace DataAuditor.UI
             }
         }
 
-        private void _auditTesting_CurrentAuditRunning(int AuditNumber, string AuditName)
+        private void _auditTesting_CurrentAuditRunning(int auditNumber, string auditName)
         {
-            lsvAudits.Items[AuditNumber].ImageIndex = 1;
-            lsvAudits.Items[AuditNumber].SubItems[1].Text = "Processing";
+            lsvAudits.Items[auditNumber].ImageIndex = 1;
+            lsvAudits.Items[auditNumber].SubItems[1].Text = "Processing";
 
             this.Refresh();
         }
 
-        private void _auditTesting_CurrentAuditDone(int AuditNumber, string AuditName)
+        private void _auditTesting_CurrentAuditDone(int auditNumber, string auditName)
         {
-            Audit currAudit = _audits.AuditGroup[AuditNumber];
+            Audit currAudit = _audits.AuditGroup[auditNumber];
             bool result = currAudit.Result;
 
             if (result)
             {
-                lsvAudits.Items[AuditNumber].ImageIndex = 3;
-                lsvAudits.Items[AuditNumber].SubItems[1].Text = "Completed";
+                lsvAudits.Items[auditNumber].ImageIndex = 3;
+                lsvAudits.Items[auditNumber].SubItems[1].Text = "Completed";
             }
             else
             {
-                lsvAudits.Items[AuditNumber].ImageIndex = 4;
-                lsvAudits.Items[AuditNumber].SubItems[1].Text = "Failure";
+                lsvAudits.Items[auditNumber].ImageIndex = 4;
+                lsvAudits.Items[auditNumber].SubItems[1].Text = "Failure";
             }
 
             this.Refresh();
@@ -829,7 +835,7 @@ namespace DataAuditor.UI
             RunSingleAudit();
         }
 
-        private void _auditTesting_CurrentSingleAuditRunning(Audit CurrentAudit)
+        private void _auditTesting_CurrentSingleAuditRunning(Audit currentAudit)
         {
             
             lsvAudits.Items[_selectedIndex].ImageIndex = 1;
@@ -838,9 +844,9 @@ namespace DataAuditor.UI
             this.Refresh();
         }
 
-        private void _auditTesting_CurrentSingleAuditDone(Audit CurrentAudit)
+        private void _auditTesting_CurrentSingleAuditDone(Audit currentAudit)
         {
-            bool result = CurrentAudit.Result;
+            bool result = currentAudit.Result;
 
             if (result)
             {
@@ -867,9 +873,7 @@ namespace DataAuditor.UI
 
         private void LoadAuditGroup(string xmlGroup)
         {
-            ListViewItem currViewItem;
-            Audit currAudit;
-            int NodeCount;
+            int nodeCount;
 
             lsvAudits.Items.Clear();
 
@@ -879,9 +883,9 @@ namespace DataAuditor.UI
 
             foreach (Audit currItem in _audits.AuditGroup)
             {
-                currAudit = currItem;
+                var currAudit = currItem;
 
-                currViewItem = lsvAudits.Items.Add(currAudit.Name, 0);
+                var currViewItem = lsvAudits.Items.Add(currAudit.Name, 0);
 
                 currViewItem.Tag = currAudit;
 
@@ -914,7 +918,6 @@ namespace DataAuditor.UI
         {
             Application.Run(new MainForm());
         }
-
     } // end of class
 
 } //end of root namespace

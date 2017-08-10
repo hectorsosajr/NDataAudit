@@ -672,10 +672,7 @@ namespace NDataAudit.Framework
 
             string cleanBody = body.ToString().Replace("\r\n", string.Empty);
 
-            if (testedAudit.SmtpHasCredentials)
-            {
-                SendEmail(testedAudit, cleanBody, sourceEmailDescription);
-            }
+            SendEmail(testedAudit, cleanBody, sourceEmailDescription);
         }
 
         private static void SendEmail(Audit testedAudit, string body, string sourceEmailDescription)
