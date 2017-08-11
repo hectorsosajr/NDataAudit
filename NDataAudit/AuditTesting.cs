@@ -749,8 +749,8 @@ namespace NDataAudit.Framework
 
             try
             {
-            server.Send(message);
-        }
+                server.Send(message);
+            }
             catch (SmtpException smtpEx)
             {
                 StringBuilder sb = new StringBuilder();

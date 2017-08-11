@@ -43,6 +43,12 @@ namespace NDataAudit.Framework
         /// <returns>Audit.</returns>
         public Audit this[int index] => ((Audit)(List[index]));
 
+        /// <summary>
+        /// Gets or sets the name of the audit group.
+        /// </summary>
+        /// <value>The name of the audit group.</value>
+        public string AuditGroupName { get; set; }
+
 	    /// <summary>
 	    /// The connection string needed to connect to the server that contains the needed test data.
 	    /// </summary>

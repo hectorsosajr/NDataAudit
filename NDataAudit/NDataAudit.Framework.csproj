@@ -127,7 +127,7 @@
     <Compile Include="AuditCollection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AuditCompletionReport.cs" />
+    <Compile Include="AuditReports.cs" />
     <Compile Include="AuditConnectionString.cs" />
     <Compile Include="AuditController.cs">
       <SubType>Code</SubType>

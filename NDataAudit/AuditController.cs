@@ -61,28 +61,16 @@ namespace NDataAudit.Framework
         /// <summary>
         /// 
         /// </summary>
-        public AuditCollection AuditGroup
-        {
-            get
-            {
-                return _colAuditGroup;
-            }
-        }
+        public AuditCollection AuditGroup => _colAuditGroup;
 
         /// <summary>
         /// 
         /// </summary>
         public string AuditGroupName
         {
-            get
-            {
-                return _auditGroupName;
-            }
+            get => _auditGroupName;
 
-            set
-            {
-                _auditGroupName = value;
-            }
+            set => _auditGroupName = value;
         }
 
         /// <summary>
@@ -108,6 +96,7 @@ namespace NDataAudit.Framework
                 auditGroup.Load(xmlGroup);
 
                 _auditGroupName = auditGroup.DocumentElement.Attributes[0].InnerText;
+                _colAuditGroup.AuditGroupName = _auditGroupName;
 
                 GetEmailSettings(auditGroup);
                 GetDatabaseDetails(auditGroup);
@@ -171,7 +160,6 @@ namespace NDataAudit.Framework
         private static void GetDatabaseDetails(XmlDocument auditGroup)
         {
             var xmlElement = auditGroup.GetElementsByTagName("database");
-            if (xmlElement != null)
             {
                 XmlElement dbProvider = xmlElement[0]["databaseprovider"];
                 _colAuditGroup.DatabaseProvider = dbProvider.InnerText;

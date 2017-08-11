@@ -88,13 +88,13 @@ namespace NDataAudit.Framework
         public bool Result { get; set; }
 
         /// <summary>
-        /// The Order By clause used in conjunction with the <see cref="SqlStatement"/> property.
+        /// The Order By clause used in conjunction with the SqlStatement property.
         /// </summary>
         [Description("The Order By clause used in conjunction with the SQLStatement property."), Category("Database")]
         public string OrderByClause { get; set; }
 
         /// <summary>
-        /// The test that will be run in this audit. <see cref="SqlStatement"/> property.
+        /// The test that will be run in this audit.
         /// </summary>
         [Description("The test that will be run in this Audit. See the SQLStatement property."), Category("Test")]
         public AuditTest Test { get; set; }
