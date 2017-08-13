@@ -21,6 +21,7 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NLog.Config;
@@ -152,6 +153,30 @@ namespace NDataAudit.Framework
             var retval = stringToConvert.Replace(Environment.NewLine, HtmlBreak)
                 .Replace(" ", HtmlSpace)
                 .Replace("\t", HtmlTab);
+
+
+            Regex regexObj = new Regex("<img.+?>", RegexOptions.IgnoreCase);
+            Match matchResults = regexObj.Match(retval);
+            while (matchResults.Success)
+            {
+                string currMatch = matchResults.Value.Replace(@"\", string.Empty)
+                    .Replace(HtmlSpace, " ");
+                retval = retval.Replace(matchResults.Value, currMatch);
+                matchResults = matchResults.NextMatch();
+            }
+            
+            //GroupCollection matches = Regex.Match(retval, "<img.+?>", RegexOptions.IgnoreCase).Groups;
+
+            //foreach (Group match in matches)
+            //{
+            //    if (match.Value != string.Empty)
+            //    {
+            //        string currMatch = match.Value.Replace(@"\", string.Empty)
+            //            .Replace(HtmlSpace, " ");
+
+            //        retval = retval.Replace(match.Value, currMatch);
+            //    }
+            //}
 
             return retval;
         }
@@ -370,18 +395,6 @@ namespace NDataAudit.Framework
         }
 
         /// <summary>
-        /// Fixes the base64 for image.
-        /// </summary>
-        /// <param name="image">The image.</param>
-        /// <returns>System.String.</returns>
-        public static string FixBase64ForImage(string image)
-        {
-            System.Text.StringBuilder sbText = new System.Text.StringBuilder(image, image.Length);
-            sbText.Replace("\r\n", string.Empty); sbText.Replace(" ", string.Empty);
-            return sbText.ToString();
-        }
-
-        /// <summary>
         /// Sends the audit report email.
         /// </summary>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
@@ -412,13 +425,12 @@ namespace NDataAudit.Framework
                 }
 
                 string htmlBody = body.ToString().ToHtml();
+                htmlBody = htmlBody.Replace("{0}", "https://cdn.rawgit.com/hectorsosajr/NDataAudit/c74445b1/images/32_database-check.png");
+                htmlBody = htmlBody.Replace("{1}", "https://cdn.rawgit.com/hectorsosajr/NDataAudit/c74445b1/images/32_database-fail.png");
 
                 MailMessage message;
 
                 var mailClient = CreateMailMessage(out message, auditGroup, htmlBody);
-
-                htmlBody = htmlBody.Replace("{0}", "pass url");
-                htmlBody = htmlBody.Replace("{1}", "fail url");
 
                 mailClient.Send(message);
 
