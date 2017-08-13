@@ -12,11 +12,19 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Globalization;
 using System.IO;
+using System.Net;
+using System.Net.Mail;
+using System.Net.Mime;
+using System.Reflection;
 using System.Text;
 using Newtonsoft.Json.Linq;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
 
 namespace NDataAudit.Framework
 {
@@ -111,7 +119,10 @@ namespace NDataAudit.Framework
         BlindCarbonCopy
     }
 
-    internal static class AuditUtils
+    /// <summary>
+    /// Class AuditUtils.
+    /// </summary>
+    public static class AuditUtils
     {
         /// <summary>
         /// Gets the HTML equivalent of line break.
@@ -356,6 +367,322 @@ namespace NDataAudit.Framework
             };
 
             return template;
+        }
+
+        /// <summary>
+        /// Fixes the base64 for image.
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <returns>System.String.</returns>
+        public static string FixBase64ForImage(string image)
+        {
+            System.Text.StringBuilder sbText = new System.Text.StringBuilder(image, image.Length);
+            sbText.Replace("\r\n", string.Empty); sbText.Replace(" ", string.Empty);
+            return sbText.ToString();
+        }
+
+        /// <summary>
+        /// Sends the audit report email.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public static bool SendAuditReportEmail(AuditCollection auditGroup)
+        {
+            var succeed = false;
+            var body = new StringBuilder();
+
+            try
+            {
+                body.AppendFormat("<h1>" + auditGroup.AuditGroupName + "</h1>");
+
+                foreach (Audit currentAudit in auditGroup)
+                {
+                    string testResult;
+                    if (currentAudit.Result)
+                    {
+                        testResult = "<img src=\"{0}\">";
+                    }
+                    else
+                    {
+                        testResult = "<img src=\"{1}\">";
+                    }
+
+                    body.Append(testResult + " - ");
+                    body.Append(currentAudit.Name);
+                    body.AppendLine();
+                }
+
+                string htmlBody = body.ToString().ToHtml();
+
+                MailMessage message;
+
+                var mailClient = CreateMailMessage(out message, auditGroup, htmlBody);
+
+                htmlBody = htmlBody.Replace("{0}", "pass url");
+                htmlBody = htmlBody.Replace("{1}", "fail url");
+
+                mailClient.Send(message);
+
+                succeed = true;
+            }
+            catch (SmtpException smtpEx)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine(smtpEx.Message);
+
+                if (smtpEx.InnerException != null)
+                {
+                    sb.AppendLine(smtpEx.InnerException.Message);
+                }
+
+                succeed = false;
+
+                var logger = GetFileLogger();
+                logger.Error(smtpEx, sb.ToString());
+            }
+            catch (Exception ex)
+            {
+                succeed = false;
+
+                var logger = GetFileLogger();
+                logger.Error(ex, ex.Message);
+            }
+
+            return succeed;
+        }
+
+        /// <summary>
+        /// Sends the single audit failure email.
+        /// </summary>
+        /// <param name="auditGroup">The audit group.</param>
+        /// <param name="failingAuditIndex">Index of the failing audit.</param>
+        /// <param name="body">The body of the email.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public static bool SendSingleAuditFailureEmail(AuditCollection auditGroup, int failingAuditIndex, string body)
+        {
+            bool succeed = false;
+            MailMessage message;
+            var mailClient = CreateMailMessage(out message, auditGroup, body);
+
+            if (!string.IsNullOrEmpty(auditGroup.EmailSubject))
+            {
+                message.Subject = auditGroup.EmailSubject;
+            }
+            else
+            {
+                message.Subject = "Audit Failure - " + auditGroup[failingAuditIndex].Name;
+            }
+
+            try
+            {
+                mailClient.Send(message);
+
+                succeed = true;
+            }
+            catch (SmtpException smtpEx)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                sb.AppendLine(smtpEx.Message);
+
+                if (smtpEx.InnerException != null)
+                {
+                    sb.AppendLine(smtpEx.InnerException.Message);
+                }
+
+                succeed = false;
+
+                var logger = GetFileLogger();
+                logger.Error(smtpEx, sb.ToString());
+            }
+
+            return succeed;
+        }
+
+        private static SmtpClient CreateMailMessage(out MailMessage message, AuditCollection auditGroup, string body)
+        {
+            message = new MailMessage {IsBodyHtml = true};
+
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            string sourceEmailDescription = config.AppSettings.Settings["sourceEmailDescription"].Value;
+
+            foreach (string recipient in auditGroup.EmailSubscribers)
+            {
+                message.To.Add(new MailAddress(recipient));
+            }
+
+            if (auditGroup.EmailCarbonCopySubscribers != null)
+            {
+                // Carbon Copies - CC
+                foreach (string ccemail in auditGroup.EmailCarbonCopySubscribers)
+                {
+                    message.CC.Add(new MailAddress(ccemail));
+                }
+            }
+
+            if (auditGroup.EmailBlindCarbonCopySubscribers != null)
+            {
+                // Blind Carbon Copies - BCC
+                foreach (string bccemail in auditGroup.EmailBlindCarbonCopySubscribers)
+                {
+                    message.Bcc.Add(new MailAddress(bccemail));
+                }
+            }
+
+            message.Body = body;
+
+            switch (auditGroup.EmailPriority)
+            {
+                case EmailPriorityEnum.Low:
+                    message.Priority = MailPriority.Low;
+                    break;
+                case EmailPriorityEnum.Normal:
+                    message.Priority = MailPriority.Normal;
+                    break;
+                case EmailPriorityEnum.High:
+                    message.Priority = MailPriority.High;
+                    break;
+                default:
+                    message.Priority = MailPriority.Normal;
+                    break;
+            }
+
+            message.From = new MailAddress(auditGroup.SmtpSourceEmail, sourceEmailDescription);
+
+            var smtpClient = new SmtpClient();
+
+            if (auditGroup.SmtpHasCredentials)
+            {
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtpClient.Host = auditGroup.SmtpServerAddress;
+                smtpClient.Port = auditGroup.SmtpPort;
+                smtpClient.Credentials = new NetworkCredential(auditGroup.SmtpUserName, auditGroup.SmtpPassword);
+                smtpClient.EnableSsl = auditGroup.SmtpUseSsl;
+            }
+            else
+            {
+                smtpClient.Host = auditGroup.SmtpServerAddress;
+            }
+
+            return smtpClient;
+        }
+
+        private static SmtpClient CreateMailMessageForPassFailReport(out MailMessage message, AuditCollection auditGroup,
+            string body)
+        {
+            message = new MailMessage { IsBodyHtml = true };
+
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            string sourceEmailDescription = config.AppSettings.Settings["sourceEmailDescription"].Value;
+
+            foreach (string recipient in auditGroup.EmailSubscribers)
+            {
+                message.To.Add(new MailAddress(recipient));
+            }
+
+            if (auditGroup.EmailCarbonCopySubscribers != null)
+            {
+                // Carbon Copies - CC
+                foreach (string ccemail in auditGroup.EmailCarbonCopySubscribers)
+                {
+                    message.CC.Add(new MailAddress(ccemail));
+                }
+            }
+
+            if (auditGroup.EmailBlindCarbonCopySubscribers != null)
+            {
+                // Blind Carbon Copies - BCC
+                foreach (string bccemail in auditGroup.EmailBlindCarbonCopySubscribers)
+                {
+                    message.Bcc.Add(new MailAddress(bccemail));
+                }
+            }
+
+            message.Body = body;
+
+            switch (auditGroup.EmailPriority)
+            {
+                case EmailPriorityEnum.Low:
+                    message.Priority = MailPriority.Low;
+                    break;
+                case EmailPriorityEnum.Normal:
+                    message.Priority = MailPriority.Normal;
+                    break;
+                case EmailPriorityEnum.High:
+                    message.Priority = MailPriority.High;
+                    break;
+                default:
+                    message.Priority = MailPriority.Normal;
+                    break;
+            }
+
+            message.From = new MailAddress(auditGroup.SmtpSourceEmail, sourceEmailDescription);
+
+            var smtpClient = new SmtpClient();
+
+            if (auditGroup.SmtpHasCredentials)
+            {
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtpClient.Host = auditGroup.SmtpServerAddress;
+                smtpClient.Port = auditGroup.SmtpPort;
+                smtpClient.Credentials = new NetworkCredential(auditGroup.SmtpUserName, auditGroup.SmtpPassword);
+                smtpClient.EnableSsl = auditGroup.SmtpUseSsl;
+            }
+            else
+            {
+                smtpClient.Host = auditGroup.SmtpServerAddress;
+            }
+
+            return smtpClient;
+        }
+
+        /// <summary>
+        /// Gets the file logger.
+        /// </summary>
+        /// <returns>Logger.</returns>
+        public static Logger GetFileLogger()
+        {
+            var config = new LoggingConfiguration();
+
+            var fileTarget = new FileTarget();
+            config.AddTarget("file", fileTarget);
+            
+            fileTarget.FileName = "${basedir}/logs/ndataaudit.${shortdate}.log";
+            fileTarget.Layout = "[${shortdate}] ${level} ${logger} ${message}";
+            fileTarget.ArchiveFileName = "${basedir}/logs/archives/logfile.{#}.txt";
+            fileTarget.ArchiveEvery = FileArchivePeriod.Day;
+
+            var fileRule = new LoggingRule("*", LogLevel.Debug, fileTarget);
+            config.LoggingRules.Add(fileRule);
+
+            LogManager.Configuration = config;
+
+            Logger logger = LogManager.GetLogger("FileLogger");
+
+            return logger;
+        }
+
+        /// <summary>
+        /// Gets the console logger.
+        /// </summary>
+        /// <returns>Logger.</returns>
+        public static Logger GetConsoleLogger()
+        {
+            var config = new LoggingConfiguration();
+            var consoleTarget = new ColoredConsoleTarget();
+
+            config.AddTarget("console", consoleTarget);
+            consoleTarget.Layout = @"${date:format=HH\:mm\:ss} ${level} ${logger} ${message}";
+
+            var consoleRule = new LoggingRule("*", LogLevel.Debug, consoleTarget);
+            config.LoggingRules.Add(consoleRule);
+
+            LogManager.Configuration = config;
+
+            Logger logger = LogManager.GetLogger("ConsoleLogger");
+
+            return logger;
         }
     }
 }

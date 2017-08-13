@@ -238,7 +238,7 @@ namespace NDataAudit.Framework
                         else
                         {
                             currentAudit.Result = false;
-                            PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, testCount, currentAudit,
+                            PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, currentAudit,
                                              dsTest);
                         }
                     }
@@ -407,7 +407,7 @@ namespace NDataAudit.Framework
                     {
                         if (currentAudit.Test.FailIfConditionIsTrue)
                         {
-                            PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, testCount, currentAudit, dsTest);
+                            PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, currentAudit, dsTest);
                         }
                     }
                     else
@@ -417,7 +417,7 @@ namespace NDataAudit.Framework
                             if (currentAudit.Test.SendReport)
                             {
                                 // It's not really a failure. Just want to send a report-like email.
-                                PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, testCount, currentAudit, dsTest);
+                                PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, currentAudit, dsTest);
                             }
                         }
                     }
@@ -594,7 +594,7 @@ namespace NDataAudit.Framework
             return result;
         }
 
-        private static void PrepareResultsEmailData(string sqlTested, int testIndex, Audit testedAudit, DataSet testData)
+        private static void PrepareResultsEmailData(string sqlTested, Audit testedAudit, DataSet testData)
         {
             var body = new StringBuilder();
 

@@ -36,17 +36,17 @@ namespace NDataAudit.Framework
         /// <summary>
         /// Creates the failure report single audit.
         /// </summary>
-        /// <param name="audit">The audits.</param>
+        /// <param name="audit">The audit.</param>
+        /// <param name="auditDataSet">The audit data set.</param>
         /// <returns>System.String.</returns>
-        public string CreateFailureReportSingleAudit(Audit audit)
+        public string CreateFailureReportSingleAudit(Audit audit, DataSet auditDataSet)
         {
-            string retval = string.Empty;
-
+            string retval = PrepareResultsSingleAudit(audit, auditDataSet);
 
             return retval;
         }
 
-        private static string PrepareResultsSingleAudit(string sqlTested, Audit testedAudit, DataSet testData)
+        private static string PrepareResultsSingleAudit(Audit testedAudit, DataSet testData)
         {
             var body = new StringBuilder();
 
@@ -118,13 +118,11 @@ namespace NDataAudit.Framework
             {
                 body.Append(AuditUtils.HtmlBreak);
                 body.Append("The '" + testedAudit.Name + "' audit has failed. The following SQL statement was used to test this audit :" + AuditUtils.HtmlBreak);
-                body.Append(sqlTested.ToHtml() + AuditUtils.HtmlBreak);
+                body.Append(testedAudit.Test.SqlStatementToCheck.ToHtml() + AuditUtils.HtmlBreak);
                 body.Append("<b>This query was run on: " + testedAudit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
             }
 
             string cleanBody = body.ToString().Replace("\r\n", string.Empty);
-
-            //SendEmail(testedAudit, cleanBody, sourceEmailDescription);
 
             return cleanBody;
         }
