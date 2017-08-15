@@ -684,7 +684,7 @@ namespace DataAuditor.UI
                 this.Cursor = Cursors.WaitCursor;
                 _auditTesting.RunAudits();
 
-                AuditUtils.SendAuditReportEmail(_auditController.AuditGroup);
+                AuditUtils.SendAuditUnitTestReportEmail(_auditController.AuditGroup);
             }
             catch (NoAuditsLoadedException ex)
             {

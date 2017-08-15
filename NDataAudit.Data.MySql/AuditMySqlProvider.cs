@@ -95,13 +95,13 @@ namespace NDataAudit.Data.MySql
 
                 Console.WriteLine(errorMessages.ToString());
 
-                string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_mysql.log";
+                //string fileName = "Logs\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + "_mysql.log";
 
-                using (TextWriter writer = File.CreateText(fileName))
-                {
-                    writer.WriteLine(errorMessages.ToString());
-                    writer.WriteLine(ex.StackTrace);
-                }
+                //using (TextWriter writer = File.CreateText(fileName))
+                //{
+                //    writer.WriteLine(errorMessages.ToString());
+                //    writer.WriteLine(ex.StackTrace);
+                //}
             }
 
             _currentDbConnection = conn;

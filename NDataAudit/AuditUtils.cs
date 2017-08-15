@@ -121,6 +121,22 @@ namespace NDataAudit.Framework
     }
 
     /// <summary>
+    /// What type of output do we want for our audits.
+    /// </summary>
+    public enum OutputType
+    {
+        /// <summary>
+        /// Unit test style where you get pass-fail status for each audit in the audit group.
+        /// </summary>
+        UnitTest,
+
+        /// <summary>
+        /// Only report on failing audits.
+        /// </summary>
+        FailOnly
+    }
+
+    /// <summary>
     /// Class AuditUtils.
     /// </summary>
     public static class AuditUtils
@@ -144,6 +160,12 @@ namespace NDataAudit.Framework
         public static string HtmlTab => "&nbsp;&nbsp;&nbsp;&nbsp;";
 
         /// <summary>
+        /// Gets the quote character.
+        /// </summary>
+        /// <value>The quote.</value>
+        public static string Quote => @"""";
+
+        /// <summary>
         /// Extension method to convert regular strings into HTML text.
         /// </summary>
         /// <param name="stringToConvert"></param>
@@ -155,6 +177,7 @@ namespace NDataAudit.Framework
                 .Replace("\t", HtmlTab);
 
 
+            // Keep IMG tags intact.
             Regex regexObj = new Regex("<img.+?>", RegexOptions.IgnoreCase);
             Match matchResults = regexObj.Match(retval);
             while (matchResults.Success)
@@ -164,19 +187,6 @@ namespace NDataAudit.Framework
                 retval = retval.Replace(matchResults.Value, currMatch);
                 matchResults = matchResults.NextMatch();
             }
-            
-            //GroupCollection matches = Regex.Match(retval, "<img.+?>", RegexOptions.IgnoreCase).Groups;
-
-            //foreach (Group match in matches)
-            //{
-            //    if (match.Value != string.Empty)
-            //    {
-            //        string currMatch = match.Value.Replace(@"\", string.Empty)
-            //            .Replace(HtmlSpace, " ");
-
-            //        retval = retval.Replace(match.Value, currMatch);
-            //    }
-            //}
 
             return retval;
         }
@@ -240,11 +250,11 @@ namespace NDataAudit.Framework
                         sb.Append("<TD style='white-space: nowrap;' bgcolor=\"" +
                                   emailTableTemplate.HtmlHeaderBackgroundColor +
                               "\"><B>");
-                    sb.Append("<font color=\"" + emailTableTemplate.HtmlHeaderFontColor + "\">" + column.ColumnName +
+                        sb.Append("<font color=\"" + emailTableTemplate.HtmlHeaderFontColor + "\">" + column.ColumnName +
                               "</font>");
 
-                    sb.Append("</B></TD>");
-                }
+                        sb.Append("</B></TD>");
+                    }
                 }
 
                 sb.Append("</TR>");
@@ -397,36 +407,16 @@ namespace NDataAudit.Framework
         /// <summary>
         /// Sends the audit report email.
         /// </summary>
+        /// <param name="auditGroup">The audit group.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public static bool SendAuditReportEmail(AuditCollection auditGroup)
+        public static bool SendAuditUnitTestReportEmail(AuditCollection auditGroup)
         {
             var succeed = false;
-            var body = new StringBuilder();
 
             try
             {
-                body.AppendFormat("<h1>" + auditGroup.AuditGroupName + "</h1>");
-
-                foreach (Audit currentAudit in auditGroup)
-                {
-                    string testResult;
-                    if (currentAudit.Result)
-                    {
-                        testResult = "<img src=\"{0}\">";
-                    }
-                    else
-                    {
-                        testResult = "<img src=\"{1}\">";
-                    }
-
-                    body.Append(testResult + " - ");
-                    body.Append(currentAudit.Name);
-                    body.AppendLine();
-                }
-
-                string htmlBody = body.ToString().ToHtml();
-                htmlBody = htmlBody.Replace("{0}", "https://cdn.rawgit.com/hectorsosajr/NDataAudit/c74445b1/images/32_database-check.png");
-                htmlBody = htmlBody.Replace("{1}", "https://cdn.rawgit.com/hectorsosajr/NDataAudit/c74445b1/images/32_database-fail.png");
+                AuditReports report = new AuditReports();
+                string htmlBody = report.CreateUnitTestStyleReport(auditGroup);
 
                 MailMessage message;
 
@@ -461,6 +451,7 @@ namespace NDataAudit.Framework
 
             return succeed;
         }
+
 
         /// <summary>
         /// Sends the single audit failure email.
@@ -512,80 +503,15 @@ namespace NDataAudit.Framework
 
         private static SmtpClient CreateMailMessage(out MailMessage message, AuditCollection auditGroup, string body)
         {
-            message = new MailMessage {IsBodyHtml = true};
+            message = new MailMessage
+            {
+                IsBodyHtml = true,
+                Subject = $"Audit Results for {auditGroup.AuditGroupName}"
+            };
 
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             string sourceEmailDescription = config.AppSettings.Settings["sourceEmailDescription"].Value;
 
-            foreach (string recipient in auditGroup.EmailSubscribers)
-            {
-                message.To.Add(new MailAddress(recipient));
-            }
-
-            if (auditGroup.EmailCarbonCopySubscribers != null)
-            {
-                // Carbon Copies - CC
-                foreach (string ccemail in auditGroup.EmailCarbonCopySubscribers)
-                {
-                    message.CC.Add(new MailAddress(ccemail));
-                }
-            }
-
-            if (auditGroup.EmailBlindCarbonCopySubscribers != null)
-            {
-                // Blind Carbon Copies - BCC
-                foreach (string bccemail in auditGroup.EmailBlindCarbonCopySubscribers)
-                {
-                    message.Bcc.Add(new MailAddress(bccemail));
-                }
-            }
-
-            message.Body = body;
-
-            switch (auditGroup.EmailPriority)
-            {
-                case EmailPriorityEnum.Low:
-                    message.Priority = MailPriority.Low;
-                    break;
-                case EmailPriorityEnum.Normal:
-                    message.Priority = MailPriority.Normal;
-                    break;
-                case EmailPriorityEnum.High:
-                    message.Priority = MailPriority.High;
-                    break;
-                default:
-                    message.Priority = MailPriority.Normal;
-                    break;
-            }
-
-            message.From = new MailAddress(auditGroup.SmtpSourceEmail, sourceEmailDescription);
-
-            var smtpClient = new SmtpClient();
-
-            if (auditGroup.SmtpHasCredentials)
-            {
-                smtpClient.UseDefaultCredentials = false;
-                smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtpClient.Host = auditGroup.SmtpServerAddress;
-                smtpClient.Port = auditGroup.SmtpPort;
-                smtpClient.Credentials = new NetworkCredential(auditGroup.SmtpUserName, auditGroup.SmtpPassword);
-                smtpClient.EnableSsl = auditGroup.SmtpUseSsl;
-            }
-            else
-            {
-                smtpClient.Host = auditGroup.SmtpServerAddress;
-            }
-
-            return smtpClient;
-        }
-
-        private static SmtpClient CreateMailMessageForPassFailReport(out MailMessage message, AuditCollection auditGroup,
-            string body)
-        {
-            message = new MailMessage { IsBodyHtml = true };
-
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            string sourceEmailDescription = config.AppSettings.Settings["sourceEmailDescription"].Value;
 
             foreach (string recipient in auditGroup.EmailSubscribers)
             {

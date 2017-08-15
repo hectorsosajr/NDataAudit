@@ -76,7 +76,12 @@ namespace DataAuditor.CommandLine
 
             _auditTesting.RunAudits();
 
-            Console.WriteLine("DataAuditor ran {0} test(s).", _auditTesting.Audits.Count);
+            Console.WriteLine("DataAuditor ran {0} test(s).", _auditTesting.Audits.Count); 
+            
+            // Try Unit Test Type report until the rest gets sorted out
+            AuditUtils.SendAuditUnitTestReportEmail(colAudits.AuditGroup);
+
+            Console.WriteLine("Sent results email to recipients.");
         }
 
         private static bool CheckForValidFile(string fileNameToCheck)

@@ -2,8 +2,6 @@
 using System.Configuration;
 using System.Data;
 using System.Globalization;
-using System.Net;
-using System.Net.Mail;
 using System.Text;
 
 namespace NDataAudit.Framework
@@ -24,13 +22,9 @@ namespace NDataAudit.Framework
         /// </summary>
         /// <param name="audits">The audits.</param>
         /// <returns>System.String.</returns>
-        public string CreateReport(AuditCollection audits)
+        public string CreateUnitTestStyleReport(AuditCollection audits)
         {
-            string retval = string.Empty;
-
-
-
-            return retval;
+            return BuildHtmlBodyForUnitTestReportEmail(audits);
         }
 
         /// <summary>
@@ -41,9 +35,7 @@ namespace NDataAudit.Framework
         /// <returns>System.String.</returns>
         public string CreateFailureReportSingleAudit(Audit audit, DataSet auditDataSet)
         {
-            string retval = PrepareResultsSingleAudit(audit, auditDataSet);
-
-            return retval;
+            return PrepareResultsSingleAudit(audit, auditDataSet);
         }
 
         private static string PrepareResultsSingleAudit(Audit testedAudit, DataSet testData)
@@ -127,95 +119,215 @@ namespace NDataAudit.Framework
             return cleanBody;
         }
 
-        //private static void SendEmail(Audit testedAudit, string body, string sourceEmailDescription)
-        //{
-        //    var message = new MailMessage { IsBodyHtml = true };
+        /// <summary>
+        /// Builds the HTML body for unit test report email.
+        /// </summary>
+        /// <param name="auditGroup">The audit group.</param>
+        /// <returns>System.String.</returns>
+        public static string BuildHtmlBodyForUnitTestReportEmail(AuditCollection auditGroup)
+        {
+            var body = new StringBuilder();
 
-        //    foreach (string recipient in _colAudits.EmailSubscribers)
-        //    {
-        //        message.To.Add(new MailAddress(recipient));
-        //    }
+            body.AppendFormat("<h1>" + auditGroup.AuditGroupName + "</h1>");
 
-        //    if (_colAudits.EmailCarbonCopySubscribers != null)
-        //    {
-        //        // Carbon Copies - CC
-        //        foreach (string ccemail in _colAudits.EmailCarbonCopySubscribers)
-        //        {
-        //            message.CC.Add(new MailAddress(ccemail));
-        //        }
-        //    }
+            body.Append("These audits ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) +
+                        AuditUtils.HtmlBreak);
 
-        //    if (_colAudits.EmailBlindCarbonCopySubscribers != null)
-        //    {
-        //        // Blind Carbon Copies - BCC
-        //        foreach (string bccemail in _colAudits.EmailBlindCarbonCopySubscribers)
-        //        {
-        //            message.Bcc.Add(new MailAddress(bccemail));
-        //        }
-        //    }
+            body.Append("<b>This report was run on: " + auditGroup.ConnectionString.DatabaseServer + "</b>" + AuditUtils.HtmlBreak);
 
-        //    message.Body = body;
+            StringBuilder database = new StringBuilder();
 
-        //    switch (testedAudit.EmailPriority)
-        //    {
-        //        case EmailPriorityEnum.Low:
-        //            message.Priority = MailPriority.Low;
-        //            break;
-        //        case EmailPriorityEnum.Normal:
-        //            message.Priority = MailPriority.Normal;
-        //            break;
-        //        case EmailPriorityEnum.High:
-        //            message.Priority = MailPriority.High;
-        //            break;
-        //        default:
-        //            message.Priority = MailPriority.Normal;
-        //            break;
-        //    }
+            switch (auditGroup.ConnectionString.DatabaseProviderName)
+            {
+                case "mysql.data.mysqlclient":
+                    database.Append("<table><tr><td>");
+                    database.Append(
+                        "<img src=https://cdn.rawgit.com/hectorsosajr/NDataAudit/72848767/images/32_MySQL.png>");
+                    database.Append("</td><td>");
+                    database.Append("Database Engine is Oracle MySQL");
+                    database.Append("</td></tr></table>");
+                    break;
+                default:
+                    database.Append("Database Engine is UNKNOWN");
+                    break;
+            }
 
-        //    if (!string.IsNullOrEmpty(testedAudit.EmailSubject))
-        //    {
-        //        message.Subject = testedAudit.EmailSubject;
-        //    }
-        //    else
-        //    {
-        //        message.Subject = "Audit Failure - " + testedAudit.Name;
-        //    }
+            body.Append(database + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
 
-        //    message.From = new MailAddress(_colAudits.SmtpSourceEmail, sourceEmailDescription);
+            if (!string.IsNullOrEmpty(auditGroup.TemplateColorScheme.CssTableStyle))
+            {
+                body.AppendLine("<style>");
+                body.AppendLine(auditGroup.TemplateColorScheme.CssTableStyle);
+                body.AppendLine("</style>");
+                body.Append("<TABLE id=emailtable>");
+                body.Append("<TR>");
+            }
+            else
+            {
+                body.Append("<TABLE BORDER=1>");
+                body.Append("<TR ALIGN='LEFT' style='white-space: nowrap;'>");
+            }
 
-        //    var server = new SmtpClient();
+            if (!string.IsNullOrEmpty(auditGroup.TemplateColorScheme.CssTableStyle))
+            {
+                body.Append("<TH>Status</TH>");
+            }
+            else
+            {
+                body.Append("<TD style='white-space: nowrap;' bgcolor=\"" +
+                            auditGroup.TemplateColorScheme.HtmlHeaderBackgroundColor +
+                            "\"><B>");
+                body.Append("<font color=\"" + auditGroup.TemplateColorScheme.HtmlHeaderFontColor + "\">Status</font>");
 
-        //    if (_colAudits.SmtpHasCredentials)
-        //    {
-        //        server.UseDefaultCredentials = false;
-        //        server.DeliveryMethod = SmtpDeliveryMethod.Network;
-        //        server.Host = _colAudits.SmtpServerAddress;
-        //        server.Port = _colAudits.SmtpPort;
-        //        server.Credentials = new NetworkCredential(_colAudits.SmtpUserName, _colAudits.SmtpPassword);
-        //        server.EnableSsl = _colAudits.SmtpUseSsl;
-        //    }
-        //    else
-        //    {
-        //        server.Host = _colAudits.SmtpServerAddress;
-        //    }
+                body.Append("</B></TD>");
+            }
 
-        //    try
-        //    {
-        //        server.Send(message);
-        //    }
-        //    catch (SmtpException smtpEx)
-        //    {
-        //        StringBuilder sb = new StringBuilder();
+            if (!string.IsNullOrEmpty(auditGroup.TemplateColorScheme.CssTableStyle))
+            {
+                body.Append("<TH>Audit Name</TH>");
+            }
+            else
+            {
+                body.Append("<TD style='white-space: nowrap;' bgcolor=\"" +
+                            auditGroup.TemplateColorScheme.HtmlHeaderBackgroundColor +
+                            "\"><B>");
+                body.Append("<font color=\"" + auditGroup.TemplateColorScheme.HtmlHeaderFontColor + "\">Audit Name</font>");
 
-        //        sb.AppendLine(smtpEx.Message);
+                body.Append("</B></TD>");
+            }
 
-        //        if (smtpEx.InnerException != null)
-        //        {
-        //            sb.AppendLine(smtpEx.InnerException.Message);
-        //        }
+            body.Append("</TR>");
 
-        //        throw;
-        //    }
-        //}
+            foreach (Audit currentAudit in auditGroup)
+            {
+                body.Append("<TR>");
+
+                // Status Icon
+                string testResult;
+                string sql = string.Empty;
+                string errorMessage = string.Empty;
+                string help = string.Empty;
+
+                if (currentAudit.Result)
+                {
+                    testResult = "<img src={pass}>";
+                }
+                else
+                {
+                    testResult = "<img src={fail}>";
+                    sql = currentAudit.Test.SqlStatementToCheck.ToHtml();
+                    errorMessage = currentAudit.Test.FailedMessage;
+                    help = currentAudit.Test.Instructions;
+                }
+
+                if (!string.IsNullOrEmpty(auditGroup.TemplateColorScheme.CssTableStyle))
+                {
+                    body.Append("<TD>");
+                    body.Append(testResult);
+                }
+                else
+                {
+                    body.Append("<TD style='white-space: nowrap;'>");
+                    body.Append(testResult);
+                }
+
+                body.Append("</TD>");
+
+                // Audit Name
+                if (!string.IsNullOrEmpty(auditGroup.TemplateColorScheme.CssTableStyle))
+                {
+                    body.Append("<TD>");
+                    body.Append(currentAudit.Name);
+                }
+                else
+                {
+                    body.Append("<TD style='white-space: nowrap;'>");
+                    body.Append(currentAudit.Name);
+                }
+
+                body.Append("</TD>");
+
+                body.Append("</TR>");
+
+                // Failed Audit Information
+                if (!currentAudit.Result)
+                {
+                    // Info icon
+                    if (!string.IsNullOrEmpty(auditGroup.TemplateColorScheme.CssTableStyle))
+                    {
+                        body.Append("<TD>");
+                        body.Append("<img src={info}>");
+                    }
+                    else
+                    {
+                        body.Append("<TD style='white-space: nowrap;'>");
+                        body.Append("<img src={info}>");
+                    }
+
+                    body.Append("</TD>");
+
+                    // Failure Information
+                    body.Append("<TD>");
+                    body.Append("<TABLE BORDER=1>");
+
+                    // Error Message Icon
+                    body.Append("<TR ALIGN='LEFT' style='white-space: nowrap;'>");
+                    body.Append("<TD>");
+                    body.Append("<img src={error}>");
+                    body.Append("</TD>");
+
+                    // Error Message Text
+                    body.Append("<TD>");
+                    body.Append(errorMessage);
+                    body.Append("</TD>");
+
+                    body.Append("</TR>");
+
+                    // SQL Icon
+                    body.Append("<TR ALIGN='LEFT' style='white-space: nowrap;'>");
+                    body.Append("<TD>");
+                    body.Append("<img src={sql}>");
+                    body.Append("</TD>");
+
+                    // SQL Text
+                    body.Append("<TD>");
+                    body.Append(sql);
+                    body.Append("</TD>");
+                    body.Append("</TR>");
+
+                    // Help Icon
+                    body.Append("<TR ALIGN='LEFT' style='white-space: nowrap;'>");
+                    body.Append("<TD>");
+                    body.Append("<img src={help}>");
+                    body.Append("</TD>");
+
+                    // Comment or Instruction Text
+                    body.Append("<TD>");
+                    body.Append(help);
+                    body.Append("</TD>");
+                    body.Append("</TR>");
+
+                    body.Append("</TABLE>");
+                    body.Append("</TD>");
+                }
+            }
+
+            body.Append("</TABLE>");
+
+            string htmlBody = body.ToString();
+            htmlBody = htmlBody.Replace("{pass}", "https://cdn.rawgit.com/hectorsosajr/NDataAudit/c74445b1/images/32_database-check.png");
+            htmlBody = htmlBody.Replace("{fail}", "https://cdn.rawgit.com/hectorsosajr/NDataAudit/c74445b1/images/32_database-fail.png");
+            htmlBody = htmlBody.Replace("{sql}",
+                "https://cdn.rawgit.com/hectorsosajr/NDataAudit/72a07bd7/images/32_database-sql.png");
+            htmlBody = htmlBody.Replace("{info}",
+                "https://cdn.rawgit.com/hectorsosajr/NDataAudit/72a07bd7/images/32_database-info.png");
+            htmlBody = htmlBody.Replace("{error}", "https://cdn.rawgit.com/hectorsosajr/NDataAudit/72a07bd7/images/32_database-error.png");
+            htmlBody = htmlBody.Replace("{help}", "https://cdn.rawgit.com/hectorsosajr/NDataAudit/72a07bd7/images/32_database-help.png");
+
+            htmlBody = htmlBody.Replace("\r\n", string.Empty);
+            htmlBody = htmlBody.Replace(@"\", string.Empty);
+
+            return htmlBody;
+        }
     }
 }

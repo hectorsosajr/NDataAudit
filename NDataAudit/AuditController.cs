@@ -100,6 +100,7 @@ namespace NDataAudit.Framework
 
                 GetEmailSettings(auditGroup);
                 GetDatabaseDetails(auditGroup);
+                GetOutputStyles(auditGroup);
                 GetSmtpDetails(auditGroup);
 
                 XmlNodeList auditList = auditGroup.GetElementsByTagName("audit");
@@ -162,10 +163,17 @@ namespace NDataAudit.Framework
             var xmlElement = auditGroup.GetElementsByTagName("database");
             {
                 XmlElement dbProvider = xmlElement[0]["databaseprovider"];
-                _colAuditGroup.DatabaseProvider = dbProvider.InnerText;
+                if (dbProvider != null)
+                {
+                    _colAuditGroup.DatabaseProvider = dbProvider.InnerText;
+                }
 
                 XmlElement connectionString = xmlElement[0]["connectionstring"];
-                _colAuditGroup.ConnectionString = new AuditConnectionString(connectionString.InnerText, _colAuditGroup.DatabaseProvider);
+                if (connectionString != null)
+                {
+                    _colAuditGroup.ConnectionString =
+                        new AuditConnectionString(connectionString.InnerText, _colAuditGroup.DatabaseProvider);
+                }
 
                 XmlNode commandTimeout = auditGroup["commandtimeout"];
                 if (commandTimeout != null)
@@ -186,12 +194,38 @@ namespace NDataAudit.Framework
                 {
                     _colAuditGroup.ConnectionString.ConnectionTimeout = "15";
                 }
+            }
+        }
 
-                //XmlNodeList orderbyNode = xmlElement.GetElementsByTagName("orderbyclause");
-                //if (orderbyNode.Count > 0)
-                //{
-                //    newAudit.OrderByClause = orderbyNode[0].InnerText;
-                //}
+        private void GetOutputStyles(XmlDocument auditGroup)
+        {
+            var xmlOuputList = auditGroup.GetElementsByTagName("outputformat");
+            {
+                XmlElement templateElement = xmlOuputList[0]["template"];
+                if (templateElement != null)
+                {
+                    string templateName = templateElement.InnerText;
+                    EmailTableTemplate currTemplate = TableTemplates.FirstOrDefault(t => t.Name.ToLower() == templateName.ToLower());
+                    _colAuditGroup.TemplateColorScheme = currTemplate;
+                }
+
+                XmlElement outputStyleElement = xmlOuputList[0]["outputstyle"];
+                if (outputStyleElement != null)
+                {
+                    string outputStyle = outputStyleElement.InnerText;
+
+                    foreach (string name in Enum.GetNames(typeof(OutputType)))
+                    {
+                        if (String.Equals(name, outputStyle, StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            OutputType currOutputType = (OutputType)Enum.Parse(typeof(OutputType), name);
+
+                            _colAuditGroup.AuditResultOutputType = currOutputType;
+
+                            break;
+                        }
+                    }
+                }
             }
         }
 

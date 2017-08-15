@@ -137,6 +137,20 @@ namespace NDataAudit.Framework
 	    [Description("Gets or sets the email priority for this audit."), Category("Email")]
 	    public EmailPriorityEnum EmailPriority { get; set; }
 
+	    /// <summary>
+	    /// Gets or sets the template color scheme for the data HTML table in emails.
+	    /// </summary>
+	    /// <value>
+	    /// The template color scheme.
+	    /// </value>
+	    public EmailTableTemplate TemplateColorScheme { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the audit result output.
+        /// </summary>
+        /// <value>The type of the audit result output.</value>
+        public OutputType AuditResultOutputType { get; set; }
+
         #endregion
 
         #region  Public Members 
