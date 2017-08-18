@@ -18,8 +18,6 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Mail;
-using System.Net.Mime;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
@@ -76,6 +74,32 @@ namespace NDataAudit.Framework
          /// </summary>
          /// <value>The CSS table style.</value>
          public string CssTableStyle { get; set; }
+    }
+
+    /// <summary>
+    ///  The type of email client to target
+    /// </summary>
+    public enum EmailClientHtml
+    {
+        /// <summary>
+        /// No email client targetted
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Gmail Web client
+        /// </summary>
+        GmailWeb = 1,
+
+        /// <summary>
+        /// Gmail Android client
+        /// </summary>
+        GmailAndroid = 2,
+
+        /// <summary>
+        /// Microsoft Outlook
+        /// </summary>
+        Outlook = 3
     }
 
     /// <summary>

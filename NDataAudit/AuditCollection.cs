@@ -15,6 +15,7 @@ using System.ComponentModel;
 
 namespace NDataAudit.Framework
 {
+	/// <inheritdoc />
 	/// <summary>
 	/// Summary description for AuditCollection.
 	/// </summary>
@@ -27,21 +28,21 @@ namespace NDataAudit.Framework
 		/// </summary>
 		public AuditCollection()
 		{
-            EmailSubscribers = new ArrayList();
-            EmailCarbonCopySubscribers = new ArrayList();
-            EmailBlindCarbonCopySubscribers = new ArrayList();
+            this.EmailSubscribers = new ArrayList();
+            this.EmailCarbonCopySubscribers = new ArrayList();
+            this.EmailBlindCarbonCopySubscribers = new ArrayList();
         }
 
         #endregion
 
-        #region  Properties 
+	    #region  Properties 
 
         /// <summary>
         /// Gets the <see cref="Audit"/> with the specified index.
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns>Audit.</returns>
-        public Audit this[int index] => ((Audit)(List[index]));
+        public Audit this[int index] => ((Audit)(this.List[index]));
 
         /// <summary>
         /// Gets or sets the name of the audit group.
@@ -138,12 +139,17 @@ namespace NDataAudit.Framework
 	    public EmailPriorityEnum EmailPriority { get; set; }
 
 	    /// <summary>
-	    /// Gets or sets the template color scheme for the data HTML table in emails.
+	    /// The email client to target
 	    /// </summary>
-	    /// <value>
-	    /// The template color scheme.
-	    /// </value>
-	    public EmailTableTemplate TemplateColorScheme { get; set; }
+	    public EmailClientHtml EmailClientToTarget { get; set; }
+
+        /// <summary>
+        /// Gets or sets the template color scheme for the data HTML table in emails.
+        /// </summary>
+        /// <value>
+        /// The template color scheme.
+        /// </value>
+        public EmailTableTemplate TemplateColorScheme { get; set; }
 
         /// <summary>
         /// Gets or sets the type of the audit result output.
@@ -179,7 +185,7 @@ namespace NDataAudit.Framework
         /// <returns>System.Int32.</returns>
         public int Add(Audit item)
 		{
-			return List.Add(item);
+			return this.List.Add(item);
 		}
 
         /// <summary>
@@ -189,7 +195,7 @@ namespace NDataAudit.Framework
         /// <param name="item">The item.</param>
         public void Insert(int index, Audit item)
 		{
-			List.Insert(index, item);
+			this.List.Insert(index, item);
 		}
 
         /// <summary>
@@ -198,7 +204,7 @@ namespace NDataAudit.Framework
         /// <param name="item">The item.</param>
         public void Remove(Audit item)
 		{
-			List.Remove(item);
+			this.List.Remove(item);
 		}
 
         /// <summary>
@@ -208,7 +214,7 @@ namespace NDataAudit.Framework
         /// <returns><c>true</c> if [contains] [the specified item]; otherwise, <c>false</c>.</returns>
         public bool Contains(Audit item)
 		{
-			return List.Contains(item);
+			return this.List.Contains(item);
 		}
 
 		#endregion

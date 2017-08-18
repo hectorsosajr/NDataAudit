@@ -147,6 +147,14 @@ namespace NDataAudit.Framework
                     database.Append("Database Engine is Oracle MySQL");
                     database.Append("</td></tr></table>");
                     break;
+                case "system.data.sqlclient":
+                    database.Append("<table><tr><td>");
+                    database.Append(
+                        "<img src=https://cdn.rawgit.com/hectorsosajr/NDataAudit/87edd0dc/images/32_SQLServer.png>");
+                    database.Append("</td><td>");
+                    database.Append("Database Engine is Microsoft SQL Server");
+                    database.Append("</td></tr></table>");
+                    break;
                 default:
                     database.Append("Database Engine is UNKNOWN");
                     break;
@@ -159,12 +167,12 @@ namespace NDataAudit.Framework
                 body.AppendLine("<style>");
                 body.AppendLine(auditGroup.TemplateColorScheme.CssTableStyle);
                 body.AppendLine("</style>");
-                body.Append("<TABLE id=emailtable>");
+                body.Append("<TABLE id=emailtable BORDER=1>");
                 body.Append("<TR>");
             }
             else
             {
-                body.Append("<TABLE BORDER=1>");
+                body.Append("<TABLE BORDER=1 width=\"100%\">");
                 body.Append("<TR ALIGN='LEFT' style='white-space: nowrap;'>");
             }
 

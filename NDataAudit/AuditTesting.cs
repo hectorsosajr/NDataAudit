@@ -824,27 +824,31 @@ namespace NDataAudit.Framework
         #endregion
     }	
     
+    /// <inheritdoc />
     /// <summary>
-    /// Custom <see cref="Exception"/> to alert users that no Audits have been loaded for testing.
+    /// Custom <see cref="T:System.Exception" /> to alert users that no Audits have been loaded for testing.
     /// </summary>
     public class NoAuditsLoadedException : Exception
     {
+        /// <inheritdoc />
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="message">The message that will be associated with this <see cref="Exception"/> and that will be shown to users.</param>
+        /// <param name="message">The message that will be associated with this <see cref="T:System.Exception" /> and that will be shown to users.</param>
         public NoAuditsLoadedException(string message) : base(message)
         {}
     }
 
+    /// <inheritdoc />
     /// <summary>
     /// Class MissingRequiredConfigurations.
     /// </summary>
-    /// <seealso cref="System.Exception" />
+    /// <seealso cref="T:System.Exception" />
     public class MissingRequiredConfigurations : Exception
     {
+        /// <inheritdoc />
         /// <summary>
-        /// Initializes a new instance of the <see cref="MissingRequiredConfigurations"/> class.
+        /// Initializes a new instance of the <see cref="T:NDataAudit.Framework.MissingRequiredConfigurations" /> class.
         /// </summary>
         /// <param name="message">The message that describes the error.</param>
         public MissingRequiredConfigurations(string message) : base(message)
