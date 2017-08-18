@@ -264,7 +264,7 @@ namespace NDataAudit.Framework
                 _colAuditGroup.EmailSubject = xmlElement.InnerText;
             }
 
-            // See if there is a custom email subject for this audit.
+            // See what is the email priority
             xmlElement = auditDoc["emailpriority"];
             if (xmlElement != null)
             {
@@ -379,6 +379,22 @@ namespace NDataAudit.Framework
             if (smtpNode[0]["usessl"] != null)
             {
                 _colAuditGroup.SmtpUseSsl = bool.Parse(smtpNode[0]["usessl"].InnerText);
+            }
+
+            if (smtpNode[0]["emailclient"] != null)
+            {
+                EmailClientHtml parsedClient;
+                
+                bool result = Enum.TryParse(smtpNode[0]["emailclient"].InnerText.ToLower(), out parsedClient);
+
+                if (result)
+                {
+                    _colAuditGroup.EmailClientToTarget = parsedClient;
+                }
+                else
+                {
+                    _colAuditGroup.EmailClientToTarget = EmailClientHtml.None;
+                }
             }
 
             // Process SMTP credentials, if any

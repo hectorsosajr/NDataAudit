@@ -180,7 +180,7 @@ namespace NDataAudit.Framework
         /// </summary>
         /// <value><c>true</c> if [was successful]; otherwise, <c>false</c>.</value>
         [Description("Gets or sets whether the audit passed or failed."), Category("Audit")]
-        public bool WasSuccessful { get; set; } 
+        public bool WasSuccessful { get; set; }
 
         #endregion
     }
