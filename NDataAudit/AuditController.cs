@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using NLog;
 
 namespace NDataAudit.Framework
 {
@@ -111,6 +112,10 @@ namespace NDataAudit.Framework
             {
                 //AuditLogger.Log(LogLevel.Debug, ex, ex.TargetSite + "::" + ex.Message, ex);
                 // Site for future logger.
+
+                var logger = AuditUtils.GetFileLogger();
+
+                logger.Error(ex, ex.Message);
             }
         }
 
