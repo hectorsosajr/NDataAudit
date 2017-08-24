@@ -142,12 +142,27 @@
                 case "mysql.data.mysqlclient":
                     retval = BuildMySqlConnectionString();
                     break;
+                case "system.data.sqlite":
+                    retval = BuildSqliteConnectionString();
+                    break;
                 case "npgsql":
                     retval = BuildPostgreConnectionString();
                     break;
                 case "hadoop.hive":
                     retval = BuildHiveConnectionString();
                     break;
+            }
+
+            return retval;
+        }
+
+        private string BuildSqliteConnectionString()
+        {
+            var retval = $"Data Source={DatabaseServer}";
+
+            if (!string.IsNullOrEmpty(ExtraSettings))
+            {
+                retval = retval + ExtraSettings;
             }
 
             return retval;
