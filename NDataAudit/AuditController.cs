@@ -180,7 +180,7 @@ namespace NDataAudit.Framework
                         new AuditConnectionString(connectionString.InnerText, _colAuditGroup.DatabaseProvider);
                 }
 
-                XmlNode commandTimeout = auditGroup["commandtimeout"];
+                XmlNode commandTimeout = xmlElement[0]["commandtimeout"];
                 if (commandTimeout != null)
                 {
                     _colAuditGroup.ConnectionString.CommandTimeout = commandTimeout.InnerText;
@@ -190,7 +190,7 @@ namespace NDataAudit.Framework
                     _colAuditGroup.ConnectionString.CommandTimeout = "180";
                 }
 
-                XmlNode connectionTimeout = auditGroup["connectiontimeout"];
+                XmlNode connectionTimeout = xmlElement[0]["connectiontimeout"];
                 if (connectionTimeout != null)
                 {
                     _colAuditGroup.ConnectionString.ConnectionTimeout = connectionTimeout.InnerText;
