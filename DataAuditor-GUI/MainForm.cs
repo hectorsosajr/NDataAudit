@@ -563,7 +563,7 @@ namespace DataAuditor.UI
             this.lsvAudits.HideSelection = false;
             this.lsvAudits.Location = new System.Drawing.Point(0, 28);
             this.lsvAudits.Name = "lsvAudits";
-            this.lsvAudits.Size = new System.Drawing.Size(591, 396);
+            this.lsvAudits.Size = new System.Drawing.Size(591, 395);
             this.lsvAudits.SmallImageList = this.imgAudits;
             this.lsvAudits.TabIndex = 13;
             this.lsvAudits.UseCompatibleStateImageBehavior = false;
@@ -667,6 +667,9 @@ namespace DataAuditor.UI
             _auditTesting.CurrentAuditRunning += _auditTesting_CurrentAuditRunning;
             _auditTesting.CurrentAuditDone += _auditTesting_CurrentAuditDone;
 
+            XpLinkRun.Enabled = false;
+            btnRunGroup.Enabled = false;
+
             try
             {
                 this.Cursor = Cursors.WaitCursor;
@@ -710,6 +713,8 @@ namespace DataAuditor.UI
             finally
             {
                 this.Cursor = Cursors.Default;
+                XpLinkRun.Enabled = true;
+                btnRunGroup.Enabled = true; 
             }
         }
 
@@ -763,7 +768,8 @@ namespace DataAuditor.UI
 
             LoadAuditGroup(auditName);
 
-            XpLinkRun.Enabled = true;		
+            XpLinkRun.Enabled = true;
+            btnRunGroup.Enabled = true;
         }
 
         private void lblAuditGroup_Click(object sender, System.EventArgs e)
