@@ -14,10 +14,8 @@
 // Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
 //*********************************************************************/
 
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using NDataAudit.Framework;
 
 namespace NDataAudit.Framework
 {
