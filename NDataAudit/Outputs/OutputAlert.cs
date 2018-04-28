@@ -29,7 +29,7 @@ namespace NDataAudit.Framework.Outputs
         /// Creates the output body.
         /// </summary>
         /// <returns>System.String.</returns>
-        protected override string CreateOutputBody()
+        public override string CreateOutputBody()
         {
             return string.Empty;
         }
@@ -40,7 +40,7 @@ namespace NDataAudit.Framework.Outputs
         /// <param name="audit">The audit.</param>
         /// <param name="auditDataSet">The audit data set.</param>
         /// <returns>System.String.</returns>
-        protected string CreateOutputBody(Audit audit, DataSet auditDataSet)
+        public string CreateOutputBody(Audit audit, DataSet auditDataSet)
         {
             var body = new StringBuilder();
 
@@ -100,18 +100,18 @@ namespace NDataAudit.Framework.Outputs
 
             if (audit.Test.SendReport)
             {
-                body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak);
-                body.Append("<b>This report was run on: " + audit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
+                body.Append("This alert ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak);
+                body.Append("<b>This alert was run on: " + audit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
             }
             else
             {
-                body.Append("This audit ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak);
+                body.Append("This alert ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak);
             }
 
             if (audit.ShowQueryMessage)
             {
                 body.Append(AuditUtils.HtmlBreak);
-                body.Append("The '" + audit.Name + "' audit has failed. The following SQL statement was used to test this audit :" + AuditUtils.HtmlBreak);
+                body.Append("The '" + audit.Name + "' audit has failed. The following SQL statement was used to test this alert :" + AuditUtils.HtmlBreak);
                 body.Append(audit.Test.SqlStatementToCheck.ToHtml() + AuditUtils.HtmlBreak);
                 body.Append("<b>This query was run on: " + audit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
             }

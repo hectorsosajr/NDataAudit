@@ -29,10 +29,10 @@ namespace NDataAudit.Framework
         /// Gets the list of Audits.
         /// </summary>
         /// <value>A list of Audits from a AuditCollection object.</value>
-        protected AuditCollection Audits => _audits;
+        public AuditCollection Audits => _audits;
 
         /// <summary>Creates the output body.</summary>
         /// <returns>System.String.</returns>
-        protected abstract string CreateOutputBody();
+        public abstract string CreateOutputBody();
     }
 }

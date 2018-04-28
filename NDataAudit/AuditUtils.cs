@@ -20,6 +20,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
+using NDataAudit.Framework.Outputs;
 using Newtonsoft.Json.Linq;
 using NLog;
 using NLog.Config;
@@ -157,7 +158,12 @@ namespace NDataAudit.Framework
         /// <summary>
         /// Only report on failing audits.
         /// </summary>
-        FailOnly
+        Alert,
+
+        /// <summary>
+        /// This is a simple report using the same output templates as unit tests and alerts.
+        /// </summary>
+        Report
     }
 
     /// <summary>
@@ -407,7 +413,7 @@ namespace NDataAudit.Framework
             }
 
             templates.Add(GetDefaultTemplate());
-            
+
             return templates;
         }
 
@@ -439,12 +445,13 @@ namespace NDataAudit.Framework
 
             try
             {
-                AuditReports report = new AuditReports();
-                string htmlBody = report.CreateUnitTestStyleReport(auditGroup);
+                //AuditReports report = new AuditReports();
+                //string htmlBody = report.CreateUnitTestStyleReport(auditGroup);
 
-                MailMessage message;
+                OutputUnitTest unitTest = new OutputUnitTest(auditGroup);
+                string htmlBody = unitTest.CreateOutputBody();
 
-                var mailClient = CreateMailMessage(out message, auditGroup, htmlBody);
+                var mailClient = CreateMailMessage(out var message, auditGroup, htmlBody);
 
                 mailClient.Send(message);
 
@@ -609,7 +616,7 @@ namespace NDataAudit.Framework
 
             var fileTarget = new FileTarget();
             config.AddTarget("file", fileTarget);
-            
+
             fileTarget.FileName = "${basedir}/logs/ndataaudit.${shortdate}.log";
             fileTarget.Layout = "[${shortdate}] ${level} ${logger} ${message}";
             fileTarget.ArchiveFileName = "${basedir}/logs/archives/logfile.{#}.txt";

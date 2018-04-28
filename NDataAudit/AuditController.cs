@@ -25,14 +25,14 @@ namespace NDataAudit.Framework
     /// </summary>
     public class AuditController
     {
-        #region  Declarations 
+        #region  Declarations
 
         private static AuditCollection _colAuditGroup;
         private string _auditGroupName;
 
         #endregion
 
-        #region  Constructors 
+        #region  Constructors
 
         /// <summary>
         /// Empty constructor
@@ -57,15 +57,15 @@ namespace NDataAudit.Framework
 
         #endregion
 
-        #region  Properties 
+        #region  Properties
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public AuditCollection AuditGroup => _colAuditGroup;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public string AuditGroupName
         {
@@ -75,13 +75,13 @@ namespace NDataAudit.Framework
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public static List<EmailTableTemplate> TableTemplates { get; set; }
 
         #endregion
 
-        #region  Public Members 
+        #region  Public Members
 
         /// <summary>
         /// Top level method that handles processing the xml audit group document and converting it
@@ -122,14 +122,14 @@ namespace NDataAudit.Framework
         #endregion
 
         #region Private Members
-        
+
         private void ProcessAudits(XmlNodeList auditList)
         {
             int nodeCount;
             XmlDocument auditDoc = new XmlDocument();
 
             int counter = auditList.Count;
-            
+
             for (nodeCount = 0; nodeCount < counter; nodeCount++)
             {
                 var newAudit = new Audit();
@@ -240,21 +240,21 @@ namespace NDataAudit.Framework
             XmlNodeList emailList = auditDoc.GetElementsByTagName("email");
             if (emailList.Count > 0)
             {
-                ProcessEmails(emailList, EmailTypeEnum.Recipient); 
+                ProcessEmails(emailList, EmailTypeEnum.Recipient);
             }
 
             // Process cc email list
             XmlNodeList ccEmailList = auditDoc.GetElementsByTagName("ccemail");
             if (ccEmailList.Count > 0)
             {
-                ProcessEmails(ccEmailList, EmailTypeEnum.CarbonCopy); 
+                ProcessEmails(ccEmailList, EmailTypeEnum.CarbonCopy);
             }
 
             // Process email list
             XmlNodeList bccEmailList = auditDoc.GetElementsByTagName("bccemail");
             if (bccEmailList.Count > 0)
             {
-                ProcessEmails(bccEmailList, EmailTypeEnum.BlindCarbonCopy); 
+                ProcessEmails(bccEmailList, EmailTypeEnum.BlindCarbonCopy);
             }
 
             // See if there is a custom email subject for this audit.
@@ -383,9 +383,7 @@ namespace NDataAudit.Framework
 
             if (smtpNode[0]["emailclient"] != null)
             {
-                EmailClientHtml parsedClient;
-                
-                bool result = Enum.TryParse(smtpNode[0]["emailclient"].InnerText.ToLower(), out parsedClient);
+                bool result = Enum.TryParse(smtpNode[0]["emailclient"].InnerText.ToLower(), out EmailClientHtml parsedClient);
 
                 if (result)
                 {

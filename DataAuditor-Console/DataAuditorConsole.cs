@@ -76,10 +76,22 @@ namespace DataAuditor.CommandLine
 
             _auditTesting.RunAudits();
 
-            Console.WriteLine("DataAuditor ran {0} test(s).", _auditTesting.Audits.Count); 
-            
+            Console.WriteLine("DataAuditor ran {0} test(s).", _auditTesting.Audits.Count);
+
+            switch (_auditTesting.Audits.AuditResultOutputType)
+            {
+                case OutputType.UnitTest:
+                    AuditUtils.SendAuditUnitTestReportEmail(colAudits.AuditGroup);
+                    break;
+                case OutputType.Alert:
+                    //AuditUtils.SendSingleAuditFailureEmail(colAudits.AuditGroup,)
+                    break;
+                case OutputType.Report:
+                    break;
+            }
+
             // Try Unit Test Type report until the rest gets sorted out
-            AuditUtils.SendAuditUnitTestReportEmail(colAudits.AuditGroup);
+            //AuditUtils.SendAuditUnitTestReportEmail(colAudits.AuditGroup);
 
             Console.WriteLine("Sent results email to recipients.");
         }

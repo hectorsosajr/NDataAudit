@@ -25,8 +25,8 @@ namespace NDataAudit.Framework.Outputs
 
         /// <summary>Creates the output body.</summary>
         /// <returns>System.String.</returns>
-        /// <exception cref="NotImplementedException"></exception>
-        protected override string CreateOutputBody()
+        /// <inheritdoc />
+        public override string CreateOutputBody()
         {
             var body = new StringBuilder();
 

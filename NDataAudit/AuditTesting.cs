@@ -17,6 +17,9 @@
 // Hector Sosa, Jr		3/21/2005	Added event handlers for running a
 //									single audit, instead of all of them.
 // Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
+// Hector Sosa, Jr      4/28/2018   Audits now store the result of the
+//                                  dataset in the new ResultDataSet
+//                                  property.
 //*********************************************************************
 
 using System;
@@ -88,8 +91,8 @@ namespace NDataAudit.Framework
         public event CurrentAuditDoneEventHandler CurrentAuditDone;
 
         /// <summary>
-        /// This event fires when <see cref="AuditTesting"/> object starts processing all of 
-        /// the <see cref="Audit"/>s in the <see cref="AuditCollection"/> object. 
+        /// This event fires when <see cref="AuditTesting"/> object starts processing all of
+        /// the <see cref="Audit"/>s in the <see cref="AuditCollection"/> object.
         /// </summary>
         public event AuditTestingStartingEventHandler AuditTestingStarting;
 
@@ -104,8 +107,8 @@ namespace NDataAudit.Framework
         public event CurrentSingleAuditDoneEventHandler CurrentSingleAuditDone;
 
         /// <summary>
-        /// This event fires when <see cref="AuditTesting"/> object ends processing all of 
-        /// the <see cref="Audit"/>s in the <see cref="AuditCollection"/> object. 
+        /// This event fires when <see cref="AuditTesting"/> object ends processing all of
+        /// the <see cref="Audit"/>s in the <see cref="AuditCollection"/> object.
         /// </summary>
         public event AuditTestingEndedEventHandler AuditTestingEnded;
 
@@ -175,7 +178,7 @@ namespace NDataAudit.Framework
         public void RunDataAudit(ref Audit currentAudit)
         {
             OnSingleAuditRunning(currentAudit);
-            RunTests(ref currentAudit);			
+            RunTests(ref currentAudit);
             OnSingleAuditDone(currentAudit);
         }
 
@@ -186,17 +189,17 @@ namespace NDataAudit.Framework
         private void GetAudits()
         {
             int auditCount = 0;
-            
+
             int tempFor1 = _colAudits.Count;
 
             ONDataAuditTestingStarting();
-            
+
             for (auditCount = 0; auditCount < tempFor1; auditCount++)
             {
                 Audit currAudit = null;
 
                 currAudit = _colAudits[auditCount];
-                
+
                 OnCurrentAuditRunning(auditCount, currAudit);
                 RunTests(ref currAudit);
                 OnCurrentAuditDone(auditCount, currAudit);
@@ -207,10 +210,11 @@ namespace NDataAudit.Framework
         {
             int testCount;
             int tempFor1 = 1;
-            
+
             for (testCount = 0; testCount < tempFor1; testCount++)
             {
                 DataSet dsTest = GetTestDataSet(ref currentAudit, testCount);
+                currentAudit.ResultDataSet = dsTest;
 
                 if (dsTest.Tables.Count == 0)
                 {
@@ -247,8 +251,8 @@ namespace NDataAudit.Framework
                 {
                     var currTest = currentAudit.Test;
 
-                    int rowCount = dsTest.Tables[0].Rows.Count;					
-        
+                    int rowCount = dsTest.Tables[0].Rows.Count;
+
                     if (currTest.TestReturnedRows)
                     {
                         if (currTest.Criteria.ToUpper() == "COUNTROWS")
@@ -463,7 +467,7 @@ namespace NDataAudit.Framework
             string sql = BuildSqlStatement(auditToRun, testIndex);
 
             CommandType commandType = (CommandType) 0;
-            
+
             if (auditToRun.Test.SqlType == Audit.SqlStatementTypeEnum.SqlText)
             {
                 commandType = CommandType.Text;
@@ -690,9 +694,9 @@ namespace NDataAudit.Framework
                 foreach (string ccemail in _colAudits.EmailCarbonCopySubscribers)
                 {
                     message.CC.Add(new MailAddress(ccemail));
-                } 
+                }
             }
-            
+
             if (_colAudits.EmailBlindCarbonCopySubscribers != null)
             {
                 // Blind Carbon Copies - BCC
@@ -822,8 +826,8 @@ namespace NDataAudit.Framework
         }
 
         #endregion
-    }	
-    
+    }
+
     /// <inheritdoc />
     /// <summary>
     /// Custom <see cref="T:System.Exception" /> to alert users that no Audits have been loaded for testing.

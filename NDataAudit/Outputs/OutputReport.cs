@@ -27,11 +27,11 @@ namespace NDataAudit.Framework.Outputs
         {}
 
         /// <summary>
-        /// Creates the output body.
+        /// Creates the body.
         /// </summary>
         /// <returns>System.String.</returns>
         /// <exception cref="NotImplementedException"></exception>
-        protected override string CreateOutputBody()
+        public override string CreateOutputBody()
         {
             throw new NotImplementedException();
         }
