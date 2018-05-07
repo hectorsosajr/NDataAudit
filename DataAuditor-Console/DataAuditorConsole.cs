@@ -80,6 +80,8 @@ namespace DataAuditor.CommandLine
 
             switch (_auditTesting.Audits.AuditResultOutputType)
             {
+                case OutputType.Audit:
+                    break;
                 case OutputType.UnitTest:
                     AuditUtils.SendAuditUnitTestReportEmail(colAudits.AuditGroup);
                     break;

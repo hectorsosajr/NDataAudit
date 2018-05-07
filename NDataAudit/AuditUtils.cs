@@ -161,6 +161,11 @@ namespace NDataAudit.Framework
         Alert,
 
         /// <summary>
+        /// The original audit where a threshold is set. This is a pass or fail system.
+        /// </summary>
+        Audit,
+
+        /// <summary>
         /// This is a simple report using the same output templates as unit tests and alerts.
         /// </summary>
         Report

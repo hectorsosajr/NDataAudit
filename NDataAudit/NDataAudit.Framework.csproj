@@ -151,6 +151,7 @@
     </Compile>
     <Compile Include="AuditUtils.cs" />
     <Compile Include="Outputs\OutputAlert.cs" />
+    <Compile Include="Outputs\OutputAudit.cs" />
     <Compile Include="Outputs\OutputReport.cs" />
     <Compile Include="Outputs\OutputUnitTest.cs" />
   </ItemGroup>
