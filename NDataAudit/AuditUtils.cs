@@ -444,7 +444,7 @@ namespace NDataAudit.Framework
         /// </summary>
         /// <param name="auditGroup">The audit group.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public static bool SendAuditUnitTestReportEmail(AuditCollection auditGroup)
+        public static bool SendAuditResultEmail(AuditCollection auditGroup)
         {
             var succeed = false;
 
@@ -453,8 +453,29 @@ namespace NDataAudit.Framework
                 //AuditReports report = new AuditReports();
                 //string htmlBody = report.CreateUnitTestStyleReport(auditGroup);
 
-                OutputUnitTest unitTest = new OutputUnitTest(auditGroup);
-                string htmlBody = unitTest.CreateOutputBody();
+                string htmlBody;
+
+                switch (auditGroup.AuditResultOutputType)
+                {
+                    case OutputType.UnitTest:
+                        OutputUnitTest unitTest = new OutputUnitTest(auditGroup);
+                        htmlBody = unitTest.CreateOutputBody();
+                        break;
+                    case OutputType.Alert:
+                        OutputAlert alert = new OutputAlert(auditGroup);
+                        htmlBody = alert.CreateOutputBody();
+                        break;
+                    case OutputType.Audit:
+                        OutputAudit audit = new OutputAudit(auditGroup);
+                        htmlBody = audit.CreateOutputBody();
+                        break;
+                    case OutputType.Report:
+                        OutputReport report = new OutputReport(auditGroup);
+                        htmlBody = report.CreateOutputBody();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
 
                 var mailClient = CreateMailMessage(out var message, auditGroup, htmlBody);
 
