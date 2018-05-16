@@ -22,3 +22,13 @@ Researching:
 |[![](https://cdn.rawgit.com/hectorsosajr/NDataAudit/72848767/images/32_MongoDb.png)]()|MongoDB
 |[![](https://cdn.rawgit.com/hectorsosajr/NDataAudit/72848767/images/32_RavenDb.png)]()|RavenDb
 |[![](https://cdn.rawgit.com/hectorsosajr/NDataAudit/72848767/images/32_HBase.png)]()|HBase
+
+## Output Styles
+
+#### __Audit - Original - Blue Fancy CSS Template__
+----
+[![](https://cdn.rawgit.com/hectorsosajr/NDataAudit/cc47424d/images/Audit-BlueFancyTemplate.png)]()
+
+#### __Unit Test - Blue Fancy CSS Template__
+----
+[![](https://cdn.rawgit.com/hectorsosajr/NDataAudit/cc47424d/images/UnitTest-BlueFancyTemplate.png)]()
