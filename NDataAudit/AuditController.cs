@@ -119,6 +119,14 @@ namespace NDataAudit.Framework
             }
         }
 
+        /// <summary>
+        /// Sends the results of the audits.
+        /// </summary>
+        public void SendResults()
+        {
+            AuditUtils.SendResult(this.AuditGroup);
+        }
+
         #endregion
 
         #region Private Members
@@ -448,7 +456,7 @@ namespace NDataAudit.Framework
                 var xmlElement = columnNode["instructions"];
                 if (xmlElement != null)
                 {
-                newTest.Instructions = columnNode["instructions"].InnerText;
+                    newTest.Instructions = columnNode["instructions"].InnerText;
                 }
 
                 xmlElement = columnNode["sendReport"];

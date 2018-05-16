@@ -41,21 +41,6 @@ namespace NDataAudit.Framework.Outputs
 
             string sourceEmailDescription = config.AppSettings.Settings["sourceEmailDescription"].Value;
 
-            if (Audits[0].Test.SendReport)
-            {
-                Audits[0].ShowThresholdMessage = false;
-                Audits[0].ShowQueryMessage = false;
-
-                if (Audits[0].EmailSubject != null)
-                {
-                    body.AppendLine("<h2>" + Audits[0].EmailSubject + "</h2>");
-                }
-
-                body.Append("This report ran at " +
-                            DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) +
-                            AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
-            }
-
             if (Audits[0].ShowThresholdMessage)
             {
                 body.AppendLine("<h2>ERROR MESSAGE</h2>");
@@ -91,15 +76,7 @@ namespace NDataAudit.Framework.Outputs
 
             body.AppendLine(AuditUtils.HtmlBreak);
 
-            if (Audits[0].Test.SendReport)
-            {
-                body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak);
-                body.Append("<b>This report was run on: " + Audits[0].TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
-            }
-            else
-            {
-                body.Append("This audit ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak);
-            }
+            body.Append("This audit ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak);
 
             if (Audits[0].ShowQueryMessage)
             {

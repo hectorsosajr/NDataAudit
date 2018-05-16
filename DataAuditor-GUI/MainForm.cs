@@ -675,7 +675,7 @@ namespace DataAuditor.UI
                 this.Cursor = Cursors.WaitCursor;
                 _auditTesting.RunAudits();
 
-                AuditUtils.SendAuditResultEmail(_auditTesting.Audits);
+                AuditUtils.SendResult(_auditTesting.Audits);
             }
             catch (NoAuditsLoadedException ex)
             {
@@ -905,6 +905,7 @@ namespace DataAuditor.UI
             this.Refresh();
 
             _auditTesting.RunDataAudit(ref currentAudit);
+            _auditController.SendResults();
         }
 
     #endregion

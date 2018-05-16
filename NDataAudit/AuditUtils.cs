@@ -440,19 +440,16 @@ namespace NDataAudit.Framework
         }
 
         /// <summary>
-        /// Sends the audit report email.
+        /// Sends the output of the <see cref="Audit"/> result. Currently only through emails.
         /// </summary>
-        /// <param name="auditGroup">The audit group.</param>
+        /// <param name="auditGroup">The list of <see cref="Audit"/>s that were tested.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public static bool SendAuditResultEmail(AuditCollection auditGroup)
+        public static bool SendResult(AuditCollection auditGroup)
         {
             var succeed = false;
 
             try
             {
-                //AuditReports report = new AuditReports();
-                //string htmlBody = report.CreateUnitTestStyleReport(auditGroup);
-
                 string htmlBody;
 
                 switch (auditGroup.AuditResultOutputType)
@@ -504,55 +501,6 @@ namespace NDataAudit.Framework
 
                 var logger = GetFileLogger();
                 logger.Error(ex, ex.Message);
-            }
-
-            return succeed;
-        }
-
-
-        /// <summary>
-        /// Sends the single audit failure email.
-        /// </summary>
-        /// <param name="auditGroup">The audit group.</param>
-        /// <param name="failingAuditIndex">Index of the failing audit.</param>
-        /// <param name="body">The body of the email.</param>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public static bool SendSingleAuditFailureEmail(AuditCollection auditGroup, int failingAuditIndex, string body)
-        {
-            bool succeed = false;
-            MailMessage message;
-            var mailClient = CreateMailMessage(out message, auditGroup, body);
-
-            if (!string.IsNullOrEmpty(auditGroup.EmailSubject))
-            {
-                message.Subject = auditGroup.EmailSubject;
-            }
-            else
-            {
-                message.Subject = "Audit Failure - " + auditGroup[failingAuditIndex].Name;
-            }
-
-            try
-            {
-                mailClient.Send(message);
-
-                succeed = true;
-            }
-            catch (SmtpException smtpEx)
-            {
-                StringBuilder sb = new StringBuilder();
-
-                sb.AppendLine(smtpEx.Message);
-
-                if (smtpEx.InnerException != null)
-                {
-                    sb.AppendLine(smtpEx.InnerException.Message);
-                }
-
-                succeed = false;
-
-                var logger = GetFileLogger();
-                logger.Error(smtpEx, sb.ToString());
             }
 
             return succeed;
