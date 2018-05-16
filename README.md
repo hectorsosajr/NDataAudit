@@ -45,3 +45,11 @@ Additional styles can be added easily by just adding another entry in the root J
 ### __Unit Test - Blue Fancy CSS Template__
 ----
 [![](https://cdn.rawgit.com/hectorsosajr/NDataAudit/cc47424d/images/UnitTest-BlueFancyTemplate.png)]()
+
+### __Unit Test - Green Fancy CSS Template__
+----
+[![](https://cdn.rawgit.com/hectorsosajr/NDataAudit/d7fa0ab7/images/UnitTest-GreenFancy%20Template.png)]()
+
+### __Unit Test - RedShift CSS Template__
+----
+[![](https://cdn.rawgit.com/hectorsosajr/NDataAudit/d7fa0ab7/images/UnitTest-RedShift%20Template.png)]()
