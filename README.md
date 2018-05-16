@@ -25,6 +25,19 @@ Researching:
 
 ## Output Styles
 
+Output styles are defined in the TableTemplates.json file. This is just JSON arrays of CSS styles. Included in this file are the following templates:
+* GreenReport
+* Green
+* GreenFancy
+* RedReport
+* Yellow
+* YellowReport
+* BlueReport
+* BlueFancy
+* RedShift - Imitates AWS Redshift page colors
+
+Additional styles can be added easily by just adding another entry in the root JSON array in TableTemplates.json file. To use your new CSS template just add the name of your new template inside the \<template>\</template> tags.
+
 #### __Audit - Original - Blue Fancy CSS Template__
 ----
 [![](https://cdn.rawgit.com/hectorsosajr/NDataAudit/cc47424d/images/Audit-BlueFancyTemplate.png)]()
