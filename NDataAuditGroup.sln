@@ -39,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{74D59B
 		images\32_ReSharper.png = images\32_ReSharper.png
 		images\32_Sqlite.png = images\32_Sqlite.png
 		images\32_SQLServer.png = images\32_SQLServer.png
+		images\Audit-BlueFancyTemplate.png = images\Audit-BlueFancyTemplate.png
+		images\UnitTest-BlueFancyTemplate.png = images\UnitTest-BlueFancyTemplate.png
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDataAudit.Framework", "NDataAudit\NDataAudit.Framework.csproj", "{53D6FB23-ABBD-4E35-9A5D-91E17BE5F19D}"
@@ -100,5 +102,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7C708680-2E11-4AEC-890F-D33F3A5C5132}
 	EndGlobalSection
 EndGlobal
