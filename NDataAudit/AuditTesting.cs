@@ -17,6 +17,9 @@
 // Hector Sosa, Jr		3/21/2005	Added event handlers for running a
 //									single audit, instead of all of them.
 // Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
+// Hector Sosa, Jr      4/28/2018   Audits now store the result of the
+//                                  dataset in the new ResultDataSet
+//                                  property.
 //*********************************************************************
 
 using System;
@@ -88,8 +91,8 @@ namespace NDataAudit.Framework
         public event CurrentAuditDoneEventHandler CurrentAuditDone;
 
         /// <summary>
-        /// This event fires when <see cref="AuditTesting"/> object starts processing all of 
-        /// the <see cref="Audit"/>s in the <see cref="AuditCollection"/> object. 
+        /// This event fires when <see cref="AuditTesting"/> object starts processing all of
+        /// the <see cref="Audit"/>s in the <see cref="AuditCollection"/> object.
         /// </summary>
         public event AuditTestingStartingEventHandler AuditTestingStarting;
 
@@ -104,8 +107,8 @@ namespace NDataAudit.Framework
         public event CurrentSingleAuditDoneEventHandler CurrentSingleAuditDone;
 
         /// <summary>
-        /// This event fires when <see cref="AuditTesting"/> object ends processing all of 
-        /// the <see cref="Audit"/>s in the <see cref="AuditCollection"/> object. 
+        /// This event fires when <see cref="AuditTesting"/> object ends processing all of
+        /// the <see cref="Audit"/>s in the <see cref="AuditCollection"/> object.
         /// </summary>
         public event AuditTestingEndedEventHandler AuditTestingEnded;
 
@@ -175,7 +178,7 @@ namespace NDataAudit.Framework
         public void RunDataAudit(ref Audit currentAudit)
         {
             OnSingleAuditRunning(currentAudit);
-            RunTests(ref currentAudit);			
+            RunTests(ref currentAudit);
             OnSingleAuditDone(currentAudit);
         }
 
@@ -186,17 +189,17 @@ namespace NDataAudit.Framework
         private void GetAudits()
         {
             int auditCount = 0;
-            
+
             int tempFor1 = _colAudits.Count;
 
             ONDataAuditTestingStarting();
-            
+
             for (auditCount = 0; auditCount < tempFor1; auditCount++)
             {
                 Audit currAudit = null;
 
                 currAudit = _colAudits[auditCount];
-                
+
                 OnCurrentAuditRunning(auditCount, currAudit);
                 RunTests(ref currAudit);
                 OnCurrentAuditDone(auditCount, currAudit);
@@ -207,10 +210,11 @@ namespace NDataAudit.Framework
         {
             int testCount;
             int tempFor1 = 1;
-            
+
             for (testCount = 0; testCount < tempFor1; testCount++)
             {
                 DataSet dsTest = GetTestDataSet(ref currentAudit, testCount);
+                currentAudit.ResultDataSet = dsTest;
 
                 if (dsTest.Tables.Count == 0)
                 {
@@ -238,8 +242,7 @@ namespace NDataAudit.Framework
                         else
                         {
                             currentAudit.Result = false;
-                            PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, currentAudit,
-                                             dsTest);
+                            //PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, currentAudit, dsTest);
                         }
                     }
                 }
@@ -247,8 +250,8 @@ namespace NDataAudit.Framework
                 {
                     var currTest = currentAudit.Test;
 
-                    int rowCount = dsTest.Tables[0].Rows.Count;					
-        
+                    int rowCount = dsTest.Tables[0].Rows.Count;
+
                     if (currTest.TestReturnedRows)
                     {
                         if (currTest.Criteria.ToUpper() == "COUNTROWS")
@@ -403,24 +406,24 @@ namespace NDataAudit.Framework
                         }
                     }
 
-                    if (currentAudit.Result == false)
-                    {
-                        if (currentAudit.Test.FailIfConditionIsTrue)
-                        {
-                            PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, currentAudit, dsTest);
-                        }
-                    }
-                    else
-                    {
-                        if (currentAudit.Test.FailIfConditionIsTrue)
-                        {
-                            if (currentAudit.Test.SendReport)
-                            {
-                                // It's not really a failure. Just want to send a report-like email.
-                                PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, currentAudit, dsTest);
-                            }
-                        }
-                    }
+                    //if (currentAudit.Result == false)
+                    //{
+                    //    if (currentAudit.Test.FailIfConditionIsTrue)
+                    //    {
+                    //        PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, currentAudit, dsTest);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    if (currentAudit.Test.FailIfConditionIsTrue)
+                    //    {
+                    //        if (currentAudit.Test.SendReport)
+                    //        {
+                    //            // It's not really a failure. Just want to send a report-like email.
+                    //            PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, currentAudit, dsTest);
+                    //        }
+                    //    }
+                    //}
 
                     dsTest.Dispose();
 
@@ -463,7 +466,7 @@ namespace NDataAudit.Framework
             string sql = BuildSqlStatement(auditToRun, testIndex);
 
             CommandType commandType = (CommandType) 0;
-            
+
             if (auditToRun.Test.SqlType == Audit.SqlStatementTypeEnum.SqlText)
             {
                 commandType = CommandType.Text;
@@ -594,177 +597,177 @@ namespace NDataAudit.Framework
             return result;
         }
 
-        private static void PrepareResultsEmailData(string sqlTested, Audit testedAudit, DataSet testData)
-        {
-            var body = new StringBuilder();
+        //private static void PrepareResultsEmailData(string sqlTested, Audit testedAudit, DataSet testData)
+        //{
+        //    var body = new StringBuilder();
 
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+        //    Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-            string sourceEmailDescription = config.AppSettings.Settings["sourceEmailDescription"].Value;
+        //    string sourceEmailDescription = config.AppSettings.Settings["sourceEmailDescription"].Value;
 
-            if (testedAudit.Test.SendReport)
-            {
-                testedAudit.ShowThresholdMessage = false;
-                testedAudit.ShowQueryMessage = false;
+        //    if (testedAudit.Test.SendReport)
+        //    {
+        //        testedAudit.ShowThresholdMessage = false;
+        //        testedAudit.ShowQueryMessage = false;
 
-                if (testedAudit.EmailSubject != null)
-                {
-                    body.AppendLine("<h2>" + testedAudit.EmailSubject + "</h2>");
-                }
+        //        if (testedAudit.EmailSubject != null)
+        //        {
+        //            body.AppendLine("<h2>" + testedAudit.EmailSubject + "</h2>");
+        //        }
 
-                body.Append("This report ran at " +
-                            DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) +
-                            AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
-            }
+        //        body.Append("This report ran at " +
+        //                    DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) +
+        //                    AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
+        //    }
 
-            if (testedAudit.ShowThresholdMessage)
-            {
-                body.AppendLine("<h2>ERROR MESSAGE</h2>");
-                body.Append(testedAudit.Test.FailedMessage + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
-            }
+        //    if (testedAudit.ShowThresholdMessage)
+        //    {
+        //        body.AppendLine("<h2>ERROR MESSAGE</h2>");
+        //        body.Append(testedAudit.Test.FailedMessage + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
+        //    }
 
-            if (testedAudit.ShowCommentMessage)
-            {
-                body.AppendLine("COMMENTS AND INSTRUCTIONS" + AuditUtils.HtmlBreak);
-                body.AppendLine("============================" + AuditUtils.HtmlBreak);
+        //    if (testedAudit.ShowCommentMessage)
+        //    {
+        //        body.AppendLine("COMMENTS AND INSTRUCTIONS" + AuditUtils.HtmlBreak);
+        //        body.AppendLine("============================" + AuditUtils.HtmlBreak);
 
-                if (testedAudit.Test.Instructions != null)
-                {
-                    if (testedAudit.Test.Instructions.Length > 0)
-                    {
-                        body.Append(testedAudit.Test.Instructions.ToHtml() + AuditUtils.HtmlBreak);
-                        body.AppendLine(AuditUtils.HtmlBreak);
-                    }
-                }
-            }
+        //        if (testedAudit.Test.Instructions != null)
+        //        {
+        //            if (testedAudit.Test.Instructions.Length > 0)
+        //            {
+        //                body.Append(testedAudit.Test.Instructions.ToHtml() + AuditUtils.HtmlBreak);
+        //                body.AppendLine(AuditUtils.HtmlBreak);
+        //            }
+        //        }
+        //    }
 
-            if (testedAudit.IncludeDataInEmail)
-            {
-                if (testData.Tables.Count > 0)
-                {
-                    EmailTableTemplate currTemplate = testedAudit.Test.TemplateColorScheme;
+        //    if (testedAudit.IncludeDataInEmail)
+        //    {
+        //        if (testData.Tables.Count > 0)
+        //        {
+        //            EmailTableTemplate currTemplate = testedAudit.Test.TemplateColorScheme;
 
-                    string htmlData = AuditUtils.CreateHtmlData(testedAudit, testData, currTemplate);
+        //            string htmlData = AuditUtils.CreateHtmlData(testedAudit, testData, currTemplate);
 
-                    body.Append(htmlData);
-                }
-            }
+        //            body.Append(htmlData);
+        //        }
+        //    }
 
-            body.AppendLine(AuditUtils.HtmlBreak);
+        //    body.AppendLine(AuditUtils.HtmlBreak);
 
-            if (testedAudit.Test.SendReport)
-            {
-                body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak);
-                body.Append("<b>This report was run on: " + testedAudit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
-            }
-            else
-            {
-                body.Append("This audit ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak);
-            }
+        //    if (testedAudit.Test.SendReport)
+        //    {
+        //        body.Append("This report ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak);
+        //        body.Append("<b>This report was run on: " + testedAudit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
+        //    }
+        //    else
+        //    {
+        //        body.Append("This audit ran at " + DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss tt", CultureInfo.InvariantCulture) + AuditUtils.HtmlBreak);
+        //    }
 
-            if (testedAudit.ShowQueryMessage)
-            {
-                body.Append(AuditUtils.HtmlBreak);
-                body.Append("The '" + testedAudit.Name + "' audit has failed. The following SQL statement was used to test this audit :" + AuditUtils.HtmlBreak);
-                body.Append(sqlTested.ToHtml() + AuditUtils.HtmlBreak);
-                body.Append("<b>This query was run on: " + testedAudit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
-            }
+        //    if (testedAudit.ShowQueryMessage)
+        //    {
+        //        body.Append(AuditUtils.HtmlBreak);
+        //        body.Append("The '" + testedAudit.Name + "' audit has failed. The following SQL statement was used to test this audit :" + AuditUtils.HtmlBreak);
+        //        body.Append(sqlTested.ToHtml() + AuditUtils.HtmlBreak);
+        //        body.Append("<b>This query was run on: " + testedAudit.TestServer + "</b>" + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
+        //    }
 
-            string cleanBody = body.ToString().Replace("\r\n", string.Empty);
+        //    string cleanBody = body.ToString().Replace("\r\n", string.Empty);
 
-            // SendEmail(testedAudit, cleanBody, sourceEmailDescription);
-        }
+        //    // SendEmail(testedAudit, cleanBody, sourceEmailDescription);
+        //}
 
-        private static void SendEmail(Audit testedAudit, string body, string sourceEmailDescription)
-        {
-            var message = new MailMessage {IsBodyHtml = true};
+        //private static void SendEmail(Audit testedAudit, string body, string sourceEmailDescription)
+        //{
+        //    var message = new MailMessage {IsBodyHtml = true};
 
-            foreach (string recipient in _colAudits.EmailSubscribers)
-            {
-                message.To.Add(new MailAddress(recipient));
-            }
+        //    foreach (string recipient in _colAudits.EmailSubscribers)
+        //    {
+        //        message.To.Add(new MailAddress(recipient));
+        //    }
 
-            if (_colAudits.EmailCarbonCopySubscribers != null)
-            {
-                // Carbon Copies - CC
-                foreach (string ccemail in _colAudits.EmailCarbonCopySubscribers)
-                {
-                    message.CC.Add(new MailAddress(ccemail));
-                } 
-            }
-            
-            if (_colAudits.EmailBlindCarbonCopySubscribers != null)
-            {
-                // Blind Carbon Copies - BCC
-                foreach (string bccemail in _colAudits.EmailBlindCarbonCopySubscribers)
-                {
-                    message.Bcc.Add(new MailAddress(bccemail));
-                }
-            }
+        //    if (_colAudits.EmailCarbonCopySubscribers != null)
+        //    {
+        //        // Carbon Copies - CC
+        //        foreach (string ccemail in _colAudits.EmailCarbonCopySubscribers)
+        //        {
+        //            message.CC.Add(new MailAddress(ccemail));
+        //        }
+        //    }
 
-            message.Body = body;
+        //    if (_colAudits.EmailBlindCarbonCopySubscribers != null)
+        //    {
+        //        // Blind Carbon Copies - BCC
+        //        foreach (string bccemail in _colAudits.EmailBlindCarbonCopySubscribers)
+        //        {
+        //            message.Bcc.Add(new MailAddress(bccemail));
+        //        }
+        //    }
 
-            switch (testedAudit.EmailPriority)
-            {
-                case EmailPriorityEnum.Low:
-                    message.Priority = MailPriority.Low;
-                    break;
-                case EmailPriorityEnum.Normal:
-                    message.Priority = MailPriority.Normal;
-                    break;
-                case EmailPriorityEnum.High:
-                    message.Priority = MailPriority.High;
-                    break;
-                default:
-                    message.Priority = MailPriority.Normal;
-                    break;
-            }
+        //    message.Body = body;
 
-            if (!string.IsNullOrEmpty(testedAudit.EmailSubject))
-            {
-                message.Subject = testedAudit.EmailSubject;
-            }
-            else
-            {
-                message.Subject = "Audit Failure - " + testedAudit.Name;
-            }
+        //    switch (testedAudit.EmailPriority)
+        //    {
+        //        case EmailPriorityEnum.Low:
+        //            message.Priority = MailPriority.Low;
+        //            break;
+        //        case EmailPriorityEnum.Normal:
+        //            message.Priority = MailPriority.Normal;
+        //            break;
+        //        case EmailPriorityEnum.High:
+        //            message.Priority = MailPriority.High;
+        //            break;
+        //        default:
+        //            message.Priority = MailPriority.Normal;
+        //            break;
+        //    }
 
-            message.From = new MailAddress(_colAudits.SmtpSourceEmail, sourceEmailDescription);
+        //    if (!string.IsNullOrEmpty(testedAudit.EmailSubject))
+        //    {
+        //        message.Subject = testedAudit.EmailSubject;
+        //    }
+        //    else
+        //    {
+        //        message.Subject = "Audit Failure - " + testedAudit.Name;
+        //    }
 
-            var server = new SmtpClient();
+        //    message.From = new MailAddress(_colAudits.SmtpSourceEmail, sourceEmailDescription);
 
-            if (_colAudits.SmtpHasCredentials)
-            {
-                server.UseDefaultCredentials = false;
-                server.DeliveryMethod = SmtpDeliveryMethod.Network;
-                server.Host = _colAudits.SmtpServerAddress;
-                server.Port = _colAudits.SmtpPort;
-                server.Credentials = new NetworkCredential(_colAudits.SmtpUserName, _colAudits.SmtpPassword);
-                server.EnableSsl = _colAudits.SmtpUseSsl;
-            }
-            else
-            {
-                server.Host = _colAudits.SmtpServerAddress;
-            }
+        //    var server = new SmtpClient();
 
-            try
-            {
-                server.Send(message);
-            }
-            catch (SmtpException smtpEx)
-            {
-                StringBuilder sb = new StringBuilder();
+        //    if (_colAudits.SmtpHasCredentials)
+        //    {
+        //        server.UseDefaultCredentials = false;
+        //        server.DeliveryMethod = SmtpDeliveryMethod.Network;
+        //        server.Host = _colAudits.SmtpServerAddress;
+        //        server.Port = _colAudits.SmtpPort;
+        //        server.Credentials = new NetworkCredential(_colAudits.SmtpUserName, _colAudits.SmtpPassword);
+        //        server.EnableSsl = _colAudits.SmtpUseSsl;
+        //    }
+        //    else
+        //    {
+        //        server.Host = _colAudits.SmtpServerAddress;
+        //    }
 
-                sb.AppendLine(smtpEx.Message);
+        //    try
+        //    {
+        //        server.Send(message);
+        //    }
+        //    catch (SmtpException smtpEx)
+        //    {
+        //        StringBuilder sb = new StringBuilder();
 
-                if (smtpEx.InnerException != null)
-                {
-                    sb.AppendLine(smtpEx.InnerException.Message);
-                }
+        //        sb.AppendLine(smtpEx.Message);
 
-                throw;
-            }
-        }
+        //        if (smtpEx.InnerException != null)
+        //        {
+        //            sb.AppendLine(smtpEx.InnerException.Message);
+        //        }
+
+        //        throw;
+        //    }
+        //}
 
         #endregion
 
@@ -822,8 +825,8 @@ namespace NDataAudit.Framework
         }
 
         #endregion
-    }	
-    
+    }
+
     /// <inheritdoc />
     /// <summary>
     /// Custom <see cref="T:System.Exception" /> to alert users that no Audits have been loaded for testing.

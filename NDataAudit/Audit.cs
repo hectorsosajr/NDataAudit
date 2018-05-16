@@ -12,12 +12,14 @@
 //									to be compliant with C# naming
 //									conventions.
 // Hector Sosa, Jr      3/12/2017   Renamed NAudit back to NDataAudit.
+// Hector Sosa, Jr      4/28/2018   Audits now store the result of the
+//                                  dataset in the new ResultDataSet
+//                                  property.
 //*********************************************************************/
 
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using NDataAudit.Framework;
+using System.Data;
 
 namespace NDataAudit.Framework
 {
@@ -54,9 +56,6 @@ namespace NDataAudit.Framework
         /// </summary>
         public Audit()
         {
-            //EmailSubscribers = new ArrayList();
-            //EmailCarbonCopySubscribers = new ArrayList();
-            //EmailBlindCarbonCopySubscribers = new ArrayList();
             Test = new AuditTest();
             ErrorMessages = new List<string>();
 
@@ -181,6 +180,13 @@ namespace NDataAudit.Framework
         /// <value><c>true</c> if [was successful]; otherwise, <c>false</c>.</value>
         [Description("Gets or sets whether the audit passed or failed."), Category("Audit")]
         public bool WasSuccessful { get; set; }
+
+        /// <summary>
+        /// Gets or sets the result data set.
+        /// </summary>
+        /// <value>The result data set.</value>
+        [Description("Gets or sets the data set that contains the result of the <see cref=\"Audit\"/> query."), Category("Data")]
+        public DataSet ResultDataSet { get; set; }
 
         #endregion
     }

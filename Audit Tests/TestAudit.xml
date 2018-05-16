@@ -11,7 +11,7 @@ WHERE departmentId NOT IN (
 			<email>hector@systemwidgets.com</email>
 		</emails>
 		<connectionstring>Data Source=YOURSERVER;Initial Catalog=YOURDATABASE;User ID=YOURUSER;Password=YOURPASSWORD;</connectionstring>
-		<tests>			
+		<tests>
 			<test>
 				<column>departmentId</column>
 				<criteria>COUNTROWS</criteria>
