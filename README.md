@@ -38,10 +38,10 @@ Output styles are defined in the TableTemplates.json file. This is just JSON arr
 
 Additional styles can be added easily by just adding another entry in the root JSON array in TableTemplates.json file. To use your new CSS template just add the name of your new template inside the \<template>\</template> tags.
 
-#### __Audit - Original - Blue Fancy CSS Template__
+### __Audit - Original - Blue Fancy CSS Template__
 ----
 [![](https://cdn.rawgit.com/hectorsosajr/NDataAudit/cc47424d/images/Audit-BlueFancyTemplate.png)]()
 
-#### __Unit Test - Blue Fancy CSS Template__
+### __Unit Test - Blue Fancy CSS Template__
 ----
 [![](https://cdn.rawgit.com/hectorsosajr/NDataAudit/cc47424d/images/UnitTest-BlueFancyTemplate.png)]()
