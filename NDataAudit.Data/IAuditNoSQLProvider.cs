@@ -9,13 +9,13 @@
 // Hector Sosa, Jr		5/17/2018	    Created
 //*********************************************************************
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace NDataAudit.Data
 {
+    /// <summary>
+    /// Interface IAuditNoSqlProvider
+    /// </summary>
     public interface IAuditNoSqlProvider
     {
         /// <summary>

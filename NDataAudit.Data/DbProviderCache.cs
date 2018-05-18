@@ -36,7 +36,7 @@ namespace NDataAudit.Data
 
             string providerDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
-            var providerAssemblies = 
+            var providerAssemblies =
                 from file in new DirectoryInfo(providerDirectory).GetFiles()
                 where file.Extension.ToLower() == ".dll"
                 select Assembly.LoadFile(file.FullName);
@@ -45,7 +45,7 @@ namespace NDataAudit.Data
 
             var providerTypes = container.GetTypesToRegister(typeof(IAuditDbProvider), providerAssemblies);
 
-            container.RegisterCollection<IAuditDbProvider>(providerTypes);
+            container.Collection.Register<IAuditDbProvider>(providerTypes);
 
             foreach (var provider in container.GetAllInstances<IAuditDbProvider>())
             {

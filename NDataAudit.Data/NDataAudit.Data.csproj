@@ -40,6 +40,8 @@
   <ItemGroup>
     <Compile Include="DbProviderCache.cs" />
     <Compile Include="IAuditDbProvider.cs" />
+    <Compile Include="IAuditNoSqlProvider.cs" />
+    <Compile Include="NoSqlProviderCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
