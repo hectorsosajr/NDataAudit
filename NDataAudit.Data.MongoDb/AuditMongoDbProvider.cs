@@ -10,13 +10,15 @@
 //*********************************************************************
 
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 
 namespace NDataAudit.Data.Mongo
 {
     /// <summary>
-    /// Class AuditMongoProvider.
+    /// Class AuditMongoDbProvider.
     /// </summary>
     /// <seealso cref="NDataAudit.Data.IAuditNoSqlProvider" />
+    [Export(typeof(IAuditNoSqlProvider))]
     public class AuditMongoDbProvider : IAuditNoSqlProvider
     {
         public string ConnectionString { get; set; }

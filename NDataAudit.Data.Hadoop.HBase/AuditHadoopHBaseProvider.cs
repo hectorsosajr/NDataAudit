@@ -1,5 +1,5 @@
 ﻿//*********************************************************************
-// File:       		AuditRavenDbProvider.cs
+// File:       		AuditHadoopHBaseProvider.cs
 // Author:  	    Hector Sosa, Jr
 // Date:			5/17/2018
 //*********************************************************************
@@ -11,20 +11,19 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using Raven.Client;
 
-namespace NDataAudit.Data.RavenDb
+namespace NDataAudit.Data.Hadoop.HBase
 {
     /// <summary>
-    /// Class AuditRavenDbProvider.
+    /// Class AuditHadoopHBaseProvider.
     /// </summary>
     /// <seealso cref="NDataAudit.Data.IAuditNoSqlProvider" />
     [Export(typeof(IAuditNoSqlProvider))]
-    public class AuditRavenDbProvider : IAuditNoSqlProvider
+    public class AuditHadoopHBaseProvider : IAuditNoSqlProvider
     {
         public string ConnectionString { get; set; }
 
-        public string DatabaseEngineName => "Hybernating Rhinos RavenDb";
+        public string DatabaseEngineName => "Hadoop HBase";
 
         public string ProviderNamespace { get; }
 
