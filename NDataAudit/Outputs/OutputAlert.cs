@@ -7,6 +7,7 @@
 //*********************************************************************
 // USER					DATE            COMMENTS
 // Hector Sosa, Jr		4/26/2018	    Created
+// Hector Sosa, Jr      6/5/2018        Changed the HTML for this output class.
 //*********************************************************************
 
 using System;
