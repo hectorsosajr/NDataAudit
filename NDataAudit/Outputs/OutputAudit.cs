@@ -85,8 +85,9 @@ namespace NDataAudit.Framework.Outputs
                             // We didn't find anything, so get the default template
                             currTemplate = AuditUtils.GetDefaultTemplate();
                         }
+                    }
 
-                        string htmlData = AuditUtils.CreateHtmlData(Audits[0], Audits[0].ResultDataSet, currTemplate);
+                    string htmlData = AuditUtils.CreateHtmlData(Audits[0], Audits[0].ResultDataSet, currTemplate);
 
                     body.Append(htmlData);
                 }
