@@ -66,9 +66,27 @@ namespace NDataAudit.Framework.Outputs
             {
                 if (Audits[0].ResultDataSet.Tables.Count > 0)
                 {
-                    EmailTableTemplate currTemplate = Audits[0].Test.TemplateColorScheme;
+                    EmailTableTemplate currTemplate;
 
-                    string htmlData = AuditUtils.CreateHtmlData(Audits[0], Audits[0].ResultDataSet, currTemplate);
+                    // Check for template info on the test first
+                    if (!Audits[0].Test.TemplateColorScheme.Equals(null))
+                    {
+                        currTemplate = Audits[0].Test.TemplateColorScheme;
+                    }
+                    else
+                    {
+                        // Check for template info at the collection level
+                        if (!Audits.TemplateColorScheme.Equals(null))
+                        {
+                            currTemplate = Audits.TemplateColorScheme;
+                        }
+                        else
+                        {
+                            // We didn't find anything, so get the default template
+                            currTemplate = AuditUtils.GetDefaultTemplate();
+                        }
+
+                        string htmlData = AuditUtils.CreateHtmlData(Audits[0], Audits[0].ResultDataSet, currTemplate);
 
                     body.Append(htmlData);
                 }

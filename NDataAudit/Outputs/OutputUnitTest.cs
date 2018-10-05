@@ -64,10 +64,31 @@ namespace NDataAudit.Framework.Outputs
 
             body.Append(database + AuditUtils.HtmlBreak + AuditUtils.HtmlBreak);
 
-            if (!string.IsNullOrEmpty(Audits.TemplateColorScheme.CssTableStyle))
+            EmailTableTemplate currTemplate;
+
+            // Check for template info on the test first
+            if (!Audits[0].Test.TemplateColorScheme.Equals(null))
+            {
+                currTemplate = Audits[0].Test.TemplateColorScheme;
+            }
+            else
+            {
+                // Check for template info at the collection level
+                if (!Audits.TemplateColorScheme.Equals(null))
+                {
+                    currTemplate = Audits.TemplateColorScheme;
+                }
+                else
+                {
+                    // We didn't find anything, so get the default template
+                    currTemplate = AuditUtils.GetDefaultTemplate();
+                }
+            }
+
+            if (!string.IsNullOrEmpty(currTemplate.CssTableStyle))
             {
                 body.AppendLine("<style>");
-                body.AppendLine(Audits.TemplateColorScheme.CssTableStyle);
+                body.AppendLine(currTemplate.CssTableStyle);
                 body.AppendLine("</style>");
                 body.Append("<TABLE id=emailtable BORDER=1>");
                 body.Append("<TR>");
@@ -78,30 +99,30 @@ namespace NDataAudit.Framework.Outputs
                 body.Append("<TR ALIGN='LEFT' style='white-space: nowrap;'>");
             }
 
-            if (!string.IsNullOrEmpty(Audits.TemplateColorScheme.CssTableStyle))
+            if (!string.IsNullOrEmpty(currTemplate.CssTableStyle))
             {
                 body.Append("<TH>Status</TH>");
             }
             else
             {
                 body.Append("<TD style='white-space: nowrap;' bgcolor=\"" +
-                            Audits.TemplateColorScheme.HtmlHeaderBackgroundColor +
+                            currTemplate.HtmlHeaderBackgroundColor +
                             "\"><B>");
-                body.Append("<font color=\"" + Audits.TemplateColorScheme.HtmlHeaderFontColor + "\">Status</font>");
+                body.Append("<font color=\"" + currTemplate.HtmlHeaderFontColor + "\">Status</font>");
 
                 body.Append("</B></TD>");
             }
 
-            if (!string.IsNullOrEmpty(Audits.TemplateColorScheme.CssTableStyle))
+            if (!string.IsNullOrEmpty(currTemplate.CssTableStyle))
             {
                 body.Append("<TH>Audit Name</TH>");
             }
             else
             {
                 body.Append("<TD style='white-space: nowrap;' bgcolor=\"" +
-                            Audits.TemplateColorScheme.HtmlHeaderBackgroundColor +
+                            currTemplate.HtmlHeaderBackgroundColor +
                             "\"><B>");
-                body.Append("<font color=\"" + Audits.TemplateColorScheme.HtmlHeaderFontColor + "\">Audit Name</font>");
+                body.Append("<font color=\"" + currTemplate.HtmlHeaderFontColor + "\">Audit Name</font>");
 
                 body.Append("</B></TD>");
             }
@@ -130,7 +151,7 @@ namespace NDataAudit.Framework.Outputs
                     help = currentAudit.Test.Instructions;
                 }
 
-                if (!string.IsNullOrEmpty(Audits.TemplateColorScheme.CssTableStyle))
+                if (!string.IsNullOrEmpty(currTemplate.CssTableStyle))
                 {
                     body.Append("<TD>");
                     body.Append(testResult);
@@ -144,7 +165,7 @@ namespace NDataAudit.Framework.Outputs
                 body.Append("</TD>");
 
                 // Audit Name
-                if (!string.IsNullOrEmpty(Audits.TemplateColorScheme.CssTableStyle))
+                if (!string.IsNullOrEmpty(currTemplate.CssTableStyle))
                 {
                     body.Append("<TD>");
                     body.Append(currentAudit.Name);
@@ -163,7 +184,7 @@ namespace NDataAudit.Framework.Outputs
                 if (!currentAudit.Result)
                 {
                     // Info icon
-                    if (!string.IsNullOrEmpty(Audits.TemplateColorScheme.CssTableStyle))
+                    if (!string.IsNullOrEmpty(currTemplate.CssTableStyle))
                     {
                         body.Append("<TD>");
                         body.Append("<img src={info}>");
