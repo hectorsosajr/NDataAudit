@@ -80,18 +80,18 @@ namespace NDataAudit.Framework.Outputs
                 if (Audits[0].ResultDataSet.Tables.Count > 0)
                 {
                     EmailTableTemplate currTemplate;
-
-                    // Check for template info on the test first
-                    if (!Audits[0].Test.TemplateColorScheme.Equals(null))
+                    
+                    // Check for template info at the collection level
+                    if (!Audits.TemplateColorScheme.Equals(null))
                     {
-                        currTemplate = Audits[0].Test.TemplateColorScheme;
+                        currTemplate = Audits.TemplateColorScheme;
                     }
                     else
                     {
-                        // Check for template info at the collection level
-                        if (!Audits.TemplateColorScheme.Equals(null))
+                        // Check for template info at the test level 
+                        if (!Audits[0].Test.TemplateColorScheme.Equals(null))
                         {
-                            currTemplate = Audits.TemplateColorScheme;
+                            currTemplate = Audits[0].Test.TemplateColorScheme;
                         }
                         else
                         {
