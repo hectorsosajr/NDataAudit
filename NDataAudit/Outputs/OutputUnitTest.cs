@@ -211,20 +211,38 @@ namespace NDataAudit.Framework.Outputs
                     body.Append("<TD>");
                     body.Append(errorMessage);
                     body.Append("</TD>");
-
                     body.Append("</TR>");
 
-                    // SQL Icon
-                    body.Append("<TR ALIGN='LEFT' style='white-space: nowrap;'>");
-                    body.Append("<TD>");
-                    body.Append("<img src={sql}>");
-                    body.Append("</TD>");
+                    if (currentAudit.IncludeDataInEmail)
+                    {
+                        // Info Icon
+                        body.Append("<TR ALIGN='LEFT' style='white-space: nowrap;'>");
+                        body.Append("<TD>");
+                        body.Append("<img src={warn}>");
+                        body.Append("</TD>");
 
-                    // SQL Text
-                    body.Append("<TD>");
-                    body.Append(sql);
-                    body.Append("</TD>");
-                    body.Append("</TR>");
+                        // Info Table from dataset
+                        string infoTable = AuditUtils.DataTableToHtmlTable(currentAudit.ResultDataSet, currTemplate);
+
+                        body.Append("<TD>");
+                        body.Append(infoTable);
+                        body.Append("</TD>");
+                        body.Append("</TR>");
+                    }
+                    else
+                    {
+                        // SQL Icon
+                        body.Append("<TR ALIGN='LEFT' style='white-space: nowrap;'>");
+                        body.Append("<TD>");
+                        body.Append("<img src={sql}>");
+                        body.Append("</TD>");
+
+                        // SQL Text
+                        body.Append("<TD>");
+                        body.Append(sql);
+                        body.Append("</TD>");
+                        body.Append("</TR>");
+                    }
 
                     // Help Icon
                     body.Append("<TR ALIGN='LEFT' style='white-space: nowrap;'>");
@@ -254,6 +272,7 @@ namespace NDataAudit.Framework.Outputs
                 "https://cdn.rawgit.com/hectorsosajr/NDataAudit/72a07bd7/images/32_database-info.png");
             htmlBody = htmlBody.Replace("{error}", "https://cdn.rawgit.com/hectorsosajr/NDataAudit/72a07bd7/images/32_database-error.png");
             htmlBody = htmlBody.Replace("{help}", "https://cdn.rawgit.com/hectorsosajr/NDataAudit/72a07bd7/images/32_database-help.png");
+            htmlBody = htmlBody.Replace("{warn}", "https://cdn.rawgit.com/hectorsosajr/NDataAudit/72a07bd7/images/32_database-warn.png");
 
             htmlBody = htmlBody.Replace("\r\n", string.Empty);
             htmlBody = htmlBody.Replace(@"\", string.Empty);
