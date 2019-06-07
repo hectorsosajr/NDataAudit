@@ -377,6 +377,147 @@ namespace NDataAudit.Framework
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="datasetToConvert"></param>
+        /// <param name="emailTableTemplate"></param>
+        /// <returns></returns>
+        public static string DataTableToHtmlTable(DataSet datasetToConvert, EmailTableTemplate emailTableTemplate)
+        {
+            var sb = new StringBuilder();
+
+            if (emailTableTemplate.Equals(null))
+            {
+                emailTableTemplate = GetDefaultTemplate();
+            }
+
+            int tableNamesCount = 0;
+
+            foreach (DataTable currTable in datasetToConvert.Tables)
+            {
+                sb.AppendFormat(@"<caption> Total Rows = ");
+                sb.AppendFormat(currTable.Rows.Count.ToString(CultureInfo.InvariantCulture));
+                sb.AppendFormat(@"</caption>");
+
+                if (!string.IsNullOrEmpty(emailTableTemplate.CssTableStyle))
+                {
+                    sb.AppendLine("<style>");
+                    sb.AppendLine(emailTableTemplate.CssTableStyle);
+                    sb.AppendLine("</style>");
+                    sb.Append("<TABLE id=emailtable>");
+                    sb.Append("<TR>");
+                }
+                else
+                {
+                    sb.Append("<TABLE BORDER=1>");
+
+                    sb.Append("<TR ALIGN='LEFT' style='white-space: nowrap;'>");
+                }
+
+                // first append the column names.
+                foreach (DataColumn column in currTable.Columns)
+                {
+                    if (!string.IsNullOrEmpty(emailTableTemplate.CssTableStyle))
+                    {
+                        sb.Append("<TH>" + column.ColumnName + "</TH>");
+                    }
+                    else
+                    {
+                        sb.Append("<TD style='white-space: nowrap;' bgcolor=\"" +
+                                  emailTableTemplate.HtmlHeaderBackgroundColor +
+                              "\"><B>");
+                        sb.Append("<font color=\"" + emailTableTemplate.HtmlHeaderFontColor + "\">" + column.ColumnName +
+                              "</font>");
+
+                        sb.Append("</B></TD>");
+                    }
+                }
+
+                sb.Append("</TR>");
+
+                int rowCounter = 1;
+
+                // next, the column values.
+                foreach (DataRow row in currTable.Rows)
+                {
+                    if (!string.IsNullOrEmpty(emailTableTemplate.CssTableStyle))
+                    {
+                        if (emailTableTemplate.UseAlternateRowColors)
+                        {
+                            if (rowCounter % 2 == 0)
+                            {
+                                // Even numbered row, so tag it with a different background color.
+                                sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT' bgcolor=\"" +
+                                          emailTableTemplate.AlternateRowColor + "\">");
+                            }
+                            else
+                            {
+                                sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT'>");
+                            }
+                        }
+                        else
+                        {
+                            sb.Append("<TR>");
+                        }
+                    }
+                    else
+                    {
+                        if (emailTableTemplate.UseAlternateRowColors)
+                        {
+                            if (rowCounter % 2 == 0)
+                            {
+                                // Even numbered row, so tag it with a different background color.
+                                sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT' bgcolor=\"" +
+                                          emailTableTemplate.AlternateRowColor + "\">");
+                            }
+                            else
+                            {
+                                sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT'>");
+                            }
+                        }
+                        else
+                        {
+                            sb.Append("<TR style='white-space: nowrap;' ALIGN='LEFT'>");
+                        }
+                    }
+
+                    foreach (DataColumn column in currTable.Columns)
+                    {
+                        if (!string.IsNullOrEmpty(emailTableTemplate.CssTableStyle))
+                        {
+                            sb.Append("<TD>");
+                            if (row[column].ToString().Trim().Length > 0)
+                                sb.Append(row[column]);
+                            else
+                                sb.Append("&nbsp;");
+                        }
+                        else
+                        {
+                            sb.Append("<TD style='white-space: nowrap;'>");
+                            if (row[column].ToString().Trim().Length > 0)
+                                sb.Append(row[column]);
+                            else
+                                sb.Append("&nbsp;");
+                        }
+
+                        sb.Append("</TD>");
+                    }
+
+                    sb.Append("</TR>");
+
+                    rowCounter++;
+                }
+
+                sb.Append("</TABLE>");
+                sb.Append("<br>");
+
+                tableNamesCount++;
+            }
+
+            return sb.ToString();
+        }
+
+        /// <summary>
         /// Gets the email table templates.
         /// </summary>
         /// <returns>List&lt;EmailTableTemplate&gt;.</returns>
