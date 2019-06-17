@@ -18,6 +18,7 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Mail;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using NDataAudit.Framework.Outputs;
@@ -526,8 +527,8 @@ namespace NDataAudit.Framework
             var templates = new List<EmailTableTemplate>();
 
             // Get the template file from the directory where the application is executing.
-            string executingDirectory = Environment.CurrentDirectory;
-            string templateFilePath = Path.Combine(executingDirectory, "TableTemplates.json");
+            string assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string templateFilePath = Path.Combine(assemblyPath, "TableTemplates.json");
             string templateText = File.ReadAllText(templateFilePath);
             var results = JObject.Parse(templateText);
 
