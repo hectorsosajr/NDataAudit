@@ -525,7 +525,10 @@ namespace NDataAudit.Framework
         {
             var templates = new List<EmailTableTemplate>();
 
-            string templateText = File.ReadAllText(@"TableTemplates.json");
+            // Get the template file from the directory where the application is executing.
+            string executingDirectory = Environment.CurrentDirectory;
+            string templateFilePath = Path.Combine(executingDirectory, "TableTemplates.json");
+            string templateText = File.ReadAllText(templateFilePath);
             var results = JObject.Parse(templateText);
 
             foreach (var template in results["tabletemplates"])
