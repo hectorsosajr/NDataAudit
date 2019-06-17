@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:element name="auditgroup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="database"/>
+        <xs:element ref="smtp"/>
+        <xs:element ref="emails"/>
+        <xs:element ref="outputformat"/>
+        <xs:element maxOccurs="unbounded" ref="audit"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="database">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="databaseprovider"/>
+        <xs:element ref="connectionstring"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="databaseprovider" type="xs:NCName"/>
+  <xs:element name="connectionstring" type="xs:string"/>
+  <xs:element name="smtp">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sourceemail"/>
+        <xs:element ref="address"/>
+        <xs:element ref="usessl"/>
+        <xs:element ref="smtpcredentials"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sourceemail" type="xs:string"/>
+  <xs:element name="address" type="xs:NCName"/>
+  <xs:element name="usessl" type="xs:boolean"/>
+  <xs:element name="smtpcredentials">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="username"/>
+        <xs:element ref="password"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="username" type="xs:string"/>
+  <xs:element name="password" type="xs:string"/>
+  <xs:element name="emails">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="email"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="email" type="xs:string"/>
+  <xs:element name="outputformat">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="template"/>
+        <xs:element ref="outputstyle"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="template" type="xs:NCName"/>
+  <xs:element name="outputstyle" type="xs:NCName"/>
+  <xs:element name="audit">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="includedatainemail"/>
+        <xs:element ref="reporttemplate"/>
+        <xs:element ref="test"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="includedatainemail" type="xs:boolean"/>
+  <xs:element name="test">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="sqlcommand"/>
+        <xs:element ref="sqltype"/>
+        <xs:element ref="column"/>
+        <xs:element ref="criteria"/>
+        <xs:element ref="operator"/>
+        <xs:element ref="testreturnedrows"/>
+        <xs:element ref="failiftrue"/>
+        <xs:element ref="usecriteria"/>
+        <xs:element ref="rowcount"/>
+        <xs:element ref="reporttemplate"/>
+        <xs:element ref="instructions"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sqlcommand" type="xs:string"/>
+  <xs:element name="sqltype" type="xs:integer"/>
+  <xs:element name="column" type="xs:NCName"/>
+  <xs:element name="criteria" type="xs:NCName"/>
+  <xs:element name="operator" type="xs:string"/>
+  <xs:element name="testreturnedrows" type="xs:boolean"/>
+  <xs:element name="failiftrue" type="xs:boolean"/>
+  <xs:element name="usecriteria" type="xs:boolean"/>
+  <xs:element name="rowcount" type="xs:integer"/>
+  <xs:element name="instructions" type="xs:string"/>
+  <xs:element name="reporttemplate" type="xs:NCName"/>
+</xs:schema>
