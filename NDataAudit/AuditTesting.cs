@@ -275,21 +275,16 @@ namespace NDataAudit.Framework
                                         }
                                         else
                                         {
-                                            if (rowCount <= currTest.RowCount)
-                                            {
-                                                // Threshold was not broken, so the test passes.
-                                                currentAudit.Result = true;
-                                            }
-                                            else
-                                            {
-                                                threshold =
+                                            // Did not meet the success criteria
+                                            // because it is less than or equal to the threshold.
+                                            currentAudit.Result = false;
+                                            threshold =
                                                     currentAudit.Test.RowCount.ToString(
                                                         CultureInfo.InvariantCulture);
                                                 currentAudit.Test.FailedMessage =
-                                                    "The failure threshold was greater than " + threshold +
+                                                    "The success threshold was greater than " + threshold +
                                                     " rows. This audit returned " +
                                                     rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
-                                            }
                                         }
                                         break;
                                     case ">=":
