@@ -254,107 +254,122 @@ namespace NDataAudit.Framework
 
                     if (currTest.TestReturnedRows)
                     {
-                        if (currTest.Criteria.ToUpper() == "COUNTROWS")
+                        switch (currTest.Criteria.ToUpper())
                         {
-                            string threshold;
-                            switch (currTest.Operator)
-                            {
-                                case ">":
-                                    if (rowCount > currTest.RowCount)
-                                    {
-                                        if (!currTest.FailIfConditionIsTrue)
+                            case "COUNTROWS":
+                                string threshold;
+                                switch (currTest.Operator)
+                                {
+                                    case ">":
+                                        if (rowCount > currTest.RowCount)
+                                        {
+                                            if (!currTest.FailIfConditionIsTrue)
+                                            {
+                                                currentAudit.Result = true;
+                                            }
+                                            else
+                                            {
+                                                threshold = currentAudit.Test.RowCount.ToString(CultureInfo.InvariantCulture);
+                                                currentAudit.Test.FailedMessage = "The failure threshold was greater than " + threshold + " rows. This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (rowCount <= currTest.RowCount)
+                                            {
+                                                // Threshold was not broken, so the test passes.
+                                                currentAudit.Result = true;
+                                            }
+                                            else
+                                            {
+                                                threshold =
+                                                    currentAudit.Test.RowCount.ToString(
+                                                        CultureInfo.InvariantCulture);
+                                                currentAudit.Test.FailedMessage =
+                                                    "The failure threshold was greater than " + threshold +
+                                                    " rows. This audit returned " +
+                                                    rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
+                                            }
+                                        }
+                                        break;
+                                    case ">=":
+                                    case "=>":
+                                        if (rowCount >= currTest.RowCount)
                                         {
                                             currentAudit.Result = true;
                                         }
                                         else
                                         {
                                             threshold = currentAudit.Test.RowCount.ToString(CultureInfo.InvariantCulture);
-                                            currentAudit.Test.FailedMessage = "The failure threshold was greater than " + threshold + " rows. This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
+                                            currentAudit.Test.FailedMessage = "The failure threshold was greater than or equal to " + threshold + " rows. This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
                                         }
-                                    }
-                                    else
-                                    {
+                                        break;
+                                    case "<":
+                                        if (rowCount < currTest.RowCount)
+                                        {
+                                            currentAudit.Result = true;
+                                        }
+                                        else
+                                        {
+                                            threshold = currentAudit.Test.RowCount.ToString(CultureInfo.InvariantCulture);
+                                            currentAudit.Test.FailedMessage = "The failure threshold was less than " + threshold + " rows. This audit returned " + rowCount + " rows.";
+                                        }
+                                        break;
+                                    case "<=":
+                                    case "=<":
                                         if (rowCount <= currTest.RowCount)
                                         {
-                                            // Threshold was not broken, so the test passes.
                                             currentAudit.Result = true;
                                         }
                                         else
                                         {
-                                            threshold =
-                                                currentAudit.Test.RowCount.ToString(
-                                                    CultureInfo.InvariantCulture);
-                                            currentAudit.Test.FailedMessage =
-                                                "The failure threshold was greater than " + threshold +
-                                                " rows. This audit returned " +
-                                                rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
+                                            threshold = currentAudit.Test.RowCount.ToString(CultureInfo.InvariantCulture);
+                                            currentAudit.Test.FailedMessage = "The failure threshold was less than or equal to " + threshold + " rows. This audit returned " + rowCount + " rows.";
                                         }
-                                    }
-                                    break;
-                                case ">=":
-                                case "=>":
-                                    if (rowCount >= currTest.RowCount)
-                                    {
-                                        currentAudit.Result = true;
-                                    }
-                                    else
-                                    {
-                                        threshold = currentAudit.Test.RowCount.ToString(CultureInfo.InvariantCulture);
-                                        currentAudit.Test.FailedMessage = "The failure threshold was greater than or equal to " + threshold + " rows. This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
-                                    }
-                                    break;
-                                case "<":
-                                    if (rowCount < currTest.RowCount)
-                                    {
-                                        currentAudit.Result = true;
-                                    }
-                                    else
-                                    {
-                                        threshold = currentAudit.Test.RowCount.ToString(CultureInfo.InvariantCulture);
-                                        currentAudit.Test.FailedMessage = "The failure threshold was less than " + threshold + " rows. This audit returned " + rowCount + " rows.";
-                                    }
-                                    break;
-                                case "<=":
-                                case "=<":
-                                    if (rowCount <= currTest.RowCount)
-                                    {
-                                        currentAudit.Result = true;
-                                    }
-                                    else
-                                    {
-                                        threshold = currentAudit.Test.RowCount.ToString(CultureInfo.InvariantCulture);
-                                        currentAudit.Test.FailedMessage = "The failure threshold was less than or equal to " + threshold + " rows. This audit returned " + rowCount + " rows.";
-                                    }
-                                    break;
-                                case "=":
-                                    if (rowCount == currTest.RowCount)
-                                    {
-                                        if (currentAudit.Test.FailIfConditionIsTrue)
+                                        break;
+                                    case "=":
+                                        if (rowCount == currTest.RowCount)
                                         {
-                                            currentAudit.Result = false;
+                                            if (currentAudit.Test.FailIfConditionIsTrue)
+                                            {
+                                                currentAudit.Result = false;
+                                            }
+                                            else
+                                            {
+                                                currentAudit.Result = true;
+                                            }
                                         }
                                         else
                                         {
-                                            currentAudit.Result = true;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (currentAudit.Test.FailIfConditionIsTrue)
-                                        {
-                                            currentAudit.Result = false;
-                                        }
-                                        else
-                                        {
-                                            currentAudit.Result = true;
-                                        }
+                                            if (currentAudit.Test.FailIfConditionIsTrue)
+                                            {
+                                                currentAudit.Result = false;
+                                            }
+                                            else
+                                            {
+                                                currentAudit.Result = true;
+                                            }
 
-                                        threshold = currentAudit.Test.RowCount.ToString(CultureInfo.InvariantCulture);
-                                        currentAudit.Test.FailedMessage = "The failure threshold was equal to " + threshold + " rows. This audit returned " + rowCount + " rows.";
-                                    }
-                                    break;
-                                case "<>":
-                                case "!=":
+                                            threshold = currentAudit.Test.RowCount.ToString(CultureInfo.InvariantCulture);
+                                            currentAudit.Test.FailedMessage = "The failure threshold was equal to " + threshold + " rows. This audit returned " + rowCount + " rows.";
+                                        }
+                                        break;
+                                    case "<>":
+                                    case "!=":
+                                        if (currentAudit.Test.FailIfConditionIsTrue)
+                                        {
+                                            currentAudit.Result = false;
+                                        }
+                                        else
+                                        {
+                                            currentAudit.Result = true;
+                                        }
+                                        break;
+                                }
+                                break;
+                            default:
+                                if (rowCount > 0)
+                                {
                                     if (currentAudit.Test.FailIfConditionIsTrue)
                                     {
                                         currentAudit.Result = false;
@@ -363,35 +378,21 @@ namespace NDataAudit.Framework
                                     {
                                         currentAudit.Result = true;
                                     }
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            if (rowCount > 0)
-                            {
-                                if (currentAudit.Test.FailIfConditionIsTrue)
-                                {
-                                    currentAudit.Result = false;
                                 }
                                 else
                                 {
-                                    currentAudit.Result = true;
-                                }
-                            }
-                            else
-                            {
-                                if (currentAudit.Test.FailIfConditionIsTrue)
-                                {
-                                    currentAudit.Result = false;
+                                    if (currentAudit.Test.FailIfConditionIsTrue)
+                                    {
+                                        currentAudit.Result = false;
 
-                                    currentAudit.Test.FailedMessage = "This audit was set to have more than zero rows returned. " + "This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
+                                        currentAudit.Test.FailedMessage = "This audit was set to have more than zero rows returned. " + "This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
+                                    }
+                                    else
+                                    {
+                                        currentAudit.Result = true;
+                                    }
                                 }
-                                else
-                                {
-                                    currentAudit.Result = true;
-                                }
-                            }
+                                break;
                         }
                     }
                     else
@@ -405,25 +406,6 @@ namespace NDataAudit.Framework
                             currentAudit.Test.FailedMessage = "This audit was set to not return any rows. " + "This audit returned " + rowCount.ToString(CultureInfo.InvariantCulture) + " rows.";
                         }
                     }
-
-                    //if (currentAudit.Result == false)
-                    //{
-                    //    if (currentAudit.Test.FailIfConditionIsTrue)
-                    //    {
-                    //        PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, currentAudit, dsTest);
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    if (currentAudit.Test.FailIfConditionIsTrue)
-                    //    {
-                    //        if (currentAudit.Test.SendReport)
-                    //        {
-                    //            // It's not really a failure. Just want to send a report-like email.
-                    //            PrepareResultsEmailData(currentAudit.Test.SqlStatementToCheck, currentAudit, dsTest);
-                    //        }
-                    //    }
-                    //}
 
                     dsTest.Dispose();
 
