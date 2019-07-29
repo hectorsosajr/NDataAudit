@@ -69,9 +69,9 @@ namespace NDataAudit.Framework
         /// </summary>
         public string AuditGroupName
         {
-            get => _auditGroupName;
+            get { return _auditGroupName; }
 
-            set => _auditGroupName = value;
+            set { _auditGroupName = value; }
         }
 
         /// <summary>
@@ -391,7 +391,9 @@ namespace NDataAudit.Framework
 
             if (smtpNode[0]["emailclient"] != null)
             {
-                bool result = Enum.TryParse(smtpNode[0]["emailclient"].InnerText.ToLower(), out EmailClientHtml parsedClient);
+                EmailClientHtml parsedClient;
+
+                bool result = Enum.TryParse(smtpNode[0]["emailclient"].InnerText.ToLower(), out parsedClient);
 
                 if (result)
                 {
