@@ -619,7 +619,9 @@ namespace NDataAudit.Framework
                         throw new ArgumentOutOfRangeException();
                 }
 
-                var mailClient = CreateMailMessage(out var message, auditGroup, htmlBody);
+                var message = new MailMessage();
+
+                var mailClient = CreateMailMessage(out message, auditGroup, htmlBody);
 
                 mailClient.Send(message);
 
